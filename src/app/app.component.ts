@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
+
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +11,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'prj666-canpolls';
+  faHome = faHome;
+  faEnvelope = faEnvelope;
+
+  ngOnInit() {
+    
+  }
 }

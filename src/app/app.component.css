@@ -1,0 +1,23 @@
+.navbar, .navbar-dark, .bg-dark {
+    height: 5em;
+    color: #8B0000;
+    background: #8B0000;
+    background-color: #8B0000;
+}
+
+.jumbotron {
+    margin: 0em;
+    background-color: #DB7093;
+}
+
+.container {
+    margin: 1em;
+}
+
+.nav-link {
+    color: #FFFFFF;
+}
+
+footer {
+    background-color: #DB7093;
+}
