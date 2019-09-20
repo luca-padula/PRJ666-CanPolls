@@ -1,30 +1,68 @@
 <div class="container">
-  <h2>Registration</h2>
+  <h2 class="text-center">Registration</h2>
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <div class="form-group">
-      <label class="control-label" for="name">First Name:</label>
-      <input type="text" class="form-control" id="firstName" name="firstName" autofocus>
-      <label class="control-label" for="name">Last Name:</label>
-      <input type="text" class="form-control" id="lastName" name="lastName">
-      <label class="control-label" for="name">Email:</label>
-      <input type="text" class="form-control" id="email" name="email">
+    <div class="form-well">
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">First Name:</label>
+        <div class="col-9">
+            <input type="text" class="form-control" id="firstName" name="firstName" autofocus>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Last Name:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="lastName" name="lastName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Email:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="email" name="email">
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label class="control-label" for="name">Username:</label>
-      <input type="text" class="form-control" id="userName" name="userName">
-      <label class="control-label" for="name">Password:</label>
-      <input type="password" class="form-control" id="password" name="password">
-      <label class="control-label" for="name">Re-enter Password:</label>
-      <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm">
+    <div class="form-well">
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Username:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="userName" name="userName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Password:</label>
+        <div class="col-9">
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Re-enter Password:</label>
+        <div class="col-9">
+          <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm">
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label class="control-label" for="name">Address 1</label>
-      <input type="text" class="form-control" id="address1" name="address1">
-      <label class="control-label" for="name">Address 2</label>
-      <input type="text" class="form-control" id="address2" name="address2">
-      <label class="control-label" for="name">Address 3</label>
-      <input type="text" class="form-control" id="address3" name="address3">
+    <div class="form-well">
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Address 1:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="address1" name="address1">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Address 2:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="address2" name="address2">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Address 3:</label>
+        <div class="col-9">
+          <input type="text" class="form-control" id="address3" name="address3">
+        </div>
+      </div>
     </div>
-    <button class="btn btn-dark" type="submit" [disabled]="!f.valid">Submit</button>
+    <div class="text-center">
+      <button class="btn btn-dark btn-lg" type="submit" [disabled]="!f.valid">Submit</button>
+    </div>
   </form>
 </div>
