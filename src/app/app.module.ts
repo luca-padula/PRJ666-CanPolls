@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { EsriMapComponent } from './esri-map/esri-map.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EventComponent } from './event/event.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EsriMapComponent,
-    EventComponent
+    EventComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
