@@ -22,6 +22,8 @@
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@ngrx/schematics": "^8.3.0",
+    "@schematics/angular": "^8.3.5",
     "@types/arcgis-js-api": "^4.12.0",
     "core-js": "^2.5.4",
     "esri-loader": "^2.10.0",
