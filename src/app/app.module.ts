@@ -7,13 +7,21 @@ import { EsriMapComponent } from './esri-map/esri-map.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EventComponent } from './event/event.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NavComponent } from './nav.component';
+import { HomeComponent } from './home.component';
+import { ContentComponent } from './content.component';
+import { FooterComponent } from './footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EsriMapComponent,
     EventComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NavComponent,
+    HomeComponent,
+    ContentComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
