@@ -8,6 +8,13 @@ import { EsriMapComponent } from './esri-map/esri-map.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { EventComponent } from './event/event.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NavComponent } from './nav.component';
+import { HomeComponent } from './home.component';
+import { ContentComponent } from './content.component';
+import { FooterComponent } from './footer.component';
+import { SubmittedEventComponent } from './submitted-event/submitted-event.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +22,13 @@ import { RegisterComponent } from './register/register.component';
     EsriMapComponent,
     LoginComponent,
     RegisterComponent
+    EventComponent,
+    PageNotFoundComponent,
+    NavComponent,
+    HomeComponent,
+    ContentComponent,
+    FooterComponent,
+    SubmittedEventComponent
   ],
   imports: [
     BrowserModule,
