@@ -19,9 +19,10 @@ export class EsriMapComponent implements OnInit {
       "esri/tasks/Locator",
       "esri/Map",
       "esri/views/MapView",
-      "esri/layers/FeatureLayer"
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Search"
     ])
-      .then(([Locator, EsriMap, EsriMapView, FeatureLayer]) => {
+      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search]) => {
         // Create a locator task using the world geocoding service
         const locatorTask = new Locator({
           url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -37,6 +38,13 @@ export class EsriMapComponent implements OnInit {
           zoom: 17,
           map: map
         });
+
+        // Search widget
+        var search = new Search({
+          view: view
+        });
+
+        view.ui.add(search, "top-right");
 
         var pollingDivisionsLabels = {
           symbol: {
