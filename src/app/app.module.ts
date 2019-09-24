@@ -11,6 +11,7 @@ import { NavComponent } from './nav.component';
 import { HomeComponent } from './home.component';
 import { ContentComponent } from './content.component';
 import { FooterComponent } from './footer.component';
+import { SubmittedEventComponent } from './submitted-event/submitted-event.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FooterComponent } from './footer.component';
     NavComponent,
     HomeComponent,
     ContentComponent,
-    FooterComponent
+    FooterComponent,
+    SubmittedEventComponent
   ],
   imports: [
     BrowserModule,

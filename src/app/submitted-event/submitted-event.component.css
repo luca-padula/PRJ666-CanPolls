@@ -1,0 +1,11 @@
+.title, .parbase {
+    margin:5px;
+}
+.column-control, .column-control-new, .parbase{
+    margin: 5px;
+}
+.top-feature, .slideshow,.parbase{
+    margin: -1px;
+    width: 100%;
+    height: 300px;
+}
