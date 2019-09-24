@@ -21,7 +21,7 @@ import { SubmittedEventComponent } from './submitted-event/submitted-event.compo
     AppComponent,
     EsriMapComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
     EventComponent,
     PageNotFoundComponent,
     NavComponent,
