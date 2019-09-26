@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "prj666-canpolls"
+  "defaultProject": "prj666-canpolls",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
