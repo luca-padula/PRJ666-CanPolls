@@ -10,11 +10,12 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { EventComponent } from './event/event.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { NavComponent } from './nav.component';
-import { HomeComponent } from './home.component';
-import { ContentComponent } from './content.component';
-import { FooterComponent } from './footer.component';
+import { NavComponent } from './nav/nav.component';
+import { HomeComponent } from './home/home.component';
+import { ContentComponent } from './content/content.component';
+import { FooterComponent } from './footer/footer.component';
 import { SubmittedEventComponent } from './submitted-event/submitted-event.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SubmittedEventComponent } from './submitted-event/submitted-event.compo
     HomeComponent,
     ContentComponent,
     FooterComponent,
-    SubmittedEventComponent
+    SubmittedEventComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
