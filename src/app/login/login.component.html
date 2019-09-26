@@ -11,14 +11,14 @@
       <h2>Sign in</h2>
       <h5>To get going</h5>
       <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-        <div class="alert alert-danger" *ngIf="warning">
+        <div class="form-group">
+          <input type="text" [(ngModel)]="user.userName" class="form-control" id="userName" name="userName" placeholder="Email or Username" autofocus required>
+        </div>
+        <div class="form-group">
+          <input type="password" [(ngModel)]="user.password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="alert alert-danger" *ngIf="warning" role="alert">
           {{warning}}
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="userName" name="userName" placeholder="Email or Username" autofocus required>
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
         </div>
         <button class="btn" type="submit">Sign In</button>
       </form>
