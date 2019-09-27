@@ -18,7 +18,7 @@ import { ContentComponent } from './content/content.component';
 import { FooterComponent } from './footer/footer.component';
 import { SubmittedEventComponent } from './submitted-event/submitted-event.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { InterceptTokenService } from './services/intercept-token.service';
+import { InterceptTokenService } from 'src/data/services/intercept-token.service';
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
