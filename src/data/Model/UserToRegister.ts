@@ -1,8 +1,7 @@
-export class User
+export class UserToRegister
 {
-    userId: string;
     userName: string;
     email: string;
     password: string;
-    rejectionCount: number;
+    password2: string;
 }

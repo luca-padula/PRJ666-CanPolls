@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/data/Model/User';
+import { UserToRegister } from '../Model/UserToRegister';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,9 @@ export class AuthService {
 
   login(user: User): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/login', user);
+  }
+
+  register(user: UserToRegister): Observable<any> {
+    return this.http.post<any>(environment.apiUrl + '/api/register', user);
   }
 }
