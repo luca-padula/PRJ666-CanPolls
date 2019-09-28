@@ -7,6 +7,9 @@
     <div *ngIf="warning" class="alert alert-danger">
       {{warning}}
     </div>
+    <div *ngFor="let err of validationErrors" class="alert alert-danger">
+      {{err.msg}}
+    </div>
     <div *ngIf="successMessage" class="alert alert-success">
       {{successMessage}}
     </div>

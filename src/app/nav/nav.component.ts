@@ -27,7 +27,7 @@ export class NavComponent implements OnInit {
   logout(): void {
     this.token = null;
     localStorage.clear();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
   }
 
 }
