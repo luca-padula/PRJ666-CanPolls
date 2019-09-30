@@ -1,0 +1,82 @@
+<div class="user-profile">
+<h2> User Profile </h2>
+<div class="container">
+    <div class="row justify-content-md-center">
+    <div class="col-md-6">
+      <form #f='ngForm' (ngSubmit)='onSubmit(f)'>
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group" [class.has-error]="Name.errors">
+              <label for="Name" class="control-label">Name:</label>
+              <input #FirstName="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="User.Name"/>
+              <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group" [class.has-error]="userName.errors">
+              <label for="userName" class="control-label">Username:</label>
+              <input #userName="ngModel" placeholder="userName" class="form-control" id="userName" type="text" name="userName" required [(ngModel)]="User.userName"/>
+              <span *ngIf="userName.errors && userName.errors.required" class="help-block">Username is Required</span> 
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-md-center">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email" class="control-label">Email:</label>
+              <input #userName="ngModel" placeholder="email" class="form-control" id="email" type="text" name="email" required [(ngModel)]="User.email"/>
+              <span *ngIf="email.errors && email.errors.required" class="help-block">Email is required</span> 
+            </div>
+          </div>
+          </div>
+          </form>
+    </div>
+
+    </div>
+</div>
+        <div class="col-xs-6">
+                <h2 class="sub-header">Past Events Organized</h2>
+                <div class="table-responsive">
+                            <table class="table table-striped">
+                                    <thead>
+                                            <tr>
+                                            <th scope="col-md-4">Description</th>
+                                            <th scope="col-md-4">Date</th>
+                                            <th scope="col-md-4">Location</th>
+                                            </tr>
+                                    </thead>
+                                        <tbody>
+                                            <tr *ngFor="let event of usersubmittedEvents" (click)="routeEmployee(Eve._id)">
+                                            <td>{{Event.eventDescription}}</td>
+                                            <td>{{Event.eventDate | date: 'longDate'}}</td>
+                                            <td>{{Event.location}}</td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                </table>
+                    </div>
+        </div>
+        <div class="col-xs-6">
+                <h2 class="sub-header">Events Attended/Attending</h2>
+                <div class="table-responsive">
+                            <table class="table table-striped">
+                                    <thead>
+                                            <tr>
+                                            <th scope="col-md-4">Description</th>
+                                            <th scope="col-md-4">Date</th>
+                                            <th scope="col-md-4">Location</th>
+                                            </tr>
+                                    </thead>
+                                        <tbody>
+                                            <tr *ngFor="let event of usersubmittedEvents" (click)="routeEmployee(Eve._id)">
+                                            <td>{{Event.eventDescription}}</td>
+                                            <td>{{Event.eventDate | date: 'longDate'}}</td>
+                                            <td>{{Event.location}}</td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                </table>
+                    </div>
+        </div>

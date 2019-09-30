@@ -1,0 +1,17 @@
+<nav class="navbar navbar-dark bg-dark"> 
+  <a class="navbar-brand" routerLink="/home">CanPolls</a>
+  <ul class="nav justify-content-end">
+    <li routerLinkActive="active">
+      <a class="nav-link" routerLink="/events">Events</a>
+    </li>
+    <li *ngIf="!(token)" class="nav-item">
+      <a class="nav-link" routerLink="/login">Login</a>
+    </li>
+    <li *ngIf="token" class="nav-item" routerLinkActive="active">
+      <a class="nav-link" routerLink="/userProfile">Profile: {{token.userName}}</a>
+    </li>
+    <li *ngIf="token" class="nav-item">
+      <a class="nav-link" (click)="logout()">Logout</a>
+    </li>
+  </ul>
+</nav>

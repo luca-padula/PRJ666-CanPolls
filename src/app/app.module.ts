@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,11 +12,19 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { EventComponent } from './event/event.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { NavComponent } from './nav.component';
-import { HomeComponent } from './home.component';
-import { ContentComponent } from './content.component';
-import { FooterComponent } from './footer.component';
+import { NavComponent } from './nav/nav.component';
+import { HomeComponent } from './home/home.component';
+import { ContentComponent } from './content/content.component';
+import { FooterComponent } from './footer/footer.component';
 import { SubmittedEventComponent } from './submitted-event/submitted-event.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { InterceptTokenService } from 'src/data/services/intercept-token.service';
+
+// retrieves the Json Web Token from local storage
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
+
 
 @NgModule({
   declarations: [
@@ -28,15 +38,29 @@ import { SubmittedEventComponent } from './submitted-event/submitted-event.compo
     HomeComponent,
     ContentComponent,
     FooterComponent,
-    SubmittedEventComponent
+    SubmittedEventComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        authScheme: 'JWT'
+      }
+    })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptTokenService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
