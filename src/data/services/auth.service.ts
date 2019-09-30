@@ -44,4 +44,8 @@ export class AuthService {
   register(user: UserToRegister): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/register', user);
   }
+
+  logout(): void {
+    localStorage.clear();
+  }
 }
