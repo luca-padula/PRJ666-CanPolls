@@ -1,0 +1,82 @@
+<div class="container">
+    <h2 class="text-left">Create an Event</h2>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <p class="lead text-left">
+        Add your Event Details
+      </p>
+     
+      <div class="form-well">
+        <div class="form-group row">
+          <label class="col-3 col-form-label" >Event Title</label>
+          <div class="col-9">
+            <input type="text"  class="form-control" id="eventTitle" name="eventTitle">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label" >Venue Name</label>
+          <div class="col-9">
+            <input type="text"  class="form-control" id="venueName" name="venueName">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label" >Street Name</label>
+          <div class="col-9">
+            <input type="text"  class="form-control" id="streetName" name="streetName">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label" >City</label>
+          <div class="col-9">
+            <input type="text"  class="form-control" id="city" name="city">
+          </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-3 col-form-label" >Province</label>
+            <div class="col-9">
+              <input type="text"   class="form-control" id="province" name="province">
+            </div>
+          </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" >Postal Code</label>
+        <div class="col-9">
+          <input type="text"  class="form-control" id="postalCode" name="postalCode" maxlength="6">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" >Date - Time</label>
+        <div class="col-9" style="display:inline-flex">
+            
+          <input type="date"  class="form-control" id="eventDateFrom" name="eventDateFrom">
+          <input type="time"  class="form-control" id="eventTimeFrom" name="eventTimeFrom">
+          <p> - </p>
+          <input type="date"  class="form-control" id="eventDateTo" name="eventDateTo">
+          <input type="time"  class="form-control" id="eventTimeTo" name="eventTimeTo">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="image-upload-container btn btn-bwm">
+        <span>Select Image</span>
+            <input #imageInput type="file" accept="image/*" name="file" id="file" (change)="onFileChanged(imageInput)" />
+        </label>
+        <div *ngIf="selectedFile" class="img-preview-container">
+                <div class="img-preview" [ngStyle] ="{'background-image':'url(' + selectedFile.src + ')'}">
+    
+                </div>
+            </div>
+      </div>
+      <div class="form-group row">
+      
+    </div>
+      <div class="form-group row">
+            <label class="col-3 col-form-label" >Event Description</label>
+            <div class="col-9">
+              <textarea  class="form-control" id="eventDesc" name="eventDesc" cols="40" rows="5" ></textarea>
+            </div>
+          </div>
+      <div class="text-center">
+        <button class="btn btn-dark btn-lg" type="submit" >Submit</button>
+      </div>
+    </form>
+  </div>
+  

@@ -8,13 +8,14 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-
+import {CreateEventComponent} from './create-event/create-event.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'events', component: EventComponent},
-  {path: 'createEvent', component: SubmittedEventComponent, canActivate: [GuardAuthService]},
+  {path: 'submittedEvent', component: SubmittedEventComponent, canActivate: [GuardAuthService]},
   {path: 'login', component: LoginComponent },
   {path: 'register', component: RegisterComponent },
+  {path: 'createEvent', component: CreateEventComponent},
   {path: 'userProfile', component: UserProfileComponent },
   {path: "", redirectTo:'/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
