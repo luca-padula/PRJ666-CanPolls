@@ -11,10 +11,10 @@ import { ValidationError } from 'src/data/Model/ValidationError';
 })
 export class RegisterComponent implements OnInit {
 
-  public user: UserToRegister;
-  public validationErrors: ValidationError[];
-  public warning: string;
-  public successMessage: string;
+  user: UserToRegister;
+  validationErrors: ValidationError[];
+  warning: string;
+  successMessage: boolean;
 
   constructor(private auth: AuthService) { }
 
@@ -24,8 +24,8 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(f: NgForm): void {
     this.auth.register(this.user).subscribe((success) => {
-      this.successMessage = success.message;
       this.warning = null;
+      this.successMessage = true;
     }, (err) => {
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;

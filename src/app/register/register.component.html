@@ -1,6 +1,10 @@
 <div class="container">
   <h2 class="text-center">Registration</h2>
-  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <div *ngIf="successMessage" class="alert alert-success text-center">
+    Success: User {{user.userName}} has been registered!<br />
+    Check your email for the link to verify your account before signing in.
+  </div>
+  <form *ngIf="!successMessage" #f="ngForm" (ngSubmit)="onSubmit(f)">
     <p class="lead text-center">
       *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
     </p>
@@ -12,9 +16,6 @@
     </div>
     <div *ngFor="let err of validationErrors" class="alert alert-danger">
       {{err.msg}}
-    </div>
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{successMessage}}
     </div>
     <div class="form-well">
       <div class="form-group row">
