@@ -9,7 +9,7 @@
             <div class="form-group row" [class.has-error]="Name.errors">
               <label for="Name" class="col-md-4 col-form-label">Name:</label>
               <div class="col-sm-10">
-              <input #FirstName="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="User.Name"/>
+              <input #FirstName="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.Name"/>
               <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
             </div>
             </div>
@@ -19,7 +19,7 @@
           <div class="col-md-6">
             <div class="form-group" [class.has-error]="userName.errors">
               <label for="userName" class="control-label">Username:</label>
-              <input #userName="ngModel" placeholder="userName" class="form-control" id="userName" type="text" name="userName" required [(ngModel)]="User.userName"/>
+              <input #userName="ngModel" placeholder="userName" class="form-control" id="userName" type="text" name="userName" required [(ngModel)]="currentUser.userName"/>
               <span *ngIf="userName.errors && userName.errors.required" class="help-block">Username is Required</span> 
             </div>
           </div>
@@ -28,7 +28,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="email" class="control-label">Email:</label>
-              <input #userName="ngModel" placeholder="email" class="form-control" id="email" type="text" name="email" required [(ngModel)]="User.email"/>
+              <input #userName="ngModel" placeholder="email" class="form-control" id="email" type="text" name="email" required [(ngModel)]="currentUser.email"/>
               <span *ngIf="email.errors && email.errors.required" class="help-block">Email is required</span> 
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/data/Model/User';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../data/services/userService'
 
 @Component({
   selector: 'app-user-profile',
@@ -7,9 +9,8 @@ import { User } from 'src/data/Model/User';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-
-  constructor() { }
-
+//private route: ActivatedRoute, private uService: UserService
+  constructor(){ }
   private paramSubscription: any;
   private userSubscription: any;
   private saveUserSubscription: any;
@@ -19,6 +20,17 @@ export class UserProfileComponent implements OnInit {
   failMessage = false;
 
   ngOnInit() {
-  }
+    /*this.paramSubscription = this.route.params.subscribe((params) => {
+      this.userSubscription = this.uService.getUserById(params[2]).subscribe((us) => {
+        this.currentUser = us[0];
 
+      });
+ });*/
+  }
+/*
+  ngOnDestroy(){
+    if(this.paramSubscription){this.paramSubscription.unsubscribe();}
+    if(this.userSubscription){this.userSubscription.unsubscribe();}
+  }
+*/
 }

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../Model/User';
 
 @Injectable()
-export class EmployeeService {
+export class UserService {
 
 
   constructor(private http: HttpClient) { }
