@@ -4,6 +4,9 @@
     <p class="lead text-center">
       *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
     </p>
+    <p class="lead text-center">
+      *Username must not contain an @ symbol or more than 1 consecutive space, leading and trailing whitespace will be removed
+    </p>
     <div *ngIf="warning" class="alert alert-danger">
       {{warning}}
     </div>
@@ -36,6 +39,18 @@
         <label class="col-3 col-form-label" for="name">Re-enter Password:</label>
         <div class="col-9">
           <input type="password" [(ngModel)]="user.password2" class="form-control" id="password2" name="password2">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">First Name:</label>
+        <div class="col-9">
+          <input type="text" [(ngModel)]="user.firstName" class="form-control" id="firstName" name="firstName">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="name">Last Name:</label>
+        <div class="col-9">
+          <input type="text" [(ngModel)]="user.lastName" class="form-control" id="lastName" name="lastName">
         </div>
       </div>
     </div>

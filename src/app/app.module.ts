@@ -20,6 +20,7 @@ import { SubmittedEventComponent } from './submitted-event/submitted-event.compo
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { InterceptTokenService } from 'src/data/services/intercept-token.service';
 import { CreateEventComponent } from './create-event/create-event.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
@@ -41,7 +42,8 @@ export function tokenGetter() {
     FooterComponent,
     SubmittedEventComponent,
     UserProfileComponent,
-    CreateEventComponent
+    CreateEventComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,

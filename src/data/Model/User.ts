@@ -7,6 +7,7 @@ export class User
     firstName: string;
     lastName: string;
     isVerified: boolean;
+    verificationHash: string;
     rejectionCount: number;
     createdAt: string;
     updatedAt: string;
