@@ -1,14 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700,900");
-.Navbar ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
 
-html {
-  font-size: 62.5%;
-  box-sizing: border-box;
-}
 
 *,
 *:before,
@@ -27,37 +18,17 @@ img {
 }
 
 
-
-
-
-body {
-  color: #333;
-  font-size: 30px;
-  font-family: Lato, Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  line-height: 1.5;
-  letter-spacing: 0.008em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
+h3 {
   color: #111;
   line-height: 1.2;
   font-weight: 900;
 }
 
-h1,
+
 h2,
 h3,
-h4,
-h5,
-h6,
 ul,
 p {
   margin-top: 1.6rem;
@@ -78,10 +49,6 @@ ul {
   padding-left: 1.8rem;
 }
 
-.image{
-    height: 400px;
-    width: 600px;
-}
 h2{
     font-size: 1.5rem;
 }
@@ -102,9 +69,8 @@ h2{
   margin-top: 6.4rem;
   margin-bottom: 3.2rem;
 }
-.l-Header-col {
-  margin-top: 3.2rem;
-  margin-bottom: 3.2rem;
+.l-Header-Col, .contact{
+  margin-left: 3rem;
 }
 @media (min-width: 544px) {
   .l-Header {
@@ -112,6 +78,7 @@ h2{
     justify-content: space-between;
     align-items: flex-end;
   }
+  
   
 }
 

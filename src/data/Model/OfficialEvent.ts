@@ -1,4 +1,4 @@
-import { Event } from './event';
+import { Event } from './Event';
 import { Political } from './Political';
 import { Category } from './Category';
 

@@ -14,7 +14,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'events', component: EventComponent},
-  {path: 'submittedEvent', component: SubmittedEventComponent},
+  {path: 'event/:id', component: SubmittedEventComponent},
   {path: 'login', component: LoginComponent },
   {path: 'register', component: RegisterComponent },
   {path: 'createEvent', component: CreateEventComponent},

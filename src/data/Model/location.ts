@@ -1,9 +1,14 @@
 export class Location
 {
-	locationId:number;
-	venueName: String;
-	streetName: String;
+	location_id:number;
+	venue_name: String;
+	street_name: String;
 	city:String;
 	province:String;
-    postalCode:String;
+	postal_code:String;
+	constructor(obj: any = null){
+        if(obj != null){
+            Object.assign(this, obj);
+        }
+    }
 }

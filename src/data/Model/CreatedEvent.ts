@@ -1,4 +1,4 @@
-import { Event } from './event';
+import { Event } from './Event';
 import { User } from './User';
 import { Feedback } from './Feedback';
 import { Admin } from './Admin';

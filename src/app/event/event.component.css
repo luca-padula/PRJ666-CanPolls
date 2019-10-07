@@ -74,3 +74,12 @@ ul li:hover{
     background-color: #777;
     color: white;
 }
+
+.event-browsing{
+  display:flex;
+  justify-content: space-between;
+  margin:3px;
+}
+a{
+  margin-top: 75px;
+}

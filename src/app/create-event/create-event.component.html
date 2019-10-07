@@ -1,6 +1,6 @@
 <div class="container">
     <h2 class="text-left">Create an Event</h2>
-    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <p class="lead text-left">
         Add your Event Details
       </p>
@@ -9,55 +9,62 @@
         <div class="form-group row">
           <label class="col-3 col-form-label" >Event Title</label>
           <div class="col-9">
-            <input type="text"  class="form-control" id="eventTitle" name="eventTitle">
+            <input type="text" formControlName="event_title"  class="form-control" id="event_title" name="event_title">
+            <p *ngIf="invalidEventTitle()" id="event_title_error" class="help-block">Invalid Event Title.</p>
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >Venue Name</label>
           <div class="col-9">
-            <input type="text"  class="form-control" id="venueName" name="venueName">
+            <input type="text" formControlName="venue_name" class="form-control" id="venue_name" name="venue_name">
+            <p *ngIf="invalidVenueName()" id="venue_name_error" class="help-block">Invalid Venue Name.</p>
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >Street Name</label>
           <div class="col-9">
-            <input type="text"  class="form-control" id="streetName" name="streetName">
+            <input type="text" formControlName="street_name" class="form-control" id="street_name" name="street_name">
+            <p *ngIf="invalidStreetName()" id="street_name_error" class="help-block">Invalid Street Name.</p>
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >City</label>
           <div class="col-9">
-            <input type="text"  class="form-control" id="city" name="city">
+            <input type="text" formControlName="city"  class="form-control" id="city" name="city">
+            <p *ngIf="invalidCity()" id="city_error" class="help-block">Invalid City.</p>
           </div>
         </div>
         <div class="form-group row">
             <label class="col-3 col-form-label" >Province</label>
             <div class="col-9">
-              <input type="text"   class="form-control" id="province" name="province">
+              <input type="text" formControlName="province"  class="form-control" id="province" name="province">
+              <p *ngIf="invalidProvince()" id="province_error" class="help-block">Invalid Province.</p>
             </div>
           </div>
-      </div>
+      
       <div class="form-group row">
         <label class="col-3 col-form-label" >Postal Code</label>
         <div class="col-9">
-          <input type="text"  class="form-control" id="postalCode" name="postalCode" maxlength="6">
+          <input type="text" formControlName="postal_code" class="form-control" id="postal_code" name="postal_code" maxlength="6">
+          <p *ngIf="invalidPostalCode()" id="postal_code_error" class="help-block">Invalid Postal Code.</p>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label" >Date - Time</label>
         <div class="col-9" style="display:inline-flex">
             
-          <input type="date"  class="form-control" id="eventDateFrom" name="eventDateFrom">
-          <input type="time"  class="form-control" id="eventTimeFrom" name="eventTimeFrom">
+          <input type="text" formControlName="date_from" class="form-control" id="date_from" name="date_from">
+          <input type="text" formControlName="time_from" class="form-control" id="time_from" name="time_from">
           <p> - </p>
-          <input type="date"  class="form-control" id="eventDateTo" name="eventDateTo">
-          <input type="time"  class="form-control" id="eventTimeTo" name="eventTimeTo">
+          <input type="text" formControlName="date_to" class="form-control" id="date_to" name="date_to">
+          <input type="text" formControlName="time_to" class="form-control" id="time_to" name="time_to">
+          <p *ngIf="invalidDateTime()" id="date_time_error" class="help-block">Invalid Date/Time.</p>
         </div>
       </div>
       <div class="form-group row">
         <label class="image-upload-container btn btn-bwm">
         <span>Select Image</span>
-            <input #imageInput type="file" accept="image/*" name="file" id="file" (change)="onFileChanged(imageInput)" />
+            <input #imageInput type="file" accept="image/*" name="file" id="file" (change)="onFileChanged(imageInput)" >
         </label>
         <div *ngIf="selectedFile" class="img-preview-container">
                 <div class="img-preview" [ngStyle] ="{'background-image':'url(' + selectedFile.src + ')'}">
@@ -66,14 +73,20 @@
             </div>
       </div>
       <div class="form-group row">
-      
-    </div>
+        <label class="col-3 col-form-label" >Attendee Limit</label>
+        <div class="col-9">
+          <input type="number" formControlName="attendee_limit" class="form-control" id="attendee_limit" name="attendee_limit" placeholder="put 0 for unlimited attendee" maxlength="5">
+          <p *ngIf="invalidAttendeeLimit()" id="attendee_limit_error" class="help-block">Invalid Attendee Limit.</p>
+        </div>
+        </div>
       <div class="form-group row">
             <label class="col-3 col-form-label" >Event Description</label>
             <div class="col-9">
-              <textarea  class="form-control" id="eventDesc" name="eventDesc" cols="40" rows="5" ></textarea>
+              <textarea formControlName="event_description" class="form-control" id="event_description" name="event_description" cols="40" rows="5" ></textarea>
+              <p *ngIf="invalidEventDescription()" id="event_description_error" class="help-block">Invalid Event Description.</p>
             </div>
           </div>
+      </div>
       <div class="text-center">
         <button class="btn btn-dark btn-lg" type="submit" >Submit</button>
       </div>

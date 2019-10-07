@@ -1,8 +1,9 @@
+<body>
 <article class="l-Wrapper">
   
     <div class="l-Header">
       <div class="l-Header-col">
-        <a href="http://www.sonjastrieder.com" target="_blank">
+        <a  target="_blank">
           <h1 class="image">
             <span class="u-shadow">
                 <img src="../../assets/image/feature-720x480.jpg"/>
@@ -12,7 +13,7 @@
         </a>
       </div>
       <div class="l-Header-col Contact">
-          <h1 class="l-Section-title ">Event Title</h1>
+          <h1 class="l-Section-title ">{{event.event_title}}</h1>
         <div>Toronto, Ontario</div>
         <div class="text-center">
             <button class="btn btn-dark btn-lg" type="submit" >Register</button>
@@ -23,7 +24,7 @@
     <section class="l-Section">
       <h2 class="l-Section-title  u-hidden@sm-down">Description</h2>
       <div class="l-Section-content">
-        <p>hihiklkjsdasdkjlskd kljlkdjaijdiwklsdih;lnx,asnjshdkhjkhdjkashdkjashdjkjhjk.</p>
+        <p>{{event.event_description}}</p>
       </div>
     </section>
   
@@ -31,10 +32,10 @@
       <h2 class="l-Section-title ">Date - Time</h2>
       <div class="l-Section-content">
         <ul>
-          <li>Start Date <strong class="Tag">99-99-9999</strong></li>
-          <li>Start time <strong class="Tag">99:99 PM/AM</strong></li>
-          <li>End Time   <strong class="Tag">99:99 PM/AM</strong></li>
-          <li>End Date   <strong class="Tag">99-99-9999</strong></li>
+          <li>Start Date <strong class="Tag">{{event.date_from}}</strong></li>
+          <li>Start time <strong class="Tag">{{event.time_from}}</strong></li>
+          <li>End Time   <strong class="Tag">{{event.time_to}}</strong></li>
+          <li>End Date   <strong class="Tag">{{event.date_to}}</strong></li>
         </ul>
       </div>
     </section>
@@ -43,10 +44,10 @@
       <h2 class="l-Section-title ">Location</h2>
       <div class="l-Section-content">
         <h3>Venue Name</h3>
-        <a class="u-link" href="#" target="_blank">jjjjjjjjj</a>
+        <a class="u-link" href="#" target="_blank">{{location.venue_name}}</a>
   
         <h3>Address</h3>
-        <a class="u-link" href="#" target="_blank">999 ahidsj</a> 
+        <a class="u-link" href="#" target="_blank">{{location.street_name}}</a> 
         
       </div>
     </section>
@@ -54,7 +55,7 @@
     <section class="l-Section">
       <h2 class="l-Section-title ">Attendee Limit</h2>
       <div class="l-Section-content">
-        <p>12-13.</p>
+        <p>{{event.attendee_limit}}</p>
       </div>
     </section>
 
@@ -69,3 +70,4 @@
         </div>
       </div>
     </div>
+  </body>
