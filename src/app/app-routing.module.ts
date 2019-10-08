@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { OfficialEventComponent } from './officialevent/officialevent.component'
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
