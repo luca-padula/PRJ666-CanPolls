@@ -124,7 +124,7 @@ export class EsriMapComponent implements OnInit {
         map.add(pollingStations);
 
         // Create a variable referencing the checkbox node
-        var pollingLayerToggle = document.getElementById("pollingLayer");
+        var pollingLayerToggle = document.getElementById("pollingLayer") as HTMLInputElement;
 
         console.log(pollingLayerToggle);
 
