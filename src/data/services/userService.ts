@@ -16,7 +16,7 @@ export class UserService {
     ("https://web422-teamsdata-harora.herokuapp.com/employee/" + user.userId, user);
   }
 */
-  getUserById(id) : Observable<User> {
-    return this.http.get<User>(environment.apiUrl + '/api/users/login' + id);
+  getUserById(id) : Observable<User[]> {
+    return this.http.get<User[]>(environment.apiUrl + '/api/users/' + 2);
   }
 }
