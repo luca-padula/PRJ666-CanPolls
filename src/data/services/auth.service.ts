@@ -53,4 +53,8 @@ export class AuthService {
   logout(): void {
     localStorage.clear();
   }
+
+  sendPasswordResetEmail(email: string): Observable<any> {
+    return this.http.post<any>(environment.apiUrl + '/api/forgotPassword', { email: email });
+  }
 }
