@@ -128,10 +128,10 @@ export class EsriMapComponent implements OnInit {
 
         console.log(pollingLayerToggle);
 
-        // Listen to the change event for the checkbox
+        //Listen to the change event for the checkbox
         pollingLayerToggle.addEventListener("change", function() {
           // When the checkbox is checked (true), set the layer's visibility to true
-          pollingStations.visible = pollingLayerToggle.checked;
+          pollingStations.visible = true;
         });
 
         view.popup.autoOpenEnabled = false;
