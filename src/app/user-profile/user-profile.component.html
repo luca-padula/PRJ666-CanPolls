@@ -54,7 +54,7 @@
                                             </tr>
                                     </thead>
                                         <tbody>
-                                            <tr *ngFor="let event of usersubmittedEvents" (click)="routeEmployee(Eve._id)">
+                                            <tr *ngFor="let event of usersubmittedEvents" (click)="">
                                             <td>{{Event.eventDescription}}</td>
                                             <td>{{Event.eventDate | date: 'longDate'}}</td>
                                             <td>{{Event.location}}</td>
@@ -79,7 +79,7 @@
                                             </tr>
                                     </thead>
                                         <tbody>
-                                            <tr *ngFor="let event of usersubmittedEvents" (click)="routeEmployee(Eve._id)">
+                                            <tr *ngFor="let event of usersubmittedEvents" (click)="">
                                             <td>{{Event.eventDescription}}</td>
                                             <td>{{Event.eventDate | date: 'longDate'}}</td>
                                             <td>{{Event.location}}</td>
