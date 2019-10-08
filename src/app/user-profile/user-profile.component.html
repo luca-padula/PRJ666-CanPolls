@@ -3,13 +3,13 @@
 <div class="container">
     <div class="row justify-content-md-center">
    <div class="col-md-6">
-      <form #f='ngForm' (ngSubmit)='onSubmit(f)'>
+      <form #f='ngForm'>
         <div class="row justify-content-md-center"> 
           <div class="col-md-6">
             <div class="form-group row" [class.has-error]="Name.errors">
               <label for="Name" class="col-md-4 col-form-label">Name:</label>
               <div class="col-sm-10">
-              <input #FirstName="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.Name"/>
+              <input #FirstName="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.firstName"/>
               <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
             </div>
             </div>
