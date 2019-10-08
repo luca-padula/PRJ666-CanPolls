@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { loadModules } from 'esri-loader';
-import esri = __esri;
+//import esri = __esri;
 
 @Component({
   selector: 'app-esri-map',
@@ -35,7 +35,7 @@ export class EsriMapComponent implements OnInit {
         const view = new EsriMapView({
           container: this.mapViewEl.nativeElement,
           center: [-79.3500, 43.7957],
-          zoom: 17,
+          zoom: 7,
           map: map
         });
 
@@ -53,7 +53,7 @@ export class EsriMapComponent implements OnInit {
             haloColor: "#000000",
             haloSize: "2px",
             font: {
-              size: "18px",
+              size: "36px",
               family: "Noto Sans",
               style: "italic",
               weight: "normal"
@@ -61,12 +61,14 @@ export class EsriMapComponent implements OnInit {
           },
           //labelPlacement: "above-center",
           labelExpressionInfo: {
-            expression: "return $feature[\"pd_num\"] + ' - ' + $feature[\"poll_name\"];"
+            //expression: "return $feature[\"pd_num\"] + ' - ' + $feature[\"poll_name\"];"
+            expression: "return $feature[\"ed_namee\"];"
           }
         };
 
         var pollingDivisions = new FeatureLayer({
-          url: "https://services8.arcgis.com/oJlq1EXvPtMkmTJA/arcgis/rest/services/Canada_Polling_Divisions_2019/FeatureServer/0",
+          //url: "https://services8.arcgis.com/oJlq1EXvPtMkmTJA/arcgis/rest/services/Canada_Polling_Divisions_2019/FeatureServer/0",
+          url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Electoral_Districts/FeatureServer/0",
           labelingInfo: [pollingDivisionsLabels],
           opacity: 0.50
         });
@@ -86,11 +88,11 @@ export class EsriMapComponent implements OnInit {
         var pollingStationsLabels = {
           symbol: {
             type: "text",
-            color: "#0000A0",
-            //haloColor: "#0000A0",
-            //haloSize: "1px",
+            color: "#6666A0",
+            haloColor: "#000000",
+            haloSize: "1px",
             font: {
-              size: "10px",
+              size: "20px",
               family: "Noto Sans",
               style: "normal",
               weight: "bold"
@@ -102,6 +104,17 @@ export class EsriMapComponent implements OnInit {
           }
         };
 
+        search.sources.push({
+          layer: pollingDivisions,
+          searchFields: ["ED_NAMEE"],
+          displayField: ["ED_NAMEE"],
+          exactMatch: false,
+          outFields: ["ED_NAMEE", "ED_NAMEF"],
+          resultGraphicEnabled: true,
+          name: "Polling Divisons",
+          placeholder: "Example: Thornhill",
+        });
+
         var pollingStations = new FeatureLayer({
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Polling_Stations/FeatureServer/0",
           renderer: pollingStationsRenderer,
@@ -110,6 +123,16 @@ export class EsriMapComponent implements OnInit {
 
         map.add(pollingStations);
 
+        // Create a variable referencing the checkbox node
+        var pollingLayerToggle = document.getElementById("pollingLayer");
+
+        console.log(pollingLayerToggle);
+
+        // Listen to the change event for the checkbox
+        pollingLayerToggle.addEventListener("change", function() {
+          // When the checkbox is checked (true), set the layer's visibility to true
+          pollingStations.visible = pollingLayerToggle.checked;
+        });
 
         view.popup.autoOpenEnabled = false;
         view.on("click", function (event) {

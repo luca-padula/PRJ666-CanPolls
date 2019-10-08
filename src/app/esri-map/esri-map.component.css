@@ -2,5 +2,16 @@
 @import 'https://js.arcgis.com/4.10/esri/css/main.css';
 
 .esri-view {
-  height: 600px;
+  height: 75vh;
 }
+
+/* #layerToggle {
+  bottom: 840px;
+  left: 600px; 
+  position: relative;
+  z-index: 99;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  opacity: 0.75;
+} */

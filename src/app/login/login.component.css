@@ -10,7 +10,7 @@
 .display-5 {
     margin-bottom: 75px;
 }
-button {
+a.btn, button {
     border-radius: 12px;
     padding: 4px 16px;
     border: 2px solid #707070;

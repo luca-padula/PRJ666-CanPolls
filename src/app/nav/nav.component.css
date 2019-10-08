@@ -5,9 +5,12 @@
     background-color: #8B0000;
 }
 
-
-
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+}
 
 .nav-link {
     color: #FFFFFF;
+    font-size: 18px;
 }
