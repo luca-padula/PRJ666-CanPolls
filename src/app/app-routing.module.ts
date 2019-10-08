@@ -11,6 +11,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'userProfile', component: UserProfileComponent },
   {path: 'verifyEmail/:id/:token', component: VerifyEmailComponent},
   {path: 'forgotPassword', component: ForgotPasswordComponent},
+  {path: 'resetPassword/:id/:token', component: ResetPasswordComponent},
   {path: "", redirectTo:'/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
