@@ -15,6 +15,9 @@ export class ResetPasswordComponent implements OnInit {
   token: string;
   password: string;
   password2: string;
+  successMessage: boolean;
+  errorMessage: boolean;
+  validationErrors: ValidationError[];
 
   constructor(
     private auth: AuthService,
@@ -33,11 +36,18 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit(f: NgForm): void {
+    this.errorMessage = false;
+    this.validationErrors = [];
     this.auth.resetPassword(this.id, this.token, this.password, this.password2)
       .subscribe((success) => {
-
+        this.successMessage = true;
       }, (err) => {
-
+        if (err.error.validationErrors) {
+          this.validationErrors = err.error.validationErrors;
+        }
+        else {
+          this.errorMessage = true;
+        }
       });
   }
 
