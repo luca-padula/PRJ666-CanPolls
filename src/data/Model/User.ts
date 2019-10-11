@@ -8,6 +8,8 @@ export class User
     lastName: string;
     isVerified: boolean;
     verificationHash: string;
+    partyAffiliation: string;
+    affiliationApproved: boolean;
     rejectionCount: number;
     createdAt: string;
     updatedAt: string;

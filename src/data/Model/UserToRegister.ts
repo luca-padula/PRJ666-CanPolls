@@ -6,4 +6,5 @@ export class UserToRegister
     password2: string;
     firstName: string;
     lastName: string;
+    partyAffiliation: string;
 }
