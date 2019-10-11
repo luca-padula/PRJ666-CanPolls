@@ -20,31 +20,40 @@ export class EsriMapComponent implements OnInit {
       "esri/Map",
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
-      "esri/widgets/Search"
+      "esri/widgets/Search",
+      "esri/widgets/Compass",
+      "esri/widgets/Locate",
     ])
-      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search]) => {
+      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate]) => {
         // Create a locator task using the world geocoding service
         const locatorTask = new Locator({
           url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
         });
 
         const map = new EsriMap({
-          basemap: 'dark-gray-vector'
+          // basemap: 'dark-gray-vector'
+          basemap: 'gray-vector'
         });
 
         const view = new EsriMapView({
           container: this.mapViewEl.nativeElement,
-          center: [-79.3500, 43.7957],
-          zoom: 7,
+          center: [-106.3468, 56.1304],
+          zoom: 5,
           map: map
         });
 
         // Search widget
-        var search = new Search({
-          view: view
-        });
+        var search = new Search({view: view});
+
+        // Compass widget
+        var compass = new Compass({view: view});
+
+        // Locate widget
+        var locateWidget = new Locate({view: view});
 
         view.ui.add(search, "top-right");
+        view.ui.add(compass, "top-left");
+        view.ui.add(locateWidget, "top-left");
 
         var pollingDivisionsLabels = {
           symbol: {
@@ -118,18 +127,18 @@ export class EsriMapComponent implements OnInit {
         var pollingStations = new FeatureLayer({
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Polling_Stations/FeatureServer/0",
           renderer: pollingStationsRenderer,
-          labelingInfo: [pollingStationsLabels]
+          labelingInfo: [pollingStationsLabels],
+          visible: false
         });
 
         map.add(pollingStations);
 
         // Create a variable referencing the checkbox node
         var pollingLayerToggle = document.getElementById("pollingLayer") as HTMLInputElement;
-
-        console.log(pollingLayerToggle);
+        pollingLayerToggle.checked = false;
 
         // Listen to the change event for the checkbox
-        pollingLayerToggle.addEventListener("change", function() {
+        pollingLayerToggle.addEventListener("change", function () {
           // When the checkbox is checked (true), set the layer's visibility to true
           pollingStations.visible = pollingLayerToggle.checked;
         });
@@ -163,6 +172,17 @@ export class EsriMapComponent implements OnInit {
               view.popup.content = "No address was found for this location";
             });
         });
+
+        // Will figure this out later
+        // view.on("pointer-move", function(event) {
+        //   view.hitTest(event).then(function(response) {
+        //     // check if a feature is returned from the hurricanesLayer
+        //     // do something with the result graphic
+        //     const graphic = response.results.filter(function(result) {
+        //       return result.graphic.layer === pollingStations;
+        //     })[0].graphic;
+        //   });
+        // });
       })
       .catch(err => {
         console.error(err);
