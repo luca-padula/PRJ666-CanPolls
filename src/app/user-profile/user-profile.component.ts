@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/data/Model/User';
-import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../data/services/userService'
+import { UserService } from '../../data/services/user.service'
 import { AuthService } from 'src/data/services/auth.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,28 +11,27 @@ import { AuthService } from 'src/data/services/auth.service';
 })
 export class UserProfileComponent implements OnInit {
  
-  constructor(){ }
-  /*
-   private auth: AuthService, private route: ActivatedRoute, private uService: UserService
-  private paramSubscription: any;
+  constructor(private auth: AuthService, private uService: UserService){ }
+    
   private userSubscription: any;
   private saveUserSubscription: any;
   currentUser: User;
   
   successMessage =  false;
   failMessage = false;
-  private token: any;*/
+  private token: any;
 
   ngOnInit() {
- /*   console.log("isnide on int");
       this.token = this.auth.readToken();
-      console.log(this.token.userId);
-      this.userSubscription = this.uService.getUserById(this.token.userId).subscribe(us => this.currentUser = us);
-  */}
+      this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
+        this.currentUser = us;
+        console.log(this.currentUser);
+        console.log(this.currentUser.firstName);
+      });
+   }
  
-  ngOnDestroy(){
-    //if(this.paramSubscription){this.paramSubscription.unsubscribe();}
-   // if(this.userSubscription){this.userSubscription.unsubscribe();}
+  ngOnDestroy(){ 
+   if(this.userSubscription){this.userSubscription.unsubscribe();}
   }
  
 }

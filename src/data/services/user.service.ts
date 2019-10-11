@@ -2,21 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
+import { User } from 'src/data/Model/User';
 
-import { User } from '../Model/User';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
-
 
   constructor(private http: HttpClient) { }
 
- /* saveUser(user : User) : Observable<any> {
-    return this.http.put<any>(environment.apiUrl + '/api/users/login', user);
-    ("https://web422-teamsdata-harora.herokuapp.com/employee/" + user.userId, user);
-  }
-*/
-  getUserById(id: number) : Observable<User> {
+  getUserById(id: string) : Observable<User> {
     return this.http.get<User>(environment.apiUrl + '/api/users/' + id);
   }
 }
