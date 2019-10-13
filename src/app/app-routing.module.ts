@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { OfficialEventComponent } from './official-event/official-event.component'
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'createEvent', component: CreateEventComponent},
   {path: 'userProfile', component: UserProfileComponent },
   {path: 'verifyEmail/:id/:token', component: VerifyEmailComponent},
+  {path: 'officialEvent',component:OfficialEventComponent},
   {path: "", redirectTo:'/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
