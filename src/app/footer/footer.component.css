@@ -1,3 +1,17 @@
+* {
+    font-size: 1.5rem;
+}
+
 footer {
     background-color: #DB7093;
+}
+
+a {
+    color: turquoise;
+    text-decoration: none;
+}
+
+#contact_table td {
+    padding: 4px;
+    vertical-align: top;
 }
