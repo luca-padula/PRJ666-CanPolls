@@ -21,12 +21,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { InterceptTokenService } from 'src/data/services/intercept-token.service';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-<<<<<<< HEAD
 import { OfficialEventComponent } from './official-event/official-event.component';
-=======
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
->>>>>>> a5e2f6d9b9548ad137c2a01e2538344435535f10
+
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
@@ -50,12 +48,9 @@ export function tokenGetter() {
     UserProfileComponent,
     CreateEventComponent,
     VerifyEmailComponent,
-<<<<<<< HEAD
-    OfficialEventComponent
-=======
+    OfficialEventComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent
->>>>>>> a5e2f6d9b9548ad137c2a01e2538344435535f10
   ],
   imports: [
     BrowserModule,
