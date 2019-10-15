@@ -10,7 +10,12 @@ import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+<<<<<<< HEAD
 import { OfficialEventComponent } from './official-event/official-event.component'
+=======
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+>>>>>>> a5e2f6d9b9548ad137c2a01e2538344435535f10
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -21,7 +26,12 @@ const routes: Routes = [
   {path: 'createEvent', component: CreateEventComponent},
   {path: 'userProfile', component: UserProfileComponent },
   {path: 'verifyEmail/:id/:token', component: VerifyEmailComponent},
+<<<<<<< HEAD
   {path: 'officialEvent',component:OfficialEventComponent},
+=======
+  {path: 'forgotPassword', component: ForgotPasswordComponent},
+  {path: 'resetPassword/:id/:token', component: ResetPasswordComponent},
+>>>>>>> a5e2f6d9b9548ad137c2a01e2538344435535f10
   {path: "", redirectTo:'/home', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];

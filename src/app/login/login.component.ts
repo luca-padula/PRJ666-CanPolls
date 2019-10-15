@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     }, (err) => {
       this.rejectionCount++;
       if (this.rejectionCount >= 5) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/forgotPassword']);
       }
       this.warning = err.error.message;
     });

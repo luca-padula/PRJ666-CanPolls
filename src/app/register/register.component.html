@@ -54,9 +54,26 @@
           <input type="text" [(ngModel)]="user.lastName" class="form-control" id="lastName" name="lastName">
         </div>
       </div>
+      <div class="form-group row">
+        <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
+        <div class="col-9">
+          <select [(ngModel)]="user.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
+            <option value="conservative">Conservative Party</option>
+            <option value="liberal">Liberal Party</option>
+            <option value="ndp">New Democratic Party</option>
+            <option value="green">Green party</option>
+            <option value="people's">People's Party</option>
+          </select>
+          <small id="affiliationHelpBlock" class="form-text text-muted">
+            Select an option if you are a member of a political party. This is optional and you can change it later.
+            After selecting a party, an email will be sent to an administrator of that party letting them know that they
+            can approve you to create events on their behalf.
+          </small>
+        </div>
+      </div>
     </div>
     <div class="text-center">
-      <button class="btn btn-dark btn-lg" type="submit" [disabled]="!f.valid">Submit</button>
+      <button class="btn btn-dark btn-lg" type="submit">Submit</button>
     </div>
   </form>
 </div>
