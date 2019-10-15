@@ -38,7 +38,7 @@ export class EsriMapComponent implements OnInit {
         const view = new EsriMapView({
           container: this.mapViewEl.nativeElement,
           center: [-106.3468, 56.1304],
-          zoom: 5,
+          zoom: 3,
           map: map
         });
 
@@ -75,24 +75,30 @@ export class EsriMapComponent implements OnInit {
           }
         };
 
+        var popupPollingDivisions = {
+          "title": "<b>Polling Division:</b> {ED_NAMEE}",
+          // "content": "<b>City:</b> {CITY_JUR}<br><b>Cross Street:</b> {X_STREET}<br><b>Parking:</b> {PARKING}<br><b>Elevation:</b> {ELEV_FT} ft"
+        }
+
         var pollingDivisions = new FeatureLayer({
           //url: "https://services8.arcgis.com/oJlq1EXvPtMkmTJA/arcgis/rest/services/Canada_Polling_Divisions_2019/FeatureServer/0",
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Electoral_Districts/FeatureServer/0",
           labelingInfo: [pollingDivisionsLabels],
-          opacity: 0.50
+          opacity: 0.50,
+          popupTemplate: popupPollingDivisions
         });
 
         map.add(pollingDivisions);
 
-        var pollingStationsRenderer = {
-          type: "simple",
-          symbol: {
-            type: "picture-marker",
-            url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRRjHnt5ly0y4GQBASsI0cYKvNuU5sjJfESphFPeSYkLcLtTnSAg",
-            width: "18px",
-            height: "18px"
-          }
-        }
+        // var pollingStationsRenderer = {
+        //   type: "simple",
+        //   symbol: {
+        //     type: "picture-marker",
+        //     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRRjHnt5ly0y4GQBASsI0cYKvNuU5sjJfESphFPeSYkLcLtTnSAg",
+        //     width: "18px",
+        //     height: "18px"
+        //   }
+        // }
 
         var pollingStationsLabels = {
           symbol: {
@@ -116,7 +122,7 @@ export class EsriMapComponent implements OnInit {
         search.sources.push({
           layer: pollingDivisions,
           searchFields: ["ED_NAMEE"],
-          displayField: ["ED_NAMEE"],
+          displayField: "ED_NAMEE",
           exactMatch: false,
           outFields: ["ED_NAMEE", "ED_NAMEF"],
           resultGraphicEnabled: true,
@@ -126,7 +132,7 @@ export class EsriMapComponent implements OnInit {
 
         var pollingStations = new FeatureLayer({
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Polling_Stations/FeatureServer/0",
-          renderer: pollingStationsRenderer,
+          // renderer: pollingStationsRenderer,
           labelingInfo: [pollingStationsLabels],
           visible: false
         });
@@ -140,38 +146,38 @@ export class EsriMapComponent implements OnInit {
         // Listen to the change event for the checkbox
         pollingLayerToggle.addEventListener("change", function () {
           // When the checkbox is checked (true), set the layer's visibility to true
-          pollingStations.visible = pollingLayerToggle.checked;
+          pollingStations.visible = true;
         });
 
-        view.popup.autoOpenEnabled = false;
-        view.on("click", function (event) {
-          // Get the coordinates of the click on the view
-          // around the decimals to 3 decimals
-          var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-          var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+        // view.popup.autoOpenEnabled = false;
+        // view.on("click", function (event) {
+        //   // Get the coordinates of the click on the view
+        //   // around the decimals to 3 decimals
+        //   var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+        //   var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
 
-          view.popup.open({
-            // Set the popup's title to the coordinates of the clicked location
-            title: "Reverse geocode: [" + lon + ", " + lat + "]",
-            location: event.mapPoint // Set the location of the popup to the clicked location
-          });
+        //   view.popup.open({
+        //     // Set the popup's title to the coordinates of the clicked location
+        //     title: "Reverse geocode: [" + lon + ", " + lat + "]",
+        //     location: event.mapPoint // Set the location of the popup to the clicked location
+        //   });
 
-          var params = {
-            location: event.mapPoint
-          };
+        //   var params = {
+        //     location: event.mapPoint
+        //   };
 
-          // Execute a reverse geocode using the clicked location
-          locatorTask
-            .locationToAddress(params)
-            .then(function (response) {
-              // If an address is successfully found, show it in the popup's content
-              view.popup.content = response.address;
-            })
-            .catch(function (error) {
-              // If the promise fails and no result is found, show a generic message
-              view.popup.content = "No address was found for this location";
-            });
-        });
+        //   // Execute a reverse geocode using the clicked location
+        //   locatorTask
+        //     .locationToAddress(params)
+        //     .then(function (response) {
+        //       // If an address is successfully found, show it in the popup's content
+        //       view.popup.content = response.address;
+        //     })
+        //     .catch(function (error) {
+        //       // If the promise fails and no result is found, show a generic message
+        //       view.popup.content = "No address was found for this location";
+        //     });
+        // });
 
         // Will figure this out later
         // view.on("pointer-move", function(event) {

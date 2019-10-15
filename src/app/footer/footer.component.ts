@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faCode } from '@fortawesome/free-solid-svg-icons';
+import { faServer } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-footer',
@@ -11,6 +13,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 export class FooterComponent implements OnInit {
   faHome = faHome;
   faEnvelope = faEnvelope;
+  faCode = faCode;
+  faServer = faServer;
 
   constructor() { }
 
