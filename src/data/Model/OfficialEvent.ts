@@ -10,4 +10,5 @@ export class OfficialEvent
    location:string;
    date:string;
    party:string;
+   link:string;
 }

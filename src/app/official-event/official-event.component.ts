@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import{OfficialEvent} from '../../data/Model/OfficialEvent'
 import{OfficialEventService} from '../../data/services/official-event.service'
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -11,19 +12,25 @@ import{OfficialEventService} from '../../data/services/official-event.service'
 export class OfficialEventComponent implements OnInit {
 
  ofEvent: OfficialEvent[];
+ error:HttpErrorResponse;
 
+//get searched event
+searchParty:string;
+
+ //get selected event 
 selectedEvent : OfficialEvent;
 showDetail(event: OfficialEvent):void{
   this.selectedEvent = event;
 }
+
+
+//get all events 
   constructor(private ofEService : OfficialEventService) { }
 
   getOfEvent():void{
     this.ofEService.getOfficialEvents()
-                .subscribe(ofEvent=>{this.ofEvent=ofEvent;console.log(ofEvent);},
-                (err) => {
-                  console.log(err);
-                });
+                .subscribe(ofEvent=>{this.ofEvent=ofEvent;},
+                (err) => {this.error = err});
                 
   }
   ngOnInit() {

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { OfficialEventComponent } from './official-event/official-event.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { PartyFilterPipe} from './official-event/party-filter.pipe'
+
 
 
 // retrieves the Json Web Token from local storage
@@ -50,7 +53,8 @@ export function tokenGetter() {
     VerifyEmailComponent,
     OfficialEventComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    PartyFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -59,6 +63,7 @@ export function tokenGetter() {
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
