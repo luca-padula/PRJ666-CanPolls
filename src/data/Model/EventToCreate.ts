@@ -1,4 +1,4 @@
-export class Event
+export class EventToCreate
 {
     event_id: number;
     event_title: String;
@@ -10,9 +10,5 @@ export class Event
     attendee_limit: number;
     location: Location;
 
-    constructor(obj: any = null){
-        if(obj != null){
-            Object.assign(this, obj);
-        }
-    }
+    
 }

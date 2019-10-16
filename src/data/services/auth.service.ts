@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/data/Model/User';
 import { UserToRegister } from '../Model/UserToRegister';
+import {EventToCreate} from '../Model/EventToCreate';
 
 @Injectable({
   providedIn: 'root'
@@ -65,5 +66,9 @@ export class AuthService {
     };
     let apiUrl: string = environment.apiUrl + '/api/resetPassword/' + id + '/' + token;
     return this.http.post<any>(apiUrl, body);
+  }
+
+  createEvent(eventToCreate: EventToCreate): Observable<any>{
+    return this.http.post<any>(environment.apiUrl + 'api/createEvent/', eventToCreate);
   }
 }

@@ -1,64 +1,73 @@
 <div class="container">
     <h2 class="text-left">Create an Event</h2>
-    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="successMessage" class="alert alert-success text-center">
+      Success: Event {{event.event_title}} has been submitted!<br />
+      Please wait for your event to be verify. We will send you an email when it finishs
+    </div>
+    <form *ngIf="!successMessage" #f="ngForm" (ngSubmit)="onSubmit(f)">
       <p class="lead text-left">
         Add your Event Details
       </p>
-     
+      <div *ngIf="warning" class="alert alert-danger">
+        {{warning}}
+      </div>
+      <div *ngFor="let err of validationErrors" class="alert alert-danger">
+        {{err.msg}}
+      </div>
       <div class="form-well">
         <div class="form-group row">
           <label class="col-3 col-form-label" >Event Title</label>
           <div class="col-9">
-            <input type="text" formControlName="event_title"  class="form-control" id="event_title" name="event_title">
-            <p *ngIf="invalidEventTitle()" id="event_title_error" class="help-block">Invalid Event Title.</p>
+            <input type="text" [(ngModel)]="event.event_title"  class="form-control" id="event_title" name="event_title">
+            
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >Venue Name</label>
           <div class="col-9">
-            <input type="text" formControlName="venue_name" class="form-control" id="venue_name" name="venue_name">
-            <p *ngIf="invalidVenueName()" id="venue_name_error" class="help-block">Invalid Venue Name.</p>
+            <input type="text" [(ngModel)]="location.venue_name" class="form-control" id="venue_name" name="venue_name">
+            
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >Street Name</label>
           <div class="col-9">
-            <input type="text" formControlName="street_name" class="form-control" id="street_name" name="street_name">
-            <p *ngIf="invalidStreetName()" id="street_name_error" class="help-block">Invalid Street Name.</p>
+            <input type="text" [(ngModel)]="location.street_name" class="form-control" id="street_name" name="street_name">
+            
           </div>
         </div>
         <div class="form-group row">
           <label class="col-3 col-form-label" >City</label>
           <div class="col-9">
-            <input type="text" formControlName="city"  class="form-control" id="city" name="city">
-            <p *ngIf="invalidCity()" id="city_error" class="help-block">Invalid City.</p>
+            <input type="text" [(ngModel)]="location.city"  class="form-control" id="city" name="city">
+            
           </div>
         </div>
         <div class="form-group row">
             <label class="col-3 col-form-label" >Province</label>
             <div class="col-9">
-              <input type="text" formControlName="province"  class="form-control" id="province" name="province">
-              <p *ngIf="invalidProvince()" id="province_error" class="help-block">Invalid Province.</p>
+              <input type="text" [(ngModel)]="location.province"  class="form-control" id="province" name="province">
+              
             </div>
           </div>
       
       <div class="form-group row">
         <label class="col-3 col-form-label" >Postal Code</label>
         <div class="col-9">
-          <input type="text" formControlName="postal_code" class="form-control" id="postal_code" name="postal_code" maxlength="6">
-          <p *ngIf="invalidPostalCode()" id="postal_code_error" class="help-block">Invalid Postal Code.</p>
+          <input type="text" [(ngModel)]="location.postal_code" class="form-control" id="postal_code" name="postal_code" maxlength="6">
+          
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label" >Date - Time</label>
         <div class="col-9" style="display:inline-flex">
             
-          <input type="text" formControlName="date_from" class="form-control" id="date_from" name="date_from">
-          <input type="text" formControlName="time_from" class="form-control" id="time_from" name="time_from">
+          <input type="text" [(ngModel)]="event.date_from" class="form-control" id="date_from" name="date_from">
+          <input type="text" [(ngModel)]="event.time_from" class="form-control" id="time_from" name="time_from">
           <p> - </p>
-          <input type="text" formControlName="date_to" class="form-control" id="date_to" name="date_to">
-          <input type="text" formControlName="time_to" class="form-control" id="time_to" name="time_to">
-          <p *ngIf="invalidDateTime()" id="date_time_error" class="help-block">Invalid Date/Time.</p>
+          <input type="text" [(ngModel)]="event.date_to" class="form-control" id="date_to" name="date_to">
+          <input type="text" [(ngModel)]="event.time_to" class="form-control" id="time_to" name="time_to">
+          
         </div>
       </div>
       <div class="form-group row">
@@ -75,15 +84,15 @@
       <div class="form-group row">
         <label class="col-3 col-form-label" >Attendee Limit</label>
         <div class="col-9">
-          <input type="number" formControlName="attendee_limit" class="form-control" id="attendee_limit" name="attendee_limit" placeholder="put 0 for unlimited attendee" maxlength="5">
-          <p *ngIf="invalidAttendeeLimit()" id="attendee_limit_error" class="help-block">Invalid Attendee Limit.</p>
+          <input type="number" [(ngModel)]="attendee_limit" class="form-control" id="attendee_limit" name="attendee_limit" placeholder="put 0 for unlimited attendee" maxlength="5">
+          
         </div>
         </div>
       <div class="form-group row">
             <label class="col-3 col-form-label" >Event Description</label>
             <div class="col-9">
-              <textarea formControlName="event_description" class="form-control" id="event_description" name="event_description" cols="40" rows="5" ></textarea>
-              <p *ngIf="invalidEventDescription()" id="event_description_error" class="help-block">Invalid Event Description.</p>
+              <textarea [(ngModel)]="event.sevent_description" class="form-control" id="event_description" name="event_description" cols="40" rows="5" ></textarea>
+              
             </div>
           </div>
       </div>

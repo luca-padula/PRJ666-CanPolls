@@ -1,10 +1,10 @@
-import { Event } from './Event';
+import { EventToCreate } from './EventToCreate';
 import { Political } from './Political';
 import { Category } from './Category';
 
 export class OfficialEvent
 {
-    event: Event;
+    event: EventToCreate;
     source: Political;
     category: Category;
 }
