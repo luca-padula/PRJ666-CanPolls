@@ -1,10 +1,14 @@
-import { EventToCreate } from './EventToCreate';
-import { Political } from './Political';
-import { Category } from './Category';
+
 
 export class OfficialEvent
 {
-    event: EventToCreate;
-    source: Political;
-    category: Category;
+   id:bigint;
+   title:string;
+   description:string;
+   province:string;
+   address:string;
+   location:string;
+   date:string;
+   party:string;
+   link:string;
 }
