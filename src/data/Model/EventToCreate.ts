@@ -8,7 +8,9 @@ export class EventToCreate
     time_from: String;
     time_to: String;
     attendee_limit: number;
-    location: Location;
-
-    
+    venue_name: String;
+	street_name: String;
+	city:String;
+	province:String;
+	postal_code:String;
 }

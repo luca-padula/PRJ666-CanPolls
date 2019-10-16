@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {EventToCreate} from 'src/data/Model/EventToCreate';
-
-import {ValidationError} from 'src/data/Model/ValidationError';
 import {AuthService} from 'src/data/services/auth.service';
+import {ValidationError} from 'src/data/Model/ValidationError';
 class ImageSnippet{
   constructor(public src: String, public file: File){}
 }
@@ -14,7 +13,7 @@ class ImageSnippet{
 })
 export class CreateEventComponent implements OnInit {
   selectedFile: ImageSnippet;
-  event: Event;
+  event: EventToCreate;
   validationErrors: ValidationError[];
   warning: string;
   successMessage: boolean;
@@ -22,7 +21,7 @@ export class CreateEventComponent implements OnInit {
   constructor(private auth: AuthService) { }
   
   ngOnInit() {
-    this.event = new Event;
+    this.event = new EventToCreate;
   }
   onFileChanged(imageInput: any){
     debugger;
@@ -36,17 +35,20 @@ export class CreateEventComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   onSubmit(f: NgForm): void{
+    
     this.auth.createEvent(this.event).subscribe((success)=>{
       this.warning = null;
       this.successMessage = true;
+      console.log("pass!!");
     }, (err) =>{
-      if(err.error.validationErrors){
+      if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
-      } 
-      else{
+      }
+      else {
         this.warning = err.error.message;
       }
-    })
+      
+    });
     
   }
 }

@@ -69,6 +69,6 @@ export class AuthService {
   }
 
   createEvent(eventToCreate: EventToCreate): Observable<any>{
-    return this.http.post<any>(environment.apiUrl + 'api/createEvent/', eventToCreate);
+    return this.http.post<any>(environment.apiUrl + '/api/createEvent', eventToCreate);
   }
 }
