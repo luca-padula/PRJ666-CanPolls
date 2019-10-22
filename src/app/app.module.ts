@@ -25,7 +25,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { OfficialEventComponent } from './official-event/official-event.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { PartyFilterPipe} from './official-event/party-filter.pipe'
+import { PartyFilterPipe} from './official-event/party-filter.pipe';
+import { EditEventComponent } from './edit-event/edit-event.component'
 
 
 
@@ -54,7 +55,8 @@ export function tokenGetter() {
     OfficialEventComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    PartyFilterPipe
+    PartyFilterPipe,
+    EditEventComponent
   ],
   imports: [
     BrowserModule,
