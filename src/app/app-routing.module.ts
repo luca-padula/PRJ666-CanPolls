@@ -10,24 +10,26 @@ import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CreateEventComponent } from './create-event/create-event.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-
 import { OfficialEventComponent } from './official-event/official-event.component'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { EditEventComponent } from './edit-event/edit-event.component';
+
 const routes: Routes = [
-  {path: 'home', component: HomeComponent},
-  {path: 'events', component: EventComponent},
-  {path: 'event/:id', component: SubmittedEventComponent},
-  {path: 'login', component: LoginComponent },
-  {path: 'register', component: RegisterComponent },
-  {path: 'createEvent', component: CreateEventComponent},
-  {path: 'userProfile', component: UserProfileComponent },
-  {path: 'verifyEmail/:id/:token', component: VerifyEmailComponent},
-{path: 'officialEvent',component:OfficialEventComponent},
-{path: 'forgotPassword', component: ForgotPasswordComponent},
-{path: 'resetPassword/:id/:token', component: ResetPasswordComponent},
-       {path: "", redirectTo:'/home', pathMatch: 'full'},
-  {path: '**', component: PageNotFoundComponent}
+  { path: 'home', component: HomeComponent },
+  { path: 'events', component: EventComponent },
+  { path: 'event/:id', component: SubmittedEventComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'createEvent', component: CreateEventComponent },
+  { path: 'userProfile', component: UserProfileComponent },
+  { path: 'verifyEmail/:id/:token', component: VerifyEmailComponent },
+  { path: 'officialEvent', component: OfficialEventComponent },
+  { path: 'forgotPassword', component: ForgotPasswordComponent },
+  { path: 'resetPassword/:id/:token', component: ResetPasswordComponent },
+  { path: 'event/:id/edit', component: EditEventComponent, canActivate: [GuardAuthService] },
+  { path: "", redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
