@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+// Look at ArcGISDynamicMapServiceLayer
+
+import { Component, OnInit, ViewChild, ElementRef, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { loadModules } from 'esri-loader';
 //import esri = __esri;
 
@@ -23,17 +25,19 @@ export class EsriMapComponent implements OnInit {
       "esri/widgets/Search",
       "esri/widgets/Compass",
       "esri/widgets/Locate",
+      "esri/core/watchUtils",
+      "esri/request"
     ])
-      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate]) => {
+      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest]) => {
         // Create a locator task using the world geocoding service
         const locatorTask = new Locator({
           url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
         });
 
-        const map = new EsriMap({
+        var map = new EsriMap({
           // basemap: 'dark-gray-vector'
           basemap: 'gray-vector'
-        });
+        })
 
         const view = new EsriMapView({
           container: this.mapViewEl.nativeElement,
@@ -42,14 +46,43 @@ export class EsriMapComponent implements OnInit {
           map: map
         });
 
+        // view.when(function () {
+        //   // This function will execute once the promise is resolved
+        //   console.log("Map loaded.");
+        // })
+        //   .catch();
+
+        // // Listen to layerview create event for the layers
+        // view.on("layerview-create", function (event) {
+        //   console.log("Layer created.");
+        // });
+
+        // view.popup.watch("selectedFeature", function (feature) {
+        //   if (feature) {
+        //     console.log(Object.entries(feature));
+        //   }
+        // });
+
         // Search widget
-        var search = new Search({view: view});
+        // Do not include the default map search
+        var search = new Search({ view: view, includeDefaultSources: false });
+
+        search.sources.push({
+          layer: pollingDivisions,
+          searchFields: ["ED_NAMEE"],
+          displayField: "ED_NAMEE",
+          exactMatch: false,
+          outFields: ["ED_NAMEE", "ED_NAMEF"],
+          resultGraphicEnabled: true,
+          name: "Polling Divisons",
+          placeholder: "Example: Thornhill",
+        })
 
         // Compass widget
-        var compass = new Compass({view: view});
+        var compass = new Compass({ view: view });
 
         // Locate widget
-        var locateWidget = new Locate({view: view});
+        var locateWidget = new Locate({ view: view });
 
         view.ui.add(search, "top-right");
         view.ui.add(compass, "top-left");
@@ -70,22 +103,21 @@ export class EsriMapComponent implements OnInit {
           },
           //labelPlacement: "above-center",
           labelExpressionInfo: {
-            //expression: "return $feature[\"pd_num\"] + ' - ' + $feature[\"poll_name\"];"
             expression: "return $feature[\"ed_namee\"];"
           }
         };
 
-        var popupPollingDivisions = {
-          "title": "<b>Polling Division:</b> {ED_NAMEE}",
-          // "content": "<b>City:</b> {CITY_JUR}<br><b>Cross Street:</b> {X_STREET}<br><b>Parking:</b> {PARKING}<br><b>Elevation:</b> {ELEV_FT} ft"
-        }
-
         var pollingDivisions = new FeatureLayer({
-          //url: "https://services8.arcgis.com/oJlq1EXvPtMkmTJA/arcgis/rest/services/Canada_Polling_Divisions_2019/FeatureServer/0",
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Electoral_Districts/FeatureServer/0",
           labelingInfo: [pollingDivisionsLabels],
           opacity: 0.50,
-          popupTemplate: popupPollingDivisions
+          outFields: ["*"],
+          popupTemplate: {
+            title: "<b>Polling Division:</b> {ED_NAMEE}",
+            outFields: ["*"],
+           // "content": "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}"
+            content: queryDivisionInformation
+          }
         });
 
         map.add(pollingDivisions);
@@ -119,17 +151,6 @@ export class EsriMapComponent implements OnInit {
           }
         };
 
-        search.sources.push({
-          layer: pollingDivisions,
-          searchFields: ["ED_NAMEE"],
-          displayField: "ED_NAMEE",
-          exactMatch: false,
-          outFields: ["ED_NAMEE", "ED_NAMEF"],
-          resultGraphicEnabled: true,
-          name: "Polling Divisons",
-          placeholder: "Example: Thornhill",
-        });
-
         var pollingStations = new FeatureLayer({
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Polling_Stations/FeatureServer/0",
           // renderer: pollingStationsRenderer,
@@ -149,46 +170,32 @@ export class EsriMapComponent implements OnInit {
           pollingStations.visible = true;
         });
 
-        // view.popup.autoOpenEnabled = false;
-        // view.on("click", function (event) {
-        //   // Get the coordinates of the click on the view
-        //   // around the decimals to 3 decimals
-        //   var lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-        //   var lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+        function queryDivisionInformation(target) {  
+          var requestURL = 'https://represent.opennorth.ca/boundaries/federal-electoral-districts/' + target.graphic.attributes.FED_NUM + '/candidates/';
 
-        //   view.popup.open({
-        //     // Set the popup's title to the coordinates of the clicked location
-        //     title: "Reverse geocode: [" + lon + ", " + lat + "]",
-        //     location: event.mapPoint // Set the location of the popup to the clicked location
-        //   });
+console.log(requestURL);
+          
+          var options = {
+            query: {
+              f: 'json'
+            },
+            responseType: 'json'
+          };
 
-        //   var params = {
-        //     location: event.mapPoint
-        //   };
+          return esriRequest(requestURL, options).then(function (response) {
+            var final_results = "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}";
 
-        //   // Execute a reverse geocode using the clicked location
-        //   locatorTask
-        //     .locationToAddress(params)
-        //     .then(function (response) {
-        //       // If an address is successfully found, show it in the popup's content
-        //       view.popup.content = response.address;
-        //     })
-        //     .catch(function (error) {
-        //       // If the promise fails and no result is found, show a generic message
-        //       view.popup.content = "No address was found for this location";
-        //     });
-        // });
+            final_results += "<table>"
 
-        // Will figure this out later
-        // view.on("pointer-move", function(event) {
-        //   view.hitTest(event).then(function(response) {
-        //     // check if a feature is returned from the hurricanesLayer
-        //     // do something with the result graphic
-        //     const graphic = response.results.filter(function(result) {
-        //       return result.graphic.layer === pollingStations;
-        //     })[0].graphic;
-        //   });
-        // });
+            for (var candidate = 0; candidate < Object.keys(response.data.objects).length; candidate++) {
+              final_results += "<tr><td>" + response.data.objects[candidate].name + "</td><td>" + response.data.objects[candidate].party_name + "</tr>";
+            }
+
+            final_results += "</table>";
+
+            return final_results;
+          });
+        }
       })
       .catch(err => {
         console.error(err);
