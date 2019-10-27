@@ -11,27 +11,23 @@ import { NgForm } from '@angular/forms';
 })
 export class UserProfileComponent implements OnInit {
  
-  constructor(private auth: AuthService, private uService: UserService){ }
-    
-  private userSubscription: any;
-  private saveUserSubscription: any;
-  currentUser: User;
   
-  successMessage =  false;
-  failMessage = false;
+    
   private token: any;
+  private userSubscription: any;
+  currentUser: User;
 
+
+  constructor(private auth: AuthService, private uService: UserService){ }
   ngOnInit() {
       this.token = this.auth.readToken();
       this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
         this.currentUser = us;
-        console.log(this.currentUser);
-        console.log(this.currentUser.firstName);
       });
    }
  
   ngOnDestroy(){ 
-   if(this.userSubscription){this.userSubscription.unsubscribe();}
+      if(this.userSubscription){this.userSubscription.unsubscribe();}
   }
  
 }
