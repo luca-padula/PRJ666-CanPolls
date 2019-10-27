@@ -3,6 +3,8 @@ import {NgForm} from '@angular/forms';
 import {EventToCreate} from 'src/data/Model/EventToCreate';
 import {AuthService} from 'src/data/services/auth.service';
 import {ValidationError} from 'src/data/Model/ValidationError';
+import { User } from 'src/data/Model/User';
+import {UserService} from 'src/data/services/user.service';
 class ImageSnippet{
   constructor(public src: String, public file: File){}
 }
@@ -17,11 +19,23 @@ export class CreateEventComponent implements OnInit {
   validationErrors: ValidationError[];
   warning: string;
   successMessage: boolean;
+  private userSubscription: any;
+  currentUser: User;
+  private token:any;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private uService: UserService) { }
   
   ngOnInit() {
     this.event = new EventToCreate;
+    this.token = this.auth.readToken();
+    this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) =>{
+      this.currentUser = us;
+      this.event.userId = this.currentUser.userId;
+      this.event.isApproved = false;
+      console.log(this.currentUser);
+      console.log(this.currentUser.firstName);
+      console.log(this.event.userId);
+    });
   }
   onFileChanged(imageInput: any){
     debugger;
@@ -51,4 +65,7 @@ export class CreateEventComponent implements OnInit {
     });
     
   }
+  ngOnDestroy(){ 
+    if(this.userSubscription){this.userSubscription.unsubscribe();}
+   }
 }
