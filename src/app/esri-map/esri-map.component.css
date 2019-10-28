@@ -5,6 +5,10 @@
   height: 75vh;
 }
 
+/* #searchWidget {
+  height: calc(100% - 40px);
+} */
+
 /* #layerToggle {
   bottom: 840px;
   left: 600px; 

@@ -71,4 +71,8 @@ export class AuthService {
   createEvent(eventToCreate: EventToCreate): Observable<any>{
     return this.http.post<any>(environment.apiUrl + '/api/createEvent', eventToCreate);
   }
+
+  sendRespondEmail(id: number, email: string, approve: boolean): Observable<any>{
+    return this.http.post<any>(environment.apiUrl+'/api/event/' + id, {email: email, approve: approve})
+  }
 }
