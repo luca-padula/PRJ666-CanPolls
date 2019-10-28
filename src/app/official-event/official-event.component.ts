@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input, OnChanges } from '@angular/core';
 import{OfficialEvent} from '../../data/Model/OfficialEvent'
 import{OfficialEventService} from '../../data/services/official-event.service'
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './official-event.component.html',
   styleUrls: ['./official-event.component.css']
 })
-export class OfficialEventComponent implements OnInit {
+export class OfficialEventComponent implements OnInit{
 
  ofEvent: OfficialEvent[];
  error:HttpErrorResponse;
@@ -23,6 +23,13 @@ showDetail(event: OfficialEvent):void{
   this.selectedEvent = event;
 }
 
+//get drop down menu
+provinces = [
+  {name:"British Columbia", value: "BC"},
+  {name:"Alberta", value: "AB"}
+  
+]
+
 
 //get all events 
   constructor(private ofEService : OfficialEventService) { }
@@ -33,6 +40,7 @@ showDetail(event: OfficialEvent):void{
                 (err) => {this.error = err});
                 
   }
+ 
   ngOnInit() {
       this.getOfEvent();
   }

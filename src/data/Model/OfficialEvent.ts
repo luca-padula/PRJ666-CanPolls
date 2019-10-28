@@ -1,5 +1,3 @@
-
-
 export class OfficialEvent
 {
    id:bigint;

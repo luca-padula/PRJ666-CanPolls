@@ -3,6 +3,7 @@ import {OfficialEvent} from '../Model/OfficialEvent'
 import {HttpClient,HttpHeaders, HttpErrorResponse} from '@angular/common/http'
 import {Observable, of, throwError} from 'rxjs'
 import { catchError, map, tap } from 'rxjs/operators';
+import { provideRoutes } from '@angular/router';
 
 
 @Injectable({
@@ -12,7 +13,7 @@ export class OfficialEventService {
 
   ofEvent : OfficialEvent[] 
 
-  private apiURL = "http://localhost:3000/api/officialEvent";
+  private apiURL = "http://localhost:3000/api/officialEvent/";
 
   httpOptions = {
     headers: new HttpHeaders(
@@ -41,7 +42,7 @@ export class OfficialEventService {
   }
   getOfficialEvents():Observable<OfficialEvent[]>
   {
-   
+    
     return this.http.get<OfficialEvent[]>(this.apiURL).pipe(
       catchError(this.handleError)
     );
