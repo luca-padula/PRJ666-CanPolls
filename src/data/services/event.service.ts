@@ -12,7 +12,7 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  getEventById(id: string) : Observable<EventToCreate>{
-    return this.http.get<EventToCreate>(environment.apiUrl + '/api/event/' + id);
+  getEventById(id: number) : Observable<Event>{
+    return this.http.get<Event>(environment.apiUrl + '/api/event/' + id);
   }
 }

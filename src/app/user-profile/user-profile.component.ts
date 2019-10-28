@@ -16,8 +16,8 @@ export class UserProfileComponent implements OnInit {
   private token: any;
   private userSubscription: any;
   currentUser: User;
-
-
+  private userNameExists: boolean;
+  successMessage = false;
   constructor(private auth: AuthService, private uService: UserService){ }
   ngOnInit() {
       this.token = this.auth.readToken();
@@ -29,5 +29,12 @@ export class UserProfileComponent implements OnInit {
   ngOnDestroy(){ 
       if(this.userSubscription){this.userSubscription.unsubscribe();}
   }
+  
+  checkUniqueUsername(): boolean
+  {
+
+    return this.userNameExists;
+  }
+
  
 }

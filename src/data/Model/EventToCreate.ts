@@ -12,5 +12,7 @@ export class EventToCreate
 	street_name: String;
 	city:String;
 	province:String;
-	postal_code:String;
+    postal_code:String;
+    isApproved: boolean;
+    userId: String;
 }
