@@ -69,7 +69,7 @@
   <div class="l-Wrapper u-keyline">
       <div class="l-Footer">
         <div  class="l-Footer-col" >
-          <div *ngIf="!isApproved" class="form-group row">
+          <div *ngIf="!currentEvent.isApproved" class="form-group row">
               <input type="button" value="Approve" (click)="approve($event)">
               <input type="button" value="Decline" >
           </div>

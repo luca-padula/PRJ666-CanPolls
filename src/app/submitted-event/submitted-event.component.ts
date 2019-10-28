@@ -16,7 +16,7 @@ export class SubmittedEventComponent implements OnInit {
   private userSubscription: any;
   private locationSubscription: any;
   currentEvent: Event;
-  creator: User;
+  currentUser: User;
   successMessage = false;  
   private token: any;
   constructor(private auth: AuthService, private eService: EventService, private uService: UserService, private r:ActivatedRoute) { }
@@ -26,9 +26,10 @@ export class SubmittedEventComponent implements OnInit {
       this.eventSubscription = this.eService.getEventById(param['id']).subscribe((data)=>{
         this.currentEvent=data["event"];
         console.log(this.currentEvent.event_title);
-        this.userSubscription = this.uService.getUserById(this.currentEvent.UserUserId).subscribe((data)=>{
-          this.creator=data;
-          console.log(this.creator.email);
+        this.token = this.auth.readToken();
+        this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
+          this.currentUser=data;
+          console.log(this.currentUser.email);
         })
       });
       
@@ -36,7 +37,7 @@ export class SubmittedEventComponent implements OnInit {
   }
 
   approve(){
-    this.auth.sendRespondEmail(this.currentEvent.event_id, this.creator.email, true).subscribe((success)=>{
+    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{
       this.successMessage = true;
     }, (err)=>{
       console.log(err);
@@ -46,5 +47,6 @@ export class SubmittedEventComponent implements OnInit {
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
     if(this.eventSubscription){this.eventSubscription.unsubscribe();}
+    if(this.userSubscription){this.userSubscription.unsubscribe();}
   }
 }
