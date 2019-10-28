@@ -14,6 +14,12 @@ export class UserService {
   getUserById(id: string) : Observable<User> {
     return this.http.get<User>(environment.apiUrl + '/api/users/' + id);
   }
+
+  findUserByUsername(userN: string)
+  {
+    return this.http.get<User>(environment.apiUrl + '/api/users/' + userN);
+  }
+
   saveUser(us : User) : Observable<any> {
     return this.http.put<any>(environment.apiUrl + '/api/users/' + us.userId, us);
   }
