@@ -3,6 +3,8 @@
 import { Component, OnInit, ViewChild, ElementRef, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { loadModules } from 'esri-loader';
 import { bindCallback } from 'rxjs';
+import { Polygon } from 'esri/geometry';
+import { $ } from 'protractor';
 //import esri = __esri;
 
 @Component({
@@ -27,9 +29,10 @@ export class EsriMapComponent implements OnInit {
       "esri/widgets/Compass",
       "esri/widgets/Locate",
       "esri/core/watchUtils",
-      "esri/request"
+      "esri/request",
+      "esri/Graphic"
     ])
-      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest]) => {
+      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest, Graphic]) => {
         // Create a locator task using the world geocoding service
         const locatorTask = new Locator({
           url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -41,14 +44,15 @@ export class EsriMapComponent implements OnInit {
           basemap: 'gray-vector'
         });
 
-        var mapOnLoad = map.on("load", function(){
-          map.graphics.on("click", myGraphicsClickHandler);
-        });
-      
-        function myGraphicsClickHandler(evt) {
-          alert("User clicked on " + evt.graphic);
-        }
-      
+        // var mapOnLoad = map.on("load", function(){
+        //   console.log("Here we go...");
+        //   map.graphics.on("click", myGraphicsClickHandler);
+        // });
+
+        // function myGraphicsClickHandler(evt) {
+        //   alert("User clicked on " + evt.graphic);
+        // }
+
 
         // Create the map view that the map will start on
         const view = new EsriMapView({
@@ -57,6 +61,10 @@ export class EsriMapComponent implements OnInit {
           zoom: 3,
           map: map
         });
+
+        // view.on("click", function(event){
+
+        // });
 
         // Search widget
         // Do not include the default map search
@@ -129,7 +137,7 @@ export class EsriMapComponent implements OnInit {
               color: color,
               outline: {
                 color: "black",
-                width: 4
+                width: 3
               }
             }
           };
@@ -157,7 +165,7 @@ export class EsriMapComponent implements OnInit {
           opacity: 0.50,
           outFields: ["*"],
           popupTemplate: {
-            title: "<b>Polling Division:</b> {name}",
+            title: "<b>{name}</b>",
             outFields: ["*"],
             content: queryDivisionInformation
           }
@@ -168,10 +176,10 @@ export class EsriMapComponent implements OnInit {
         // Add a layer search
         search.sources.push({
           layer: pollingDivisions,
-          searchFields: ["ED_NAMEE"],
-          displayField: "ED_NAMEE",
+          searchFields: ["name"],
+          displayField: "name",
           exactMatch: false,
-          outFields: ["ED_NAMEE", "ED_NAMEF"],
+          outFields: ["name", "provcode"],
           resultGraphicEnabled: true,
           name: "Polling Divisons",
           placeholder: "Example: Thornhill",
@@ -209,7 +217,7 @@ export class EsriMapComponent implements OnInit {
         var pollingStations = new FeatureLayer({
           url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Polling_Stations/FeatureServer/0",
           // renderer: pollingStationsRenderer,
-          // labelingInfo: [pollingStationsLabels],
+          labelingInfo: [pollingStationsLabels],
           visible: false
         });
 
@@ -226,30 +234,98 @@ export class EsriMapComponent implements OnInit {
         });
 
         function queryDivisionInformation(target) {
-          var requestURL = 'https://represent.opennorth.ca/boundaries/federal-electoral-districts/' + target.graphic.attributes.FED_NUM + '/candidates/';
+          var resultsInfo = document.getElementById("resultsInfo");
+          resultsInfo.innerHTML = "<table>";
 
-          console.log(requestURL);
+          console.log("Number: ", target.graphic.attributes.OBJECTID);
 
-          var options = {
-            query: {
-              f: 'json'
-            },
-            responseType: 'json'
-          };
+          var query = pollingDivisions.createQuery();
+          query.where = "OBJECTID = " + target.graphic.attributes.OBJECTID;
+          query.outFields = ["*"];
 
-          return esriRequest(requestURL, options).then(function (response) {
-            var final_results = "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}";
+          return pollingDivisions.queryFeatures(query)
+            .then(function (response) {
+              var requestURL = 'https://represent.opennorth.ca/boundaries/federal-electoral-districts/' + response.features[0].attributes.fednum + '/candidates/';
 
-            final_results += "<table>"
+              var options = {
+                query: {
+                  f: 'json'
+                },
+                responseType: 'json'
+              };
 
-            for (var candidate = 0; candidate < Object.keys(response.data.objects).length; candidate++) {
-              final_results += "<tr><td>" + response.data.objects[candidate].name + "</td><td>" + response.data.objects[candidate].party_name + "</tr>";
-            }
+              return esriRequest(requestURL, options).then(function (response) {
+                //console.log(response);
+                console.log(requestURL);
 
-            final_results += "</table>";
+                var representative = null;
 
-            return final_results;
-          });
+                // Find the representative's name from using alias checking
+                for (var field of target.graphic.layer.fields) {
+                  if (target.graphic.attributes.WinningParty == field.alias) {
+                    representative = eval('target.graphic.attributes.' + field.name);
+                    break;
+                  }
+                }
+
+                //var final_results = "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}";
+                var final_results = "<b>Federal Electoral District Number:</b> {fednum}<br><b>Elected Party:</b> {WinningParty}";
+
+                if (representative) {
+                  final_results += "<br><b>Elected Representative:</b> " + representative;
+                }
+
+                let resultsTable = document.getElementById("resultsTable") as HTMLTableElement;
+                resultsTable.innerHTML = "";
+
+                for (var representative of response.data.objects) {
+                  let resultsRow = resultsTable.insertRow(-1)
+
+                  resultsRow.insertCell(-1);
+                  resultsRow.append(document.createTextNode(representative.name));
+                  resultsRow.append(document.createElement("br"));
+
+                  let resultsPicture = document.createElement("img");
+                  resultsPicture.setAttribute("src", representative.photo_url);
+                  resultsRow.append(resultsPicture);
+
+                  resultsRow.insertCell(-1);
+                  resultsRow.append(document.createTextNode(representative.party_name));
+                  resultsRow.append(document.createElement("br"));
+                  resultsRow.append(document.createTextNode(representative.district_name));
+                  resultsRow.append(document.createElement("br"));
+                  resultsRow.append(document.createTextNode(representative.election_name));
+
+                  if (representative.offices[0] && representative.offices[0].tel) {
+                    resultsRow.append(document.createElement("br"));
+                    resultsRow.append(document.createTextNode(representative.offices[0].tel));
+                  }
+                  
+                  resultsRow.append(document.createElement("br"));
+                  resultsRow.append(document.createTextNode(representative.email));
+
+                  // resultsInfo.innerHTML += "<tr>";
+
+                  // resultsInfo.innerHTML += "<td>" + representative.name;
+                  // resultsInfo.innerHTML += "<br><a href='" + representative.personal_url + "' target='_blank'><img src='" + representative.photo_url + "'></a></td>";
+
+                  // resultsInfo.innerHTML += "<td>" + representative.party_name + "<br>";
+                  // resultsInfo.innerHTML += representative.district_name + "<br>";
+                  // resultsInfo.innerHTML += representative.election_name + "<br>";
+
+                  // if (representative.offices[0] && representative.offices[0].tel) {
+                  //   resultsInfo.innerHTML += representative.offices[0].tel + "<br>";
+                  // }
+                  // resultsInfo.innerHTML += representative.email + "<br></td>";
+
+                  // resultsInfo.innerHTML += "</tr>";
+                }
+
+                // resultsInfo.innerHTML += "</table>";
+
+                return final_results;
+              });
+            });
         }
       })
       .catch(err => {
