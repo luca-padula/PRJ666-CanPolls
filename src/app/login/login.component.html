@@ -20,7 +20,7 @@
         <div class="alert alert-danger" *ngIf="warning" role="alert">
           {{warning}}
         </div>
-        <button class="btn" type="submit">Sign In</button>
+        <button class="btn" type="submit" [disabled]="!f.valid">Sign In</button>
       </form>
       <a routerLink="/forgotPassword">Forgot your password?</a>
     </div>
