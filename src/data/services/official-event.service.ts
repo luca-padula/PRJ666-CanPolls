@@ -13,7 +13,7 @@ export class OfficialEventService {
 
   ofEvent : OfficialEvent[] 
 
-  private apiURL = "http://localhost:3000/api/officialEvent/";
+  private apiURL = "http://myvmlab.senecacollege.ca:6738/api/officialEvent/";
 
   httpOptions = {
     headers: new HttpHeaders(
