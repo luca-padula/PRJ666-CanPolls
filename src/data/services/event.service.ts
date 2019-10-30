@@ -18,11 +18,15 @@ export class EventService {
     return this.http.get<Event>(environment.apiUrl + '/api/event/' + id);
   }
 
-  updateEventById(id: number, event: Event): Observable<Event> {
+  updateEventById(id: number, event: Event): Observable<any> {
     return this.http.put<Event>(environment.apiUrl + '/api/event/' + id, event);
   }
 
   getRegisteredUsers(eventId: number): Observable<User[]> {
     return this.http.get<User[]>(environment.apiUrl + '/api/event/' + eventId + '/registeredUsers');
+  }
+
+  removeRegisteredUser(eventId: number, userId: number): Observable<any> {
+    return this.http.delete(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
 }
