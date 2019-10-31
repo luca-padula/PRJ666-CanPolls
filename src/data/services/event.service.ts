@@ -29,4 +29,9 @@ export class EventService {
   removeRegisteredUser(eventId: number, userId: number): Observable<any> {
     return this.http.delete(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
+
+  getAllEventsByUser(userId: number) : Observable<Event[]>
+  {
+    return this.http.get<Event[]>(environment.apiUrl + '/api/events/createdEvents/' + userId);
+  }
 }
