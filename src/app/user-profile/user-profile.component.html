@@ -1,78 +1,119 @@
-<div class="user-profile">
-<h2> User Profile </h2>
 <div class="container">
-    <div class="row justify-content-md-center">
-   <div class="col-md-6">
-      <form #f='ngForm'(ngSubmit)='onSubmit(f)'>
-        <div class="row justify-content-md-center"> 
-          <div class="col-md-6">
+    <h2 class="text-left"> User Profile </h2>
+      <div *ngIf="successMessage" class="alert alert-success text-center">
+        Success: User {{currentUser.userName}} has been updated!<br />
+      </div>
+      <form #f='ngForm' (ngSubmit)='onSubmit(f)'>
+          <p class="lead text-center">
+              *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
+            </p>
+            <p class="lead text-center">
+              *Username must not contain an @ symbol or more than 1 consecutive space, leading and trailing whitespace will be removed
+            </p>
+            <div *ngIf="warning" class="alert alert-danger">
+              {{warning}}
+            </div>
+            <div *ngFor="let err of validationErrors" class="alert alert-danger">
+              {{err.msg}}
+            </div>
+        <div class="form-well"> 
             <div class="form-group row" [class.has-error]="Name.errors">
-              <label for="Name" class="col-md-4 col-form-label">Name:</label>
-              <div class="col-sm-10">
-              <input #Name="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.firstName + ' '  + currentUser.lastName"/>
-              <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
-            </div>
-            </div>
-         </div> 
-       </div> 
-        <div class="row justify-content-md-center">
-          <div class="col-md-6">
-            <div class="form-group" [class.has-error]="userName.errors">
-              <label for="userName" class="control-label">Username:</label>
-              <input #userName="ngModel" placeholder="userName" class="form-control" id="userName" type="text" name="userName" required [(ngModel)]="currentUser.userName"/>
-              <span *ngIf="userName.errors && userName.errors.required" class="help-block">Username is Required</span> 
-            </div>
-          </div>
-        </div>
-        <div class="row justify-content-md-center">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="email" class="control-label">Email:</label>
-              <input #email="ngModel" placeholder="email" class="form-control" id="email" type="text" name="email" required [(ngModel)]="currentUser.email"/>
-              <span *ngIf="email.errors && email.errors.required" class="help-block">Email is required</span> 
+                <label class="col-3 col-form-label" for="name">First Name:</label>
+                <div class="col-9">
+                <input #Name="ngModel" class="form-control" id="fName" type="text"  name="fName" required [(ngModel)]="currentUser.firstName"/>
+                  </div>  
+              </div>
+            <div class="form-group row" [class.has-error]="Name.errors">
+                <label for="Name" class="col-3 col-form-label">Last Name:</label>
+                <div class="col-9">
+                <input #Name="ngModel" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.lastName"/>
+              </div>
+              </div>
+            <div class="form-group row" [class.has-error]="userName.errors">
+                <label for="userName" class="col-3 col-form-label">Username:</label>
+                <div class="col-9">
+                <input #userName="ngModel"  class="form-control" id="userName" type="text" name="userName" required [(ngModel)]="currentUser.userName"/>
             </div>
           </div>
-          </div>
-          <div class="row justify-content-md-center">
-          <div class="col-md-6">
-            <div class="form-group">
-              <input [disabled]="!f.valid" type="submit" class="btn btn-primary pull-right" value="Update Information" /> 
+              <div class="form-group row">
+                <label for="email" class="col-3 col-form-label">Email:</label> 
+                <div class="col-9">
+                <input #email="ngModel" placeholder="email" class="form-control" id="email" type="text" name="email" required [(ngModel)]="currentUser.email"/>
             </div>
           </div>
+            <div class="form-group row">
+                <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
+                <div class="col-9">
+                  <select [(ngModel)]="currentUser.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
+                    <option value="conservative">Conservative Party</option>
+                    <option value="liberal">Liberal Party</option>
+                    <option value="ndp">New Democratic Party</option>
+                    <option value="green">Green Party</option>
+                    <option value="people's">People's Party</option>
+                  </select>
+                  <small id="affiliationHelpBlock" class="form-text text-muted">
+                    Select an option if you are a member of a political party. This is optional and you can change it later.
+                    After selecting a party, an email will be sent to an administrator of that party letting them know that they
+                    can approve you to create events on their behalf.
+                  </small>
+                </div>
+        </div> 
+       </div>  
+       <div class="form-group">
+          <input [disabled]="!f.valid" type="submit" class="btn btn-primary pull-right" value="Update Information" /> 
+        </div> 
+      <!-- <div class="form-group row">
+         
+            <div class="form-group col-3">
+                <button  class="btn btn-primary pull-right" color="primary"  (click)="onEdit()">Edit Password</button>
+              </div> 
+       </div>  
+
+       <ng-container *ngIf="!isEditEnable">
+          <div style="margin: 0 auto;text-align: left;">
+              <div>
+                  <label>Name:</label>
+                  <div><input id="tbname" name="yourname" /></div>
+              </div>
+              <div>
+                  <label>Email Address:</label>
+                  <div><input name="email" id="email" /></div></div>
+              <div>
+                  <label>Additional Information (optional):</label>
+                  <div><textarea rows="5" cols="46"></textarea></div>
+              </div>
           </div>
+      </ng-container>-->
           </form>
-    </div>
- </div>
+
+
+          <h2 class="sub-header">Past Events Organized</h2>
+                    <div class="table-responsive">
+                                <table class="table table-bordered">
+                                        <thead>
+                                                <tr>
+                                                <th scope="col-md-4">Title</th>
+                                                <th scope="col-md-4">Description</th>
+                                                <th scope="col-md-4">Date</th>
+                                                </tr>
+                                        </thead>
+                                            <tbody>
+                                                <tr *ngFor="let event of userSubmittedEvents">
+                                                <td>{{event.event_title}}</td>
+                                                <td>{{event.event_description}}</td>
+                                                <td>{{event.date_to | date: 'longDate'}}</td>
+                                                </tr>
+                                            </tbody>  
+                                  </table>
+                      </div>
 </div>
-
-<!--
-
+ <!--   
 <div class="container">
-  <div class="row ">
-        <div class="col-md-6 col-md-offset-2">
-                <h2 class="sub-header">Past Events Organized</h2>
-                <div class="table-responsive">
-                            <table class="table table-bordered">
-                                    <thead>
-                                            <tr>
-                                            <th scope="col-md-4">Description</th>
-                                            <th scope="col-md-4">Date</th>
-                                            <th scope="col-md-4">Location</th>
-                                            </tr>
-                                    </thead>
-                                        <tbody>
-                                            <tr *ngFor="let event of usersubmittedEvents" (click)="">
-                                            <td>{{Event.eventDescription}}</td>
-                                            <td>{{Event.eventDate | date: 'longDate'}}</td>
-                                            <td>{{Event.location}}</td>
-                                            </tr>
-                                        </tbody>
-                                        
-                                </table>
-                    </div>
+<div class="form-group row">
+            <div class="col-md-6 col-md-offset-2">
+                    
+            </div>
         </div>
-        
-     
 
         <div class="col-md-6 text-left col-md-offset-2">
                 <h2 class="sub-header">Events Attended/Attending</h2>
