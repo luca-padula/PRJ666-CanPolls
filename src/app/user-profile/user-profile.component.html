@@ -99,7 +99,7 @@
                                         </thead>
                                             <tbody>
                                                 <tr *ngFor="let event of userSubmittedEvents">
-                                                <td>{{event.event_title}}</td>
+                                                <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
                                                 <td>{{event.event_description}}</td>
                                                 <td>{{event.date_to | date: 'longDate'}}</td>
                                                 </tr>

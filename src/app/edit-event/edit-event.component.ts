@@ -79,20 +79,34 @@ export class EditEventComponent implements OnInit {
   }
 
   onEventSubmit(f: NgForm): void {
+    this.validationErrors = [];
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
       this.successMessage = success.message;
       setTimeout(() => this.successMessage = null, 4000);
     }, (err) => {
       console.log('Unable to update event', err);
+      if (err.error.validationErrors) {
+        this.validationErrors = err.error.validationErrors;
+      }
+      else {
+        this.warning = err.error.message;
+      }
     });
   }
 
   onLocationSubmit(f: NgForm): void {
+    this.validationErrors = [];
     this.updateLocationSubscription = this.eventService.updateLocationById(this.eventId, this.location).subscribe((success) => {
       this.successMessage = success.message;
       setTimeout(() => this.successMessage = null, 4000);
     }, (err) => {
       console.log('Unable to update event', err);
+      if (err.error.validationErrors) {
+        this.validationErrors = err.error.validationErrors;
+      }
+      else {
+        this.warning = err.error.message;
+      }
     });
   }
 

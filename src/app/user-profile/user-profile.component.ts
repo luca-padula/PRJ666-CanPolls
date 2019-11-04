@@ -5,6 +5,7 @@ import { UserService } from '../../data/services/user.service'
 import { EventService } from '../../data/services/event.service'
 import { AuthService } from 'src/data/services/auth.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ValidationError } from 'src/data/Model/ValidationError';
 
 @Component({
@@ -24,7 +25,7 @@ export class UserProfileComponent implements OnInit {
   warning: String;
   isEditEnable : boolean = true;
 
-  constructor(private auth: AuthService, private uService: UserService, private eService: EventService){ }
+  constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){ }
   ngOnInit() {
       this.token = this.auth.readToken();
       this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
@@ -38,6 +39,10 @@ export class UserProfileComponent implements OnInit {
 
   onEdit(){
     this.isEditEnable =!this.isEditEnable;
+  }
+
+  routeEvent(eventId: number): void {
+    this.router.navigate(['/event', eventId, 'edit']);
   }
 
   ngOnDestroy(){ 
