@@ -45,10 +45,10 @@
           <div>
             <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.title}}</p>
             <i> <b>Date: </b>{{selectedEvent.date}}</i>
-            <p><b>Locations: </b>{{selectedEvent.location}}</p>
-            <p><b>Address: </b>{{selectedEvent.address}}</p>
-            <p><b>Description: </b>{{selectedEvent.description}}</p>
-            <p><a href="{{selectedEvent.link}}"><b>Transfer to event</b></a></p>
+            <p *ngIf="selectedEvent.location"><b>Locations: </b>{{selectedEvent.location}}</p>
+            <p *ngIf="selectedEvent.address"><b>Address: </b>{{selectedEvent.address}}</p>
+            <p *ngIf="selectedEvent.description"><b>Description: </b>{{selectedEvent.description}}</p>
+            <p *ngIf="selectedEvent.link"><a href="{{selectedEvent.link}}"><b>Transfer to event</b></a></p>
 
 
 
