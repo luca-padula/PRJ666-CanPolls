@@ -11,11 +11,22 @@ export class EventComponent implements OnInit {
   events: Event[];
   getEventsSub: any;
   loadingError: boolean = false;
+  provinces = [
+    {name:"British Columbia", value: "BC"},
+    {name:"Alberta", value: "AB"}
+    
+  ]
+  selectedEvent : Event;
+showDetail(event: Event):void{
+  this.selectedEvent = event;
+}
+
   constructor(private eService: EventService) { }
 
   ngOnInit() {
     this.getEventsSub = this.eService.getAllEvents().subscribe((data)=>{
-      
+      this.events = data;
+      console.log(this.events);
     },
     ()=>{
       this.loadingError = true;
