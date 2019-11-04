@@ -9,7 +9,7 @@
             <div class="form-group row" [class.has-error]="Name.errors">
               <label for="Name" class="col-md-4 col-form-label">Name:</label>
               <div class="col-sm-10">
-              <input #Name="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.firstName + ' '  + currentUser.lastName"/>
+              <input #Name="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.firstName + ' ' + currentUser.lastName"/>
               <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
             </div>
             </div>

@@ -3,7 +3,7 @@
         Success: Event {{currentEvent.event_title}} has been approved!<br />
         Email has been sent to the creator. Thank you for your time!
       </div>
-      <form >
+      <form *ngIf="!successMessage">
 <article class="l-Wrapper">
     
       
@@ -71,7 +71,7 @@
         <div  class="l-Footer-col" >
           <div *ngIf="!currentEvent.isApproved" class="form-group row">
               <input type="button" value="Approve" (click)="approve($event)">
-              <input type="button" value="Decline" >
+              <input type="button" value="Decline" (click)="decline($event)">
           </div>
         </div>
         <div class="l-Footer-col Contact">
