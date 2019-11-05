@@ -6,6 +6,7 @@ import {EventToCreate} from 'src/data/Model/EventToCreate';
 import { Event } from 'src/data/Model/Event';
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
+import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
 import { User } from 'src/data/Model/User';
 
 
@@ -34,12 +35,8 @@ export class EventService {
     return this.http.put<Location>(environment.apiUrl + '/api/location/' + eventId, location);
   }
 
-  getRegistrationsByEventId(eventId: number): Observable<EventRegistration[]> {
-    return this.http.get<EventRegistration[]>(environment.apiUrl + '/api/event/' + eventId + '/registrations');
-  }
-
-  getRegisteredUsers(eventId: number): Observable<User[]> {
-    return this.http.get<User[]>(environment.apiUrl + '/api/event/' + eventId + '/registeredUsers');
+  getRegistrationsWithUsersByEventId(eventId: number): Observable<EventRegistrationWithUser[]> {
+    return this.http.get<EventRegistrationWithUser[]>(environment.apiUrl + '/api/event/' + eventId + '/registrationData');
   }
 
   removeRegisteredUser(eventId: number, userId: number): Observable<any> {
