@@ -51,3 +51,5 @@ export class EventService {
     return this.http.get<Event[]>(environment.apiUrl + '/api/events/createdEvents/' + userId);
   }
 }
+
+//<td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
