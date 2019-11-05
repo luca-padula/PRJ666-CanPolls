@@ -58,10 +58,11 @@
         <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
         <div class="col-9">
           <select [(ngModel)]="user.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
+            <option value=""></option>
             <option value="conservative">Conservative Party</option>
             <option value="liberal">Liberal Party</option>
             <option value="ndp">New Democratic Party</option>
-            <option value="green">Green party</option>
+            <option value="green">Green Party</option>
             <option value="people's">People's Party</option>
           </select>
           <small id="affiliationHelpBlock" class="form-text text-muted">
