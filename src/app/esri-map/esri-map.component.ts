@@ -66,10 +66,6 @@ export class EsriMapComponent implements OnInit {
 
         // });
 
-        // Search widget
-        // Do not include the default map search
-        var search = new Search({ view: view, includeDefaultSources: false });
-
         // view.when(function () {
         //   // This function will execute once the promise is resolved
         //   console.log("Map loaded.");
@@ -93,41 +89,42 @@ export class EsriMapComponent implements OnInit {
         // Locate widget
         var locateWidget = new Locate({ view: view });
 
-        view.ui.add(search, "top-right");
         view.ui.add(compass, "top-left");
         view.ui.add(locateWidget, "top-left");
 
-        var pollingDivisionsLabels = {
-          symbol: {
-            type: "text",
-            color: "#FFFFFF",
-            haloColor: "#000000",
-            haloSize: "2px",
-            font: {
-              size: "36px",
-              family: "Noto Sans",
-              style: "italic",
-              weight: "normal"
-            }
-          },
-          //labelPlacement: "above-center",
-          labelExpressionInfo: {
-            expression: "return $feature[\"ed_namee\"];"
-          }
-        };
-
-        // var pollingDivisions = new FeatureLayer({
-        //   url: "https://services.arcgis.com/txWDfZ2LIgzmw5Ts/arcgis/rest/services/Federal_Electoral_Districts/FeatureServer/0",
-        //   labelingInfo: [pollingDivisionsLabels],
-        //   opacity: 0.50,
-        //   outFields: ["*"],
-        //   popupTemplate: {
-        //     title: "<b>Polling Division:</b> {ED_NAMEE}",
-        //     outFields: ["*"],
-        //     // "content": "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}"
-        //     content: queryDivisionInformation
+        // var federalLayerLabels = {
+        //   symbol: {
+        //     type: "text",
+        //     color: "#FFFFFF",
+        //     haloColor: "#000000",
+        //     haloSize: "2px",
+        //     font: {
+        //       size: "36px",
+        //       family: "Noto Sans",
+        //       style: "italic",
+        //       weight: "normal"
+        //     }
+        //   },
+        //   //labelPlacement: "above-center",
+        //   labelExpressionInfo: {
+        //     expression: "return $feature[\"ed_namee\"];"
         //   }
-        // });
+        // };
+        
+        var generalBoundaries = new FeatureLayer({
+          url: "https://webservices.maps.canada.ca/arcgis/rest/services/ELECTIONS/federal_electoral_districts_boundaries_2015_en/MapServer/0",
+          // labelingInfo: [federalLayerLabels],
+          // renderer: politicalColorRenderer,
+          opacity: 0.40,
+          outFields: ["*"],
+          // popupTemplate: {
+          //   title: "<b>{name}</b>",
+          //   outFields: ["*"],
+          //   // content: queryDivisionInformation
+          // }
+        });
+
+        map.add(generalBoundaries);
 
         function colorPoliticalRegion(value, color) {
           return {
@@ -158,11 +155,11 @@ export class EsriMapComponent implements OnInit {
           ]
         };
 
-        var pollingDivisions = new FeatureLayer({
+        var federalLayer = new FeatureLayer({
           url: "https://services5.arcgis.com/yhL5dRej97QO0Sj3/arcgis/rest/services/Federal_Election_Results_2019/FeatureServer/0",
-          // labelingInfo: [pollingDivisionsLabels],
+          // labelingInfo: [federalLayerLabels],
           renderer: politicalColorRenderer,
-          opacity: 0.50,
+          opacity: 0.40,
           outFields: ["*"],
           popupTemplate: {
             title: "<b>{name}</b>",
@@ -171,29 +168,69 @@ export class EsriMapComponent implements OnInit {
           }
         });
 
-        map.add(pollingDivisions);
+        map.add(federalLayer);
 
-        // Add a layer search
-        search.sources.push({
-          layer: pollingDivisions,
-          searchFields: ["name"],
-          displayField: "name",
-          exactMatch: false,
-          outFields: ["name", "provcode"],
-          resultGraphicEnabled: true,
-          name: "Polling Divisons",
-          placeholder: "Example: Thornhill",
-        })
+        var provincialBC = new FeatureLayer({
+          url: "https://services.arcgis.com/zmLUiqh7X11gGV2d/ArcGIS/rest/services/BC2017/FeatureServer/0",
+          // renderer: politicalColorRenderer,
+          opacity: 0.40,
+          outFields: ["*"],
+          popupTemplate: {
+            title: "<b>{ED_NAME}</b>",
+            outFields: ["*"],
+            // content: queryDivisionInformation
+          },
+          visible: false,
+          title: "BC"
+        });
 
-        // var pollingStationsRenderer = {
-        //   type: "simple",
-        //   symbol: {
-        //     type: "picture-marker",
-        //     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRRjHnt5ly0y4GQBASsI0cYKvNuU5sjJfESphFPeSYkLcLtTnSAg",
-        //     width: "18px",
-        //     height: "18px"
-        //   }
-        // }
+        var provincialON = new FeatureLayer({
+          url: "https://services5.arcgis.com/yhL5dRej97QO0Sj3/arcgis/rest/services/Ontario2018Time/FeatureServer/0",
+          // renderer: politicalColorRenderer,
+          opacity: 0.40,
+          outFields: ["*"],
+          popupTemplate: {
+            title: "<b>{ENGLISH_NA}</b>",
+            outFields: ["*"],
+            // content: queryDivisionInformation
+          },
+          visible: false,
+          title: "ON"
+        });
+
+        var provincialNB = new FeatureLayer({
+          url: "https://services5.arcgis.com/yhL5dRej97QO0Sj3/arcgis/rest/services/ElectionResults2018/FeatureServer/0",
+          // renderer: politicalColorRenderer,
+          opacity: 0.40,
+          outFields: ["*"],
+          popupTemplate: {
+            title: "<b>{ElectionResults2018_PED_Name_E}</b>",
+            outFields: ["*"],
+            // content: queryDivisionInformation
+          },
+          visible: false,
+          title: "NB"
+        });
+
+        var provincialSK = new FeatureLayer({
+          url: "https://services.arcgis.com/zmLUiqh7X11gGV2d/arcgis/rest/services/Saskatchewan_2016/FeatureServer/0",
+          // renderer: politicalColorRenderer,
+          opacity: 0.40,
+          outFields: ["*"],
+          popupTemplate: {
+            title: "<b>{ElectoralDistrictName}</b>",
+            outFields: ["*"],
+            // content: queryDivisionInformation
+          },
+          visible: false,
+          title: "SK"
+        });
+
+        let provincialLayers = [provincialBC, provincialON, provincialNB, provincialSK];
+
+        provincialLayers.forEach(layer => {
+          map.add(layer);
+        });
 
         var pollingStationsLabels = {
           symbol: {
@@ -223,6 +260,95 @@ export class EsriMapComponent implements OnInit {
 
         map.add(pollingStations);
 
+        // Search widget
+        // Do not include the default map search
+        var search = new Search({
+          view: view,
+          allPlaceholder: "Polling Division or Station",
+          sources: [
+            {
+              layer: federalLayer,
+              searchFields: ["name"],
+              displayField: "name",
+              exactMatch: false,
+              outFields: ["name", "provcode"],
+              resultGraphicEnabled: true,
+              name: "Polling Divisons",
+              placeholder: "Example: Thornhill"
+            },
+            {
+              layer: pollingStations,
+              searchFields: ["site_name"],
+              displayField: "site_name",
+              outFields: ["*"],
+              name: "Polling Stations",
+              placeholder: "Example: Sunrise of Thornhill"
+            }
+          ]
+        });
+
+        view.ui.add(search, "top-right");
+
+        // var pollingStationsRenderer = {
+        //   type: "simple",
+        //   symbol: {
+        //     type: "picture-marker",
+        //     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRRjHnt5ly0y4GQBASsI0cYKvNuU5sjJfESphFPeSYkLcLtTnSAg",
+        //     width: "18px",
+        //     height: "18px"
+        //   }
+        // }
+
+        ///////////////////////////////////
+        // FILTER OPTION EVENT LISTENERS //
+        ///////////////////////////////////
+
+        let resultsTable = document.getElementById("resultsTable") as HTMLTableElement;
+
+        function clearResults() {
+          resultsTable.innerHTML = "";
+          view.popup.close();
+        }
+
+        function checkProvincial(province) {
+          provincialLayers.forEach(layer => {
+            if (((<HTMLInputElement>document.getElementById("provincial")).checked) && province == layer.title) {
+              layer.visible = true;
+              view.goTo(layer.fullExtent);
+            } else {
+              layer.visible = false;
+            }
+            
+          });
+        }
+
+        var provinces = document.getElementById("provincialSelection");
+        provinces.addEventListener("change", function () {
+          checkProvincial((<HTMLInputElement>this).value);
+        });
+
+        // Retrieve all region type radio buttons
+        var regionType = document.getElementsByName("regionType");
+        regionType.forEach(element => {
+          element.addEventListener("click", function () {
+            if ((<HTMLInputElement>element).value == "provincial") {
+              provincialLayers.forEach(layer => {
+                layer.visible = false;
+              });
+            }
+
+            checkProvincial((<HTMLInputElement>provinces).value);
+
+            federalLayer.visible = (<HTMLInputElement>element).value == "federal";
+
+            if (federalLayer.visible == true) {
+              // Not working?
+              view.goTo(federalLayer.fullExtent);
+            }
+            clearResults();
+          });
+        });
+
         // Create a variable referencing the checkbox node
         var pollingLayerToggle = document.getElementById("pollingLayer") as HTMLInputElement;
         pollingLayerToggle.checked = false;
@@ -239,11 +365,11 @@ export class EsriMapComponent implements OnInit {
 
           console.log("Number: ", target.graphic.attributes.OBJECTID);
 
-          var query = pollingDivisions.createQuery();
+          var query = federalLayer.createQuery();
           query.where = "OBJECTID = " + target.graphic.attributes.OBJECTID;
           query.outFields = ["*"];
 
-          return pollingDivisions.queryFeatures(query)
+          return federalLayer.queryFeatures(query)
             .then(function (response) {
               var requestURL = 'https://represent.opennorth.ca/boundaries/federal-electoral-districts/' + response.features[0].attributes.fednum + '/candidates/';
 
@@ -275,7 +401,6 @@ export class EsriMapComponent implements OnInit {
                   final_results += "<br><b>Elected Representative:</b> " + representative;
                 }
 
-                let resultsTable = document.getElementById("resultsTable") as HTMLTableElement;
                 resultsTable.innerHTML = "";
 
                 for (var representative of response.data.objects) {
@@ -300,7 +425,7 @@ export class EsriMapComponent implements OnInit {
                     resultsRow.append(document.createElement("br"));
                     resultsRow.append(document.createTextNode(representative.offices[0].tel));
                   }
-                  
+
                   resultsRow.append(document.createElement("br"));
                   resultsRow.append(document.createTextNode(representative.email));
 

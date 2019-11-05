@@ -18,3 +18,15 @@ table, td, th {
     border: 1px solid black;
     padding: 5px;
 }
+
+#filterPane {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.filterOptions * {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 2.5px;
+}
