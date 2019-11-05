@@ -127,22 +127,24 @@
 
   <h3 class="text-center">Registered Users</h3>
   <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped text-center">
       <thead class="thead-dark">
         <th>Attendee #</th>
         <th>Username</th>
         <th>Party Affiliation</th>
+        <th>Status</th>
         <th></th>
       </thead>
       <tbody>
-        <tr *ngFor="let user of registeredUsers; index as idx">
+        <tr *ngFor="let registration of registrations; index as idx">
           <td>{{idx + 1}}</td>
-          <td>{{user.userName}}</td>
+          <td>{{registration.User.userName}}</td>
           <td>
-            <span *ngIf="user.partyAffiliation">{{user.partyAffiliation}}</span>
-            <span *ngIf="!user.partyAffiliation">None</span>
+            <span *ngIf="registration.User.partyAffiliation">{{registration.User.partyAffiliation}}</span>
+            <span *ngIf="!registration.User.partyAffiliation">None</span>
           </td>
-          <td><button class="btn btn-danger text-center" (click)="removeRegisteredUser(user.userId)">Remove User</button></td>
+          <td>{{registration.status}}</td>
+          <td><button class="btn btn-danger text-center" (click)="removeRegisteredUser(registration.UserUserId)">Remove User</button></td>
         </tr>
       </tbody>
     </table>
