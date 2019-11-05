@@ -43,7 +43,13 @@ export class SubmittedEventComponent implements OnInit {
       console.log(err);
     })
   }
-
+  decline(){
+    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, false).subscribe((success)=>{
+      this.successMessage = true;
+    }, (err)=>{
+      console.log(err);
+    })
+  }
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
     if(this.eventSubscription){this.eventSubscription.unsubscribe();}

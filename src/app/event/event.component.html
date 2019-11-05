@@ -4,40 +4,49 @@
   </div>
   <div class="container" >
       <div class="row">
+
           <div class="col-md-12">
               <input class="form-control" id="EventSearch" name="EventSearch" type="text" placeholder="Search for Political Events"  /><br />
               <div class="button button-hover">
                 <a routerLink="/officialEvent"><button class="button1" id="button1">Official Event</button></a>
                 <a routerLink="/events"><button class="button1" id="button2">User Event</button></a>
               </div>
-              <div class="list">
-                <ul class ="left">
-                  <li routerLinkActive="active">
-                    <div class="event-browsing">
-                    <div class="details">
-                      <p style="font-size:1rem">Event Title</p>
-                      <i> August 21, 2019</i>
-                      <p>This is an example of event description</p>
-                    </div>
-                    <a routerLink="/submittedEvent">More</a>
+              <br>
+              <div class="form-group col-md-12 row">
+
+              </div>
+                <div class="list">
+                  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                  <ul class="left">
+                  <li routerLinkActive="active"
+                      *ngFor="let event of events?.data | paginate: { itemsPerPage: 4, currentPage: p }"
+                      (click)="showDetail(event)">
+                  <div class="event-browsing">
+                  <div class="master">
+                    <p style="font-size:1rem">{{event.event_title}}</p>
+                      <i> {{event.date_from}}-{{event.date_to}}</i>
+                  </div>
                   </div>
                   </li>
-                  <li routerLinkActive="active">Agnes <a routerLink="/submittedEvent">More</a></li>
-                  <li routerLinkActive="active">Billy <a routerLink="/submittedEvent">More</a></li>
-                  <li routerLinkActive="active">Bob <a routerLink="/submittedEvent">More</a></li>
-                  <li routerLinkActive="active">Calvin <a routerLink="/submittedEvent">More</a></li>
-                  <li routerLinkActive="active">Christina <a routerLink="/submittedEvent">More</a></li>
-                  <li routerLinkActive="active">Cindy <a routerLink="/submittedEvent">More</a></li>
+                  </ul>
+
+               </div>
+            
+               <ul class="right" *ngIf="selectedEvent">
+                  <li>
+                    <div>
+                      <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.event_title}}</p>
+                      <i> <b>Date: </b>{{selectedEvent.date_from}} - {{selectedEvent.date_to}}</i>
+                      <p><b>Locations: </b></p>
+                      <p><b>Address: </b></p>
+                      <p><b>Description: </b>{{selectedEvent.event_description}}</p>
+                      <p><a href="/event/{{selectedEvent.event_id}}"><b>More Details</b></a></p>
+          
+          
+          
+                    </div>
+                  </li>
                 </ul>
-            </div>
-            <div class="gallery">
-                
-                  <img src="../../assets/image/feature-720x480.jpg">
-                
-                <div class="desc">Add a description of the image here</div>
-              </div>
-              
-          </div>
       </div>
   </div>
   <br /><br />
