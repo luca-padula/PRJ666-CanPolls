@@ -24,6 +24,7 @@ export class EditEventComponent implements OnInit {
   event: Event;
   location: Location;
   registrations: EventRegistrationWithUser[];
+  filteredRegistrations: EventRegistrationWithUser[];
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -34,6 +35,8 @@ export class EditEventComponent implements OnInit {
   validationErrors: ValidationError[];
   successMessage: string;
   warning: string;
+  removeUserSuccess: string;
+  removeUserWarning: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +68,7 @@ export class EditEventComponent implements OnInit {
     });
     this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
       this.registrations = results;
+      this.filteredRegistrations = this.registrations.filter((reg) => reg.status != 'removed');
     }, (err) => {
       console.log('Unable to get registrations', err);
     });
@@ -104,10 +108,11 @@ export class EditEventComponent implements OnInit {
 
   removeRegisteredUser(userId: number): void {
     this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
-      this.successMessage = success.message;
-      setTimeout(() => this.successMessage = null, 4000);
+      this.removeUserSuccess = success.message;
+      setTimeout(() => this.removeUserSuccess = null, 4000);
     }, (err) => {
       console.log('Unable to remove user', err);
+      this.removeUserWarning = err.message;
     });
   }
 
