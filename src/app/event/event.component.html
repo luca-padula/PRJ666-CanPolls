@@ -19,7 +19,7 @@
                   <pagination-controls (pageChange)="p = $event"></pagination-controls>
                   <ul class="left">
                   <li routerLinkActive="active"
-                      *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
+                      *ngFor="let event of events?.data | paginate: { itemsPerPage: 4, currentPage: p }"
                       (click)="showDetail(event)">
                   <div class="event-browsing">
                   <div class="master">
