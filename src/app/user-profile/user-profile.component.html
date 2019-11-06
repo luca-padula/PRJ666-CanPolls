@@ -1,31 +1,26 @@
 <div class="container">
-<<<<<<< HEAD
-    <div class="row justify-content-md-center">
-   <div class="col-md-6">
-      <form #f='ngForm'(ngSubmit)='onSubmit(f)'>
-        <div class="row justify-content-md-center"> 
-          <div class="col-md-6">
-            <div class="form-group row" [class.has-error]="Name.errors">
-              <label for="Name" class="col-md-4 col-form-label">Name:</label>
-              <div class="col-sm-10">
-              <input #Name="ngModel" placeholder="Name" class="form-control" id="Name" type="text"  name="Name" required [(ngModel)]="currentUser.firstName + ' ' + currentUser.lastName"/>
-              <span *ngIf="Name.errors && Name.errors.required" class="help-block">Name is Required</span> 
-            </div>
-=======
-    <h2 class="text-left"> User Profile </h2>
+  <h2 class="text-left"> User Profile </h2>
+
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Change Profile</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Change Password</a>
+    </li>
+  </ul>
+  <!--TAB 1 CHANGE PROFILE-->
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
       <div *ngIf="successMessage" class="alert alert-success text-center">
         Success: User {{currentUser.userName}} has been updated!<br />
       </div>
-      <form #f='ngForm' (ngSubmit)='onSubmit(f)'>
-          <p class="lead text-center">
-              *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
-            </p>
+      <form #f='ngForm' (ngSubmit)='onSubmit(f,true)'>
             <p class="lead text-center">
               *Username must not contain an @ symbol or more than 1 consecutive space, leading and trailing whitespace will be removed
             </p>
             <div *ngIf="warning" class="alert alert-danger">
               {{warning}}
->>>>>>> b23aa6972f411b9b0e6f50e2d6279ffec15080f4
             </div>
             <div *ngFor="let err of validationErrors" class="alert alert-danger">
               {{err.msg}}
@@ -74,83 +69,96 @@
         </div> 
        </div>  
        <div class="form-group">
-          <input [disabled]="!f.valid" type="submit" class="btn btn-primary pull-right" value="Update Information" /> 
+          <input [disabled]="!f.valid" type="submit" class="btn btn-primary pull-right" value="Update Profile" /> 
         </div> 
-      <!-- <div class="form-group row">
-         
-            <div class="form-group col-3">
-                <button  class="btn btn-primary pull-right" color="primary"  (click)="onEdit()">Edit Password</button>
-              </div> 
-       </div>  
-
-       <ng-container *ngIf="!isEditEnable">
-          <div style="margin: 0 auto;text-align: left;">
-              <div>
-                  <label>Name:</label>
-                  <div><input id="tbname" name="yourname" /></div>
-              </div>
-              <div>
-                  <label>Email Address:</label>
-                  <div><input name="email" id="email" /></div></div>
-              <div>
-                  <label>Additional Information (optional):</label>
-                  <div><textarea rows="5" cols="46"></textarea></div>
-              </div>
-          </div>
-      </ng-container>-->
           </form>
+    </div>
+    <!--TAB 2 CHANGE PASSWORD-->
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
 
-
-          <h2 class="sub-header">Past Events Organized</h2>
-                    <div class="table-responsive">
-                                <table class="table table-bordered">
-                                        <thead>
-                                                <tr>
-                                                <th scope="col-md-4">Title</th>
-                                                <th scope="col-md-4">Description</th>
-                                                <th scope="col-md-4">Date</th>
-                                                </tr>
-                                        </thead>
-                                            <tbody>
-                                                <tr *ngFor="let event of userSubmittedEvents">
-                                                <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
-                                                <td>{{event.event_description}}</td>
-                                                <td>{{event.date_to | date: 'longDate'}}</td>
-                                                </tr>
-                                            </tbody>  
-                                  </table>
+        <div *ngIf="passwordSuccess" class="alert alert-success text-center">
+            Success: Your password has been successfully reset!
+        </div>
+          
+              <form #fp='ngForm' (ngSubmit)="onSubmit(fp,false)">
+                  <p class="lead text-center">
+                      *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
+                    </p>
+                    <div *ngIf="passwordWarning" class="alert alert-danger">
+                        {{passwordWarning}}
                       </div>
+                  <div *ngFor="let perr of passwordValidation" class="alert alert-danger text-center">
+                      {{perr.msg}}
+                  </div>
+                  <div class="form-well"> 
+                    <div class="form-group row">
+                          <label class="col-3 col-form-label" for="name">Password:</label>
+                          <div class="col-9">
+                              <input type="password" [(ngModel)]="password" class="form-control" id="password"
+                                  name="password" required>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="name">Confirm Password:</label>
+                          <div class="col-9">
+                              <input type="password" [(ngModel)]="password2" class="form-control" id="password2"
+                                  name="password2" required>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <input [disabled]="!fp.valid" type="submit" class="btn btn-primary pull-right" value="Update Password" /> 
+                    </div> 
+              </form>
+  </div>
+        <h2 class="sub-header">Past Events Organized</h2>
+         <div class="table-responsive">
+                              <table class="table table-bordered">
+                                      <thead>
+                                              <tr>
+                                              <th scope="col-md-4">Title</th>
+                                              <th scope="col-md-4">Description</th>
+                                              <th scope="col-md-4">Date</th>
+                                              </tr>
+                                      </thead>
+                                          <tbody>
+                                              <tr *ngFor="let event of userSubmittedEvents">
+                                              <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
+                                              <td>{{event.event_description}}</td>
+                                              <td>{{event.date_to | date: 'longDate'}}</td>
+                                              </tr>
+                                          </tbody>  
+                                </table>
+          </div>
 </div>
- <!--   
+<!--   
 <div class="container">
 <div class="form-group row">
-            <div class="col-md-6 col-md-offset-2">
-                    
-            </div>
-        </div>
-
-        <div class="col-md-6 text-left col-md-offset-2">
-                <h2 class="sub-header">Events Attended/Attending</h2>
-                <div class="table-responsive">
-                            <table class="table table-bordered">
-                                    <thead>
-                                            <tr>
-                                            <th scope="col-md-4">Description</th>
-                                            <th scope="col-md-4">Date</th>
-                                            <th scope="col-md-4">Location</th>
-                                            </tr>
-                                    </thead>
-                                        <tbody>
-                                            <tr *ngFor="let event of usersubmittedEvents" (click)="">
-                                            <td>{{Event.eventDescription}}</td>
-                                            <td>{{Event.eventDate | date: 'longDate'}}</td>
-                                            <td>{{Event.location}}</td>
-                                            </tr>
-                                        </tbody> 
-                            </table>
-                    </div>
-        </div>
+          <div class="col-md-6 col-md-offset-2">
+                  
+          </div>
+      </div>
+      <div class="col-md-6 text-left col-md-offset-2">
+              <h2 class="sub-header">Events Attended/Attending</h2>
+              <div class="table-responsive">
+                          <table class="table table-bordered">
+                                  <thead>
+                                          <tr>
+                                          <th scope="col-md-4">Description</th>
+                                          <th scope="col-md-4">Date</th>
+                                          <th scope="col-md-4">Location</th>
+                                          </tr>
+                                  </thead>
+                                      <tbody>
+                                          <tr *ngFor="let event of usersubmittedEvents" (click)="">
+                                          <td>{{Event.eventDescription}}</td>
+                                          <td>{{Event.eventDate | date: 'longDate'}}</td>
+                                          <td>{{Event.location}}</td>
+                                          </tr>
+                                      </tbody> 
+                          </table>
+                  </div>
       </div>
     </div>
-
-    -->
+  </div>
+  -->

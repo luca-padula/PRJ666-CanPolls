@@ -6,6 +6,7 @@ import { EventService } from 'src/data/services/event.service';
 import { Event } from 'src/data/Model/Event';
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
+import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
 import { User } from 'src/data/Model/User';
 import { ValidationError } from 'src/data/Model/ValidationError';
 
@@ -22,15 +23,13 @@ export class EditEventComponent implements OnInit {
   eventId: number;
   event: Event;
   location: Location;
-  eventRegistrations: EventRegistration[];
-  registeredUsers: User[];
+  registrations: EventRegistrationWithUser[];
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
   getLocationSubscription: any;
   updateLocationSubscription: any;
   getRegistrationsSubscription: any;
-  getUsersSubscription: any;
   removeUserSubscription: any;
   validationErrors: ValidationError[];
   successMessage: string;
@@ -64,17 +63,10 @@ export class EditEventComponent implements OnInit {
     }, (err) => {
       console.log('Unable to get location', err);
     });
-    this.getRegistrationsSubscription = this.eventService.getRegistrationsByEventId(this.eventId).subscribe((results) => {
-      this.eventRegistrations = results.filter((item, index, array) => {
-        return item.status != 'removed';
-      });
+    this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
+      this.registrations = results;
     }, (err) => {
       console.log('Unable to get registrations', err);
-    });
-    this.getUsersSubscription = this.eventService.getRegisteredUsers(this.eventId).subscribe((results) => {
-      this.registeredUsers = results;
-    }, (err) => {
-      console.log('Unable to get registered users', err);
     });
   }
 
@@ -132,8 +124,6 @@ export class EditEventComponent implements OnInit {
       this.updateLocationSubscription.unsubscribe();
     if (this.getRegistrationsSubscription)
       this.getRegistrationsSubscription.unsubscribe();
-    if (this.getUsersSubscription)
-      this.getUsersSubscription.unsubscribe();
     if (this.removeUserSubscription)
       this.removeUserSubscription.unsubscribe();
   }

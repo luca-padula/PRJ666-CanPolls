@@ -27,10 +27,20 @@
                 <p style="font-size:1rem">{{event.event_title}}</p>
                 <i> {{event.date_from}}-{{event.date_to}}</i>
               </div>
-            </div>
-          </li>
-        </ul>
-
+                <div class="list">
+                  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                  <ul class="left">
+                  <li routerLinkActive="active"
+                      *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
+                      (click)="showDetail(event)">
+                  <div class="event-browsing">
+                  <div class="master">
+                    <p style="font-size:1rem">{{event.event_title}}</p>
+                      <i> {{event.date_from}}-{{event.date_to}}</i>
+                  </div>
+                  </div>
+                  </li>
+                  </ul>
       </div>
 
       <ul class="right" *ngIf="selectedEvent">

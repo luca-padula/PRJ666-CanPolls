@@ -3,7 +3,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { loadModules } from 'esri-loader';
 import { bindCallback } from 'rxjs';
-import { Polygon } from 'esri/geometry';
+//import { Polygon } from 'esri/geometry';
 import { $ } from 'protractor';
 //import esri = __esri;
 

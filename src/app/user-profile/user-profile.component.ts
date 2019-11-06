@@ -23,7 +23,16 @@ export class UserProfileComponent implements OnInit {
   userSubmittedEvents: any[];
   successMessage: boolean;
   warning: String;
-  isEditEnable : boolean = true;
+  
+  
+  
+  passwordSuccess : boolean;
+  passwordValidation: ValidationError[];
+  passwordWarning: String;
+
+  password: string;
+  password2: string;
+  curPass: string;
 
   constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){ }
   ngOnInit() {
@@ -38,7 +47,7 @@ export class UserProfileComponent implements OnInit {
    }
 
   onEdit(){
-    this.isEditEnable =!this.isEditEnable;
+    
   }
 
   routeEvent(eventId: number): void {
@@ -50,8 +59,12 @@ export class UserProfileComponent implements OnInit {
       if(this.eventSubscription){this.eventSubscription.unsubscribe();}
   }
 
-  onSubmit(f: NgForm): void {
-    this.uService.updateUserInfo(this.currentUser).subscribe((success) => {
+  onSubmit(f: NgForm, prof: boolean): void {
+
+    if(prof == true)
+    {
+      console.log("update profile called.");
+    this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
       this.warning = null;
       this.successMessage = true;
       setTimeout(()=>{
@@ -72,6 +85,35 @@ export class UserProfileComponent implements OnInit {
         },2500);
       }
     });
+  }
+  else
+  {
+    console.log("update password called.");
+    this.uService.updatePassword(this.currentUser, this.password, this.password2).subscribe((passwordSuccess) => {
+      this.passwordWarning = null;
+      this.passwordSuccess = true;
+      setTimeout(()=>{
+        this.passwordSuccess = false;
+      },2500);
+    }, (err) => {
+      console.log(err.error);
+      if (err.error.validationErrors) {
+        this.passwordValidation = err.error.validationErrors;
+        setTimeout(()=>{
+          this.passwordValidation = null;
+        },2500);
+      }
+      else {
+        this.passwordWarning = err.error.message;
+        setTimeout(()=>{
+          this.passwordWarning = "";
+        },2500);
+      }
+    });
+  }
+
+
+
   }
  
 }
