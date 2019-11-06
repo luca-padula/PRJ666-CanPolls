@@ -7,7 +7,6 @@ import { Event } from 'src/data/Model/Event';
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
-import { User } from 'src/data/Model/User';
 
 
 @Injectable({
@@ -39,6 +38,14 @@ export class EventService {
     return this.http.get<EventRegistrationWithUser[]>(environment.apiUrl + '/api/event/' + eventId + '/registrationData');
   }
 
+  getRegistration(eventId: number, userId: string): Observable<EventRegistration> {
+    return this.http.get<EventRegistration>(environment.apiUrl + '/api/event/' + eventId + '/registration/' + userId);
+  }
+
+  getRegistrationCount(eventId: number): Observable<number> {
+    return this.http.get<number>(environment.apiUrl + '/api/event/' + eventId + '/registrationCount');
+  }
+
   removeRegisteredUser(eventId: number, userId: number): Observable<any> {
     return this.http.delete(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
@@ -48,5 +55,3 @@ export class EventService {
     return this.http.get<Event[]>(environment.apiUrl + '/api/events/createdEvents/' + userId);
   }
 }
-
-//<td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
