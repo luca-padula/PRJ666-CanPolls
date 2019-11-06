@@ -23,6 +23,9 @@ export class SubmittedEventComponent implements OnInit {
   getRegistrationSubscription: any;
   getRegistrationCountSubscription: any;
   userCanRegister: boolean = false;
+  registerUserSubscription: any;
+  registrationSuccess: boolean = false;
+  registrationFailure: string;
   currentEvent: Event;
   currentUser: User;
   eventRegistrationCount: number;
@@ -41,12 +44,12 @@ export class SubmittedEventComponent implements OnInit {
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
     });
-    this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
-      this.currentUser=data;
-    });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       if (this.auth.isAuthenticated()) {
+        this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
+          this.currentUser=data;
+        });
         this.getRegistrationSubscription = this.eService.getRegistration(this.eventId, this.token.userId).subscribe((result) => {
           this.registration = result;
           this.getRegistrationCountSubscription = this.eService.getRegistrationCount(this.eventId).subscribe((result) => {
@@ -71,6 +74,17 @@ export class SubmittedEventComponent implements OnInit {
     });
   }
 
+  registerUser(): void {
+    this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
+      this.registrationSuccess = true;
+      this.userCanRegister = false;
+      setTimeout(() => this.registrationSuccess = false, 4000);
+    }, (err) => {
+      console.log(err);
+      this.registrationFailure = err.message;
+    })
+  }
+
   approve(){
     this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{
       this.successMessage = true;
@@ -91,5 +105,6 @@ export class SubmittedEventComponent implements OnInit {
     if(this.userSubscription){this.userSubscription.unsubscribe();}
     if(this.getRegistrationSubscription){this.getRegistrationSubscription.unsubscribe();}
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
+    if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
   }
 }

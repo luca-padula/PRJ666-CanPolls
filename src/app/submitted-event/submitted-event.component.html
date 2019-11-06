@@ -22,7 +22,19 @@
           <h1 class="l-Section-title ">{{currentEvent.event_title}}</h1>
         <div>Toronto, Ontario</div>
         <div class="text-center">
-            <button class="btn btn-dark btn-lg" [disabled]="!userCanRegister" >Register</button>
+            <button *ngIf="userCanRegister" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
+            <div *ngIf="registration && registration.status !== 'removed'" class="alert alert-success">
+              You are registered for this event!
+            </div>
+            <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
+              You have previously been removed from this event.
+            </div>
+            <div *ngIf="registrationSuccess" class="alert alert-success">
+              Success: You have registered for this event!
+            </div>
+            <div *ngIf="registrationFailure" class="alert alert-danger">
+              {{registrationFailure}}
+            </div>
           </div>
       </div>
     </div>

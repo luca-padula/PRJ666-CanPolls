@@ -46,6 +46,10 @@ export class EventService {
     return this.http.get<number>(environment.apiUrl + '/api/event/' + eventId + '/registrationCount');
   }
 
+  registerUserForEvent(eventId: number, userId: string): Observable<any> {
+    return this.http.post<any>(environment.apiUrl + '/api/event/' + eventId + '/registerUser/' + userId, {});
+  }
+
   removeRegisteredUser(eventId: number, userId: number): Observable<any> {
     return this.http.delete(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
