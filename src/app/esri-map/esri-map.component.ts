@@ -59,6 +59,31 @@ export class EsriMapComponent implements OnInit {
           map: map
         });
 
+        var requestURL = 'https://represent.opennorth.ca/candidates/house-of-commons/?limit=10000';
+
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL);
+        request.responseType = 'json';
+        request.send();
+
+        request.onload = function () {
+          var federalCandidates = request.response;
+          
+          for (var candidate of federalCandidates.objects) {
+            // var requestURL = 'https://represent.opennorth.ca' + candidate.related.boundary_url + 'shape';
+
+            // var request2 = new XMLHttpRequest();
+            // request2.open('GET', requestURL);
+            // request2.responseType = 'json';
+            // request2.send();
+
+            // request2.onload = function () {
+            //   console.log(request2.response)
+            // }
+            console.log(candidate.related.boundary_url);
+          }
+        }
+
         // Set up an on-click event handler on the map to extract information based on coordinates
         view.on("click", function (event) {
           view.hitTest(event).then(function (response) {
