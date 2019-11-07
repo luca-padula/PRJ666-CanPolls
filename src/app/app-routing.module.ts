@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'event/:id', component: SubmittedEventComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'createEvent', component: CreateEventComponent },
+  { path: 'createEvent', component: CreateEventComponent, canActivate: [GuardAuthService] },
   { path: 'userProfile', component: UserProfileComponent },
   { path: 'verifyEmail/:id/:token', component: VerifyEmailComponent },
   { path: 'officialEvent', component: OfficialEventComponent },

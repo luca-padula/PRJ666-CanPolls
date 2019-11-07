@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import {Event} from '../../data/Model/Event';
 import {User} from '../../data/Model/User';
+import {Location} from '../../data/Model/Location';
 import {EventService} from '../../data/services/event.service';
 import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
@@ -28,6 +29,7 @@ export class SubmittedEventComponent implements OnInit {
   registrationFailure: string;
   currentEvent: Event;
   currentUser: User;
+  currentLocation: Location;
   eventRegistrationCount: number;
   successMessage = false;  
   private token: any;
@@ -43,6 +45,11 @@ export class SubmittedEventComponent implements OnInit {
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
+    });
+    this.locationSubscription= this.eService.getLocationByEventId(this.eventId).subscribe((data)=>{
+      this.currentLocation = data;
+    }, (err)=>{
+      console.log(err);
     });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
@@ -103,6 +110,7 @@ export class SubmittedEventComponent implements OnInit {
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
     if(this.eventSubscription){this.eventSubscription.unsubscribe();}
     if(this.userSubscription){this.userSubscription.unsubscribe();}
+    if(this.locationSubscription){this.locationSubscription.unsubscribe();}
     if(this.getRegistrationSubscription){this.getRegistrationSubscription.unsubscribe();}
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
