@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Event} from '../../data/Model/Event';
+
 import {EventService} from '../../data/services/event.service';
 
 @Component({
@@ -10,6 +11,8 @@ import {EventService} from '../../data/services/event.service';
 export class EventComponent implements OnInit {
   events: Event[];
   getEventsSub: any;
+  
+  
   loadingError: boolean = false;
   provinces = [
     {name:"British Columbia", value: "BC"},
@@ -17,16 +20,17 @@ export class EventComponent implements OnInit {
     
   ]
   selectedEvent : Event;
-showDetail(event: Event):void{
-  this.selectedEvent = event;
-}
+ 
 
   constructor(private eService: EventService) { }
-
+  showDetail(event: Event):void{
+    
+    this.selectedEvent = event;
+    
+  }
   ngOnInit() {
     this.getEventsSub = this.eService.getAllEvents().subscribe((data)=>{
       this.events = data;
-      console.log(this.events);
     },
     ()=>{
       this.loadingError = true;
@@ -37,6 +41,7 @@ showDetail(event: Event):void{
     if(this.getEventsSub){
       this.getEventsSub.unsubscribe();
     }
+    
   }
 
 }

@@ -50,3 +50,6 @@ input[type="file"]{
     height: 116px;
     width: 116px;
 }
+.table-responsive {
+    margin: 40px auto;
+}

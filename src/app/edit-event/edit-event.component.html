@@ -9,12 +9,6 @@
     <p class="lead text-left">
       Update your Event Details
     </p>
-    <div *ngIf="warning" class="alert alert-danger">
-      {{warning}}
-    </div>
-    <div *ngFor="let err of validationErrors" class="alert alert-danger">
-      {{err.msg}}
-    </div>
     <div class="form-well">
       <div class="form-group row">
         <label class="col-3 col-form-label">Event Title</label>
@@ -29,10 +23,8 @@
         <div class="col-9" style="display:inline-flex">
 
           <input type="text" [(ngModel)]="event.date_from" class="form-control" id="date_from" name="date_from">
-          <input type="text" [(ngModel)]="event.time_from" class="form-control" id="time_from" name="time_from">
           <p> - </p>
           <input type="text" [(ngModel)]="event.date_to" class="form-control" id="date_to" name="date_to">
-          <input type="text" [(ngModel)]="event.time_to" class="form-control" id="time_to" name="time_to">
 
         </div>
       </div>
@@ -66,6 +58,12 @@
     </div>
     <div class="text-center">
       <button class="btn btn-dark btn-lg" type="submit">Update Event</button>
+    </div>
+    <div *ngIf="warning" class="alert alert-danger">
+      {{warning}}
+    </div>
+    <div *ngFor="let err of validationErrors" class="alert alert-danger">
+      {{err.msg}}
     </div>
     <div *ngIf="successMessage" class="alert alert-success text-center">
       Success: {{successMessage}}!
@@ -136,7 +134,7 @@
         <th></th>
       </thead>
       <tbody>
-        <tr *ngFor="let registration of registrations; index as idx">
+        <tr *ngFor="let registration of filteredRegistrations; index as idx">
           <td>{{idx + 1}}</td>
           <td>{{registration.User.userName}}</td>
           <td>
@@ -148,5 +146,11 @@
         </tr>
       </tbody>
     </table>
+    <div *ngIf="removeUserSuccess" class="alert alert-success text-center">
+      Success: {{removeUserSuccess}}!
+    </div>
+    <div *ngIf="removeUserWarning" class="alert alert-danger text-center">
+      {{removeUserWarning}}
+    </div>
   </div>
 </div>
