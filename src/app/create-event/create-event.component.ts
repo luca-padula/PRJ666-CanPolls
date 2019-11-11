@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
+import {FileSelectDirective, FileUploader} from 'ng2-file-upload';
 import {EventToCreate} from 'src/data/Model/EventToCreate';
 import {AuthService} from 'src/data/services/auth.service';
 import {ValidationError} from 'src/data/Model/ValidationError';
 import { User } from 'src/data/Model/User';
 import {UserService} from 'src/data/services/user.service';
+import { environment } from 'src/environments/environment';
+import {HttpClient} from '@angular/common/http';
+
 class ImageSnippet{
   constructor(public src: String, public file: File){}
 }
@@ -15,6 +19,7 @@ class ImageSnippet{
 })
 export class CreateEventComponent implements OnInit {
   selectedFile: ImageSnippet;
+  sfile : File = null;
   event: EventToCreate;
   validationErrors: ValidationError[];
   warning: string;
@@ -22,8 +27,9 @@ export class CreateEventComponent implements OnInit {
   private userSubscription: any;
   currentUser: User;
   private token:any;
-
-  constructor(private auth: AuthService, private uService: UserService) { }
+  
+  attachmentList: any;
+  constructor(private auth: AuthService, private uService: UserService, private http: HttpClient) { }
   
   ngOnInit() {
     this.event = new EventToCreate;
@@ -32,6 +38,7 @@ export class CreateEventComponent implements OnInit {
       this.currentUser = us;
       this.event.userId = this.currentUser.userId;
       this.event.isApproved = false;
+      
       console.log(this.currentUser);
       console.log(this.currentUser.firstName);
       console.log(this.event.userId);
@@ -39,9 +46,10 @@ export class CreateEventComponent implements OnInit {
   }
   onFileChanged(imageInput: any){
     debugger;
-    const file : File = imageInput.files[0];
+    const file: File = imageInput.files[0];
+    this.sfile = file;
     const reader = new FileReader();
-
+   
     reader.addEventListener('load', (event:any) =>{
       debugger;
       this.selectedFile = new ImageSnippet(event.target.result, file);
@@ -49,8 +57,9 @@ export class CreateEventComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   onSubmit(f: NgForm): void{
-    
+   
     this.auth.createEvent(this.event).subscribe((success)=>{
+      
       this.warning = null;
       this.successMessage = true;
       console.log("pass!!");
@@ -63,6 +72,12 @@ export class CreateEventComponent implements OnInit {
       }
       
     });
+    
+  }
+  onUpload(){
+    const fd = new FormData();
+    fd.append('image', this.sfile, this.sfile.name);
+    console.log(fd);
     
   }
   ngOnDestroy(){ 

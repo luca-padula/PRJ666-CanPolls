@@ -4,7 +4,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgxPaginationModule} from 'ngx-pagination';
-
+import { FileSelectDirective } from 'ng2-file-upload';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EsriMapComponent } from './esri-map/esri-map.component';
@@ -58,7 +58,8 @@ export function tokenGetter() {
     ResetPasswordComponent,
     PartyFilterPipe,
     EditEventComponent,
-    ProvinceFilterPipe
+    ProvinceFilterPipe,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
