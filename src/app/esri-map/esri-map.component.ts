@@ -80,7 +80,7 @@ export class EsriMapComponent implements OnInit {
             // request2.onload = function () {
             //   console.log(request2.response)
             // }
-            console.log(candidate.related.boundary_url);
+            // console.log(candidate.related.boundary_url);
           }
         }
 
@@ -91,7 +91,7 @@ export class EsriMapComponent implements OnInit {
             let latitude = coordinates.latitude.toFixed(3);
             let longitude = coordinates.longitude.toFixed(3);
 
-            let requestURL = 'https://represent.opennorth.ca/candidates/?point=' + latitude + '%2C' + longitude + '?limit=' + searchLimit;
+            let requestURL = 'https://represent.opennorth.ca/representatives/?point=' + latitude + '%2C' + longitude + '?limit=' + searchLimit;
 
             var options = {
               query: {
@@ -113,20 +113,30 @@ export class EsriMapComponent implements OnInit {
                 let headerRow = resultsHeader.insertRow(-1);
                 let headerCell = headerRow.insertCell(-1);
                 headerCell.colSpan = 3;
-                headerCell.innerHTML = "<h3>Elected Member of Parliament</h3>";
+                headerCell.innerHTML = "<h3>Representatives</h3>";
                 headerCell.setAttribute("style", "text-align:center;");
 
-                for (var candidate of response.data.objects) {
-                  if (candidate.offices && candidate.election_name) {
-                    //console.log(candidate.name);
+                let resultsBody = resultsTable.createTBody();
 
+                for (var candidate of response.data.objects) {
+                  if (candidate.elected_office) {
                     let resultsRow = resultsTable.insertRow(-1);
                     let resultsCell = resultsRow.insertCell(-1);
 
-                    resultsCell.append(document.createTextNode(candidate.name));
-                    resultsCell.append(document.createElement("br"));
+                    let resultsName = document.createElement("h4");
+                    resultsName.append(document.createTextNode(candidate.name));
+                    resultsCell.append(resultsName);
+
+                    let resultsLink = document.createElement("a");
+                    
+                    if (candidate.personal_url != "") {
+                      resultsLink.setAttribute("href", candidate.personal_url);
+                    }
+                    
+                    resultsLink.setAttribute("target", "_blank");
 
                     let resultsPicture = document.createElement("img");
+                    resultsPicture.setAttribute("width", "200px");
 
                     if (candidate.photo_url != "") {
                       resultsPicture.setAttribute("src", candidate.photo_url);
@@ -134,14 +144,15 @@ export class EsriMapComponent implements OnInit {
                       resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
                     }
 
-                    resultsCell.append(resultsPicture);
+                    resultsLink.append(resultsPicture);
+                    resultsCell.append(resultsLink);
 
                     resultsCell = resultsRow.insertCell(-1);
-                    resultsCell.append(document.createTextNode(candidate.party_name));
+                    resultsCell.append(document.createTextNode("Party: " + candidate.party_name));
                     resultsCell.append(document.createElement("br"));
-                    resultsCell.append(document.createTextNode(candidate.district_name));
+                    resultsCell.append(document.createTextNode("District: " + candidate.district_name));
                     resultsCell.append(document.createElement("br"));
-                    resultsCell.append(document.createTextNode(candidate.election_name));
+                    resultsCell.append(document.createTextNode("Elected Office: " + candidate.elected_office));
 
                     if (candidate.offices[0] && candidate.offices[0].tel) {
                       resultsCell.append(document.createElement("br"));
@@ -149,7 +160,10 @@ export class EsriMapComponent implements OnInit {
                     }
 
                     resultsCell.append(document.createElement("br"));
-                    resultsCell.append(document.createTextNode(candidate.email));
+                    let emailLink = document.createElement("a");
+                    emailLink.setAttribute("href", "mailto:" + candidate.email);
+                    resultsCell.append(emailLink);
+                    emailLink.append(document.createTextNode(candidate.email));
                   }
                 }
               }
@@ -462,7 +476,7 @@ export class EsriMapComponent implements OnInit {
           var resultsInfo = document.getElementById("resultsInfo");
           resultsInfo.innerHTML = "<table>";
 
-          console.log("Number: ", target.graphic.attributes.OBJECTID);
+          // console.log("Number: ", target.graphic.attributes.OBJECTID);
 
           var query = federalLayer.createQuery();
           query.where = "OBJECTID = " + target.graphic.attributes.OBJECTID;
@@ -481,7 +495,7 @@ export class EsriMapComponent implements OnInit {
 
               return esriRequest(requestURL, options).then(function (response) {
                 //console.log(response);
-                console.log(requestURL);
+                // console.log(requestURL);
 
                 var representative = null;
 
