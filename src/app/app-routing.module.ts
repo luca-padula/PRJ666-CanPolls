@@ -14,6 +14,7 @@ import { OfficialEventComponent } from './official-event/official-event.componen
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { EditEventComponent } from './edit-event/edit-event.component';
+import { AdminComponent } from './admin/admin.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'createEvent', component: CreateEventComponent, canActivate: [GuardAuthService] },
   { path: 'userProfile', component: UserProfileComponent },
+  { path: 'admin', component: AdminComponent },
   { path: 'verifyEmail/:id/:token', component: VerifyEmailComponent },
   { path: 'officialEvent', component: OfficialEventComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },

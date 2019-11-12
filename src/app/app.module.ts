@@ -27,7 +27,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PartyFilterPipe} from './official-event/party-filter.pipe';
 import { EditEventComponent } from './edit-event/edit-event.component'
-import {ProvinceFilterPipe} from './official-event/province-filter.pipe'
+import {ProvinceFilterPipe} from './official-event/province-filter.pipe';
+import { AdminComponent } from './admin/admin.component'
 
 
 
@@ -58,7 +59,8 @@ export function tokenGetter() {
     ResetPasswordComponent,
     PartyFilterPipe,
     EditEventComponent,
-    ProvinceFilterPipe
+    ProvinceFilterPipe,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
