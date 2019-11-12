@@ -25,10 +25,15 @@
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@ngrx/schematics": "^8.3.0",
     "@types/arcgis-js-api": "^4.13.0",
+<<<<<<< HEAD
     "@types/jquery": "^3.3.31",
+=======
+    "arcgis-js-api": "^4.13.2",
+>>>>>>> 0ea56c5df2fc8f5d56182efa8cfaa12f728cad66
     "core-js": "^2.5.4",
     "esri-loader": "^2.12.0",
     "jsonwebtoken": "^8.5.1",
+    "ng2-file-upload": "^1.4.0",
     "ngx-pagination": "^4.1.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.9.0",

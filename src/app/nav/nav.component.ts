@@ -10,6 +10,8 @@ import { AuthService } from 'src/data/services/auth.service';
 export class NavComponent implements OnInit {
 
   public token: any;
+  private UserIsAdmin: boolean = false;
+
 
   constructor(
     private auth: AuthService,
@@ -18,7 +20,8 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationStart) {
+      if (event instanceof NavigationStart)
+      {
         this.token = this.auth.readToken();
       }
     });
@@ -31,3 +34,20 @@ export class NavComponent implements OnInit {
   }
 
 }
+/**
+ *        <li *ngIf="token" class="nav-item">
+        <a class="nav-link" routerLink="/admin">Admin Profile</a>
+      </li>
+
+
+      console.log("Userid: "+this.token.isAdmin);
+        if(this.token!= null && this.token.isAdmin == true)
+        {
+          console.log("Admin: "+this.token.isAdmin);  
+          //this.UserIsAdmin=true;
+        }
+        else
+        {
+          console.log("null token");
+        }
+ */

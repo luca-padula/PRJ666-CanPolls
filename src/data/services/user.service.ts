@@ -24,8 +24,9 @@ export class UserService {
     return this.http.put<any>(environment.apiUrl + '/api/updateUser/' + us.userId, us);
   }
 
-  updatePassword(us: User, password: string, password2: string) : Observable<any> {
+  updatePassword(us: User, password: string, password2: string, oldPass: string) : Observable<any> {
     let body = {
+      curPass: oldPass,
       currentUser: us,
       password: password,
       password2: password2

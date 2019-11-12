@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit {
   userSubmittedEvents: any[];
   successMessage: boolean;
   warning: String;
-  
+  updateUserMessageString: String;
   
   
   passwordSuccess : boolean;
@@ -63,8 +63,9 @@ export class UserProfileComponent implements OnInit {
 
     if(prof == true)
     {
-      console.log("update profile called.");
     this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
+      console.log(successMessage)
+    this.updateUserMessageString = successMessage;
       this.warning = null;
       this.successMessage = true;
       setTimeout(()=>{
@@ -88,8 +89,7 @@ export class UserProfileComponent implements OnInit {
   }
   else
   {
-    console.log("update password called.");
-    this.uService.updatePassword(this.currentUser, this.password, this.password2).subscribe((passwordSuccess) => {
+    this.uService.updatePassword(this.currentUser, this.password, this.password2, this.curPass).subscribe((passwordSuccess) => {
       this.passwordWarning = null;
       this.passwordSuccess = true;
       setTimeout(()=>{

@@ -4,7 +4,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgxPaginationModule} from 'ngx-pagination';
-
+import { FileSelectDirective } from 'ng2-file-upload';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EsriMapComponent } from './esri-map/esri-map.component';
@@ -27,7 +27,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PartyFilterPipe} from './official-event/party-filter.pipe';
 import { EditEventComponent } from './edit-event/edit-event.component'
-import {ProvinceFilterPipe} from './official-event/province-filter.pipe'
+import {ProvinceFilterPipe} from './official-event/province-filter.pipe';
+import { AdminComponent } from './admin/admin.component'
 
 
 
@@ -58,7 +59,12 @@ export function tokenGetter() {
     ResetPasswordComponent,
     PartyFilterPipe,
     EditEventComponent,
-    ProvinceFilterPipe
+    ProvinceFilterPipe,
+<<<<<<< HEAD
+    AdminComponent
+=======
+    FileSelectDirective
+>>>>>>> e585953aa63fb3b38652cff80cd55322850f80fd
   ],
   imports: [
     BrowserModule,

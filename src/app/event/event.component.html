@@ -19,12 +19,12 @@
                   <pagination-controls (pageChange)="p = $event"></pagination-controls>
                   <ul class="left">
                   <li routerLinkActive="active"
-                      *ngFor="let event of events?.data | paginate: { itemsPerPage: 4, currentPage: p }"
+                      *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
                       (click)="showDetail(event)">
                   <div class="event-browsing">
                   <div class="master">
                     <p style="font-size:1rem">{{event.event_title}}</p>
-                      <i> {{event.date_from}}-{{event.date_to}}</i>
+                      <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>
                   </div>
                   </div>
                   </li>
@@ -36,9 +36,7 @@
                   <li>
                     <div>
                       <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.event_title}}</p>
-                      <i> <b>Date: </b>{{selectedEvent.date_from}} - {{selectedEvent.date_to}}</i>
-                      <p><b>Locations: </b></p>
-                      <p><b>Address: </b></p>
+                      <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}} - {{selectedEvent.date_to | date:'longDate'}}</i>
                       <p><b>Description: </b>{{selectedEvent.event_description}}</p>
                       <p><a href="/event/{{selectedEvent.event_id}}"><b>More Details</b></a></p>
           
