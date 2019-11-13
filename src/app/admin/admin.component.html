@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="isuserAdmin">
 <div class="center">
     <h2>Users And Events</h2>
     <br/>
@@ -28,12 +28,12 @@
                           </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let us of filteredUsers; let i=dataIndex;" (click)="fillEvents(user.userName)">
+                      <tr *ngFor="let us of filteredUsers; let i=dataIndex;" (click)="fillEvents(us)">
                         <td>{{us.userId}}</td>
                         <td>{{us.userName}}</td>
                         <td>{{us.email}}</td>
                         <td>
-                           <select [(ngModel)]="us.accountStatus" class="form-control" id="accountStatus" name="accountStatus" (change)="onStatusChange(us)" >
+                           <select [(ngModel)]="us.accountStatus" class="form-control" id="accountStatus" name="accountStatus" (change)="onUserStatusChange(us)" >
                                <option value="A">Activate</option>
                                <option value="D">DeActivate</option>
                                <option value="B">Ban</option>
@@ -47,7 +47,34 @@
 
         <!--TAB 2 CHANGE PASSWORD-->
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-            
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <input class="form-control" id="eventSearch" name="eventSearch" type="text" placeholder="Search Events by Title or Party" (keyup)="onEventSearch($event)" /><br />
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col-md-4">Event Id</th>
+                                        <th scope="col-md-4">Event Title</th>
+                                        <th scope="col-md-4">Party Affiliation</th>
+                                        <th scope="col-md-4">Event Status</th>
+                                      </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let eve of filteredEvents;">
+                                    <td>{{eve.event_id}}</td>
+                                    <td>{{eve.event_title}}</td>
+                                    <td>{{eve.User.partyAffiliation}}</td>
+                                    <td>
+                                       <select [(ngModel)]="eve.isApproved" class="form-control" id="eveStatus" name="eveStatus" (change)="onEventStatusChange(eve)" >
+                                           <option value="1">Approve</option>
+                                           <option value="0">Decline</option>
+                                         </select>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                          </table>
+                    </div>
+                </div>
       </div>
 
 

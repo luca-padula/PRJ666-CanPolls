@@ -23,6 +23,12 @@ export class NavComponent implements OnInit {
       if (event instanceof NavigationStart)
       {
         this.token = this.auth.readToken();
+        //console.log("Userid: "+JSON.stringify(this.token));
+        if(this.token!= null && this.token.isAdmin == true)
+        {
+          //console.log("Admin: "+this.token.isAdmin);  
+          this.UserIsAdmin=true;
+        }
       }
     });
   }
@@ -35,19 +41,8 @@ export class NavComponent implements OnInit {
 
 }
 /**
- *        <li *ngIf="token" class="nav-item">
-        <a class="nav-link" routerLink="/admin">Admin Profile</a>
-      </li>
+ *       
 
 
-      console.log("Userid: "+this.token.isAdmin);
-        if(this.token!= null && this.token.isAdmin == true)
-        {
-          console.log("Admin: "+this.token.isAdmin);  
-          //this.UserIsAdmin=true;
-        }
-        else
-        {
-          console.log("null token");
-        }
+      
  */

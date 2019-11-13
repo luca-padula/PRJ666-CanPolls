@@ -60,11 +60,8 @@ export function tokenGetter() {
     PartyFilterPipe,
     EditEventComponent,
     ProvinceFilterPipe,
-<<<<<<< HEAD
-    AdminComponent
-=======
+    AdminComponent,
     FileSelectDirective
->>>>>>> e585953aa63fb3b38652cff80cd55322850f80fd
   ],
   imports: [
     BrowserModule,
