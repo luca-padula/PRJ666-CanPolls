@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from 'src/environments/environment';
 import {EventToCreate} from 'src/data/Model/EventToCreate';
 import { Event } from 'src/data/Model/Event';
+import {EventWithUserObj} from 'src/data/Model/EventWithUserObj'
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
@@ -54,8 +55,12 @@ export class EventService {
     return this.http.delete(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
 
-  getAllEventsByUser(userId: number) : Observable<Event[]>
+  getAllEventsByUser(userId: number) : Observable<EventWithUserObj[]>
   {
-    return this.http.get<Event[]>(environment.apiUrl + '/api/events/createdEvents/' + userId);
+    return this.http.get<EventWithUserObj[]>(environment.apiUrl + '/api/events/createdEvents/' + userId);
+  }
+
+  getAllEventsWithUser():Observable<EventWithUserObj[]>{
+    return this.http.get<EventWithUserObj[]>(environment.apiUrl + '/api/eventsUser');
   }
 }
