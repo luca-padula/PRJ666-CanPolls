@@ -3,7 +3,7 @@ export class EventToCreate
     event_id: number;
     event_title: String;
     event_description: String;
-    photo: String;
+    photo: Blob;
     date_to: String;
     date_from: String;
     time_from: String;

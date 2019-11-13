@@ -57,9 +57,12 @@ export class CreateEventComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   onSubmit(f: NgForm): void{
-   
+    console.log(this.selectedFile.src);
+    console.log(this.selectedFile.file);
+    console.log(this.sfile.type);
+   this.event.photo = new Blob([this.selectedFile.file], {type: this.sfile.type});
     this.auth.createEvent(this.event).subscribe((success)=>{
-      
+      console.log(this.event.photo);
       this.warning = null;
       this.successMessage = true;
       console.log("pass!!");
@@ -74,12 +77,7 @@ export class CreateEventComponent implements OnInit {
     });
     
   }
-  onUpload(){
-    const fd = new FormData();
-    fd.append('image', this.sfile, this.sfile.name);
-    console.log(fd);
-    
-  }
+ 
   ngOnDestroy(){ 
     if(this.userSubscription){this.userSubscription.unsubscribe();}
    }

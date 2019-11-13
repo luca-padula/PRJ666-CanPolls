@@ -7,6 +7,7 @@ import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-submitted-event',
@@ -33,11 +34,15 @@ export class SubmittedEventComponent implements OnInit {
   eventRegistrationCount: number;
   successMessage = false;  
   private token: any;
+  src: any;
+  base64data: any;
+  b: String;
   constructor(
     private auth: AuthService,
     private eService: EventService,
     private uService: UserService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private sanitizer: DomSanitizer
     ) { }
 
   ngOnInit() {
@@ -46,13 +51,17 @@ export class SubmittedEventComponent implements OnInit {
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
     });
-    this.locationSubscription= this.eService.getLocationByEventId(this.eventId).subscribe((data)=>{
+    this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
+      this.currentEvent=data;
+      console.log(this.currentEvent.photo);
+      this.uploadImage(this.currentEvent.photo)
+    
+    this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
       this.currentLocation = data;
     }, (err)=>{
       console.log(err);
     });
-    this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
-      this.currentEvent=data;
+     
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
           this.currentUser=data;
@@ -80,7 +89,33 @@ export class SubmittedEventComponent implements OnInit {
       console.log(err);
     });
   }
-
+ uploadImage(data: Blob){
+   var b = new Blob([data], {type: data.type});
+  //const file: File = new File([data], "image.png");
+    let objectURL = window.URL.createObjectURL(b);
+    console.log(objectURL);       
+    this.src = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    console.log(this.src); 
+      //this.uploadImage(this.currentEvent.photo);
+    
+    //const reader = new FileReader();
+    //var base64data: string | String;
+    /*reader.addEventListener('load', ()=> {
+      debugger;
+      this.b = reader.result as String;  
+      this.b = this.b.split(',')[1];
+      console.log(this.b);
+      this.src = this.sanitizer.bypassSecurityTrustUrl('data:image/*;base64,' + this.b);   
+    });
+    
+    reader.readAsDataURL(data);
+    console.log(this.src);
+    */
+    //this.b = base64data.split(',')[1];
+    //console.log(this.b);
+    //base64data = base64data.substr(base64data.indexOf(',') + 1)
+    //this.src.src = 'data:image/bmp;base64,'+ Base64.encode(data);
+ }
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = true;
