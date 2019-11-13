@@ -25,6 +25,7 @@ export class SubmittedEventComponent implements OnInit {
   getRegistrationCountSubscription: any;
   userCanRegister: boolean = false;
   registerUserSubscription: any;
+  cancelRegistrationSubscription: any;
   registrationSuccess: boolean = false;
   registrationFailure: string;
   currentEvent: Event;
@@ -92,6 +93,18 @@ export class SubmittedEventComponent implements OnInit {
     })
   }
 
+  cancelRegistration(): void {
+    this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
+
+      // TO-DO: set success message
+      
+
+    }, (err) => {
+      console.log(err);
+      this.registrationFailure = err.message;
+    })
+  }
+
   approve(){
     this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{
       this.successMessage = true;
@@ -114,5 +127,6 @@ export class SubmittedEventComponent implements OnInit {
     if(this.getRegistrationSubscription){this.getRegistrationSubscription.unsubscribe();}
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
+    if(this.cancelRegistrationSubscription){this.cancelRegistrationSubscription.unsubscribe();}
   }
 }
