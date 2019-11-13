@@ -51,7 +51,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   routeEvent(eventId: number): void {
-    this.router.navigate(['/event', eventId, 'edit']);
+    this.router.navigate(['/event', eventId]);
   }
 
   ngOnDestroy(){ 

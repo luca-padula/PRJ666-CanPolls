@@ -68,7 +68,7 @@ export class EditEventComponent implements OnInit {
     });
     this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
       this.registrations = results;
-      this.filteredRegistrations = this.registrations.filter((reg) => reg.status != 'removed');
+      this.filteredRegistrations = this.registrations.filter((reg) => reg.status == 'registered');
     }, (err) => {
       console.log('Unable to get registrations', err);
     });

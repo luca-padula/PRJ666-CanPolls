@@ -26,6 +26,7 @@
             <div *ngIf="registration && registration.status === 'registered'" class="alert alert-success">
               You are registered for this event!
             </div>
+            <button *ngIf="userCanCancel" class="btn btn-danger btn-lg" (click)="cancelRegistration()">Cancel Registration</button>
             <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
               You have previously been removed from this event.
             </div>
@@ -33,11 +34,12 @@
               You cancelled your registration for this event.
             </div>
             <div *ngIf="registrationSuccess" class="alert alert-success">
-              Success: You have registered for this event!
+              {{registrationSuccess}}
             </div>
             <div *ngIf="registrationFailure" class="alert alert-danger">
               {{registrationFailure}}
             </div>
+            <button *ngIf="userCanEdit" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
           </div>
       </div>
     </div>
