@@ -59,9 +59,15 @@ export function tokenGetter() {
     ResetPasswordComponent,
     PartyFilterPipe,
     EditEventComponent,
+<<<<<<< HEAD
     ProvinceFilterPipe, 
     AdminComponent, 
     FeedbackComponent
+=======
+    ProvinceFilterPipe,
+    AdminComponent,
+    FileSelectDirective
+>>>>>>> 993affc88012f9bbb188c46265317d0d2db31c17
   ],
   imports: [
     BrowserModule,

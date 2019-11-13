@@ -10,7 +10,9 @@
     <li *ngIf="token" class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/userProfile">User Profile</a>
     </li>
-   
+    <li *ngIf="token && UserIsAdmin" class="nav-item">
+        <a class="nav-link" routerLink="/admin">Admin Profile</a>
+      </li>
     <li *ngIf="token" class="nav-item">
       <a class="nav-link" (click)="logout()">Logout</a>
     </li>
