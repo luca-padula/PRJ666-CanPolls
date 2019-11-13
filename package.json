@@ -24,8 +24,12 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "@ngrx/schematics": "^8.3.0",
+=======
+    "@ngrx/schematics": "^8.5.1",
+>>>>>>> 993affc88012f9bbb188c46265317d0d2db31c17
 =======
     "@ngrx/schematics": "^8.5.1",
 >>>>>>> 993affc88012f9bbb188c46265317d0d2db31c17
