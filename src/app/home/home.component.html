@@ -22,12 +22,13 @@
   <div id="governmentType">
     <h3>Government Type</h3>
     <div class="filterOptions">
+        <label><input type="radio" name="regionType" id="general" value="general"> General</label>
       <label><input type="radio" name="regionType" id="federal" value="federal" checked> Federal</label>
       <label><input type="radio" name="regionType" id="provincial" value="provincial"> Provincial</label>
       <select id="provincialSelection">
         <option value="BC">British Columbia</option>
         <option value="ON">Ontario</option>
-        <option value="NB">New Brunswick</option>
+        <!--<option value="NB">New Brunswick</option>-->
         <option value="SK">Saskatchewan</option>
       </select>
       <!--<label><input type="radio" name="regionType" id="municipal" value="municipal"> Municipal</label>-->
@@ -46,7 +47,19 @@
 
 <app-esri-map></app-esri-map>
 
-<div>
+<div id="resultsDiv">
   <div id="resultsInfo">More information about the selected region will be displayed here.</div>
   <table id="resultsTable"></table>
+</div>
+
+<div id="calendarDiv">
+  <h3>Election Calendar</h3>
+  <div id="electionCalendar">
+    <table>
+      <thead>
+        <tr></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </div>
