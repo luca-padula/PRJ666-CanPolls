@@ -33,4 +33,9 @@ export class UserService {
     };
     return this.http.put<any>(environment.apiUrl + '/api/updatePassword/' + us.userId, body);
   }
+
+  deleteUser(user: User) : Observable<any> {
+    return this.http.put<any>(environment.apiUrl + '/api/deleteUser/' + user.userId, user);
+  }
+
 }
