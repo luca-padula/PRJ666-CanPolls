@@ -134,15 +134,12 @@
         <th></th>
       </thead>
       <tbody>
-        <tr *ngFor="let registration of filteredRegistrations; index as idx">
+        <tr *ngFor="let reg of filteredRegistrations; index as idx">
           <td>{{idx + 1}}</td>
-          <td>{{registration.User.userName}}</td>
-          <td>
-            <span *ngIf="registration.User.partyAffiliation">{{registration.User.partyAffiliation}}</span>
-            <span *ngIf="!registration.User.partyAffiliation">None</span>
-          </td>
-          <td>{{registration.status}}</td>
-          <td><button class="btn btn-danger text-center" (click)="removeRegisteredUser(registration.UserUserId)">Remove User</button></td>
+          <td>{{reg.User.userName}}</td>
+          <td>{{reg.User.partyAffiliation}}</td>
+          <td>{{reg.status}}</td>
+          <td><button class="btn btn-danger text-center" (click)="removeRegisteredUser(reg.UserUserId)">Remove User</button></td>
         </tr>
       </tbody>
     </table>
