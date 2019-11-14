@@ -47,6 +47,10 @@ export class AuthService {
     return this.http.post<any>(environment.apiUrl + '/api/register', user);
   }
 
+  resendVerificationEmail(user: User): Observable<any> {
+    return this.http.post<any>(environment.apiUrl + '/api/resendVerificationEmail', user);
+  }
+
   verifyUser(id: string, token: string): Observable<any> {
     let apiUrl: string = environment.apiUrl + '/api/verifyEmail/' + id + '/' + token;
     return this.http.post<any>(apiUrl, {});

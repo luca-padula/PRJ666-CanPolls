@@ -4,13 +4,14 @@
 .jumbotron {
     margin: 0;
     padding: 150px 50px;
+    height: 100%;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
 .display-5 {
     margin-bottom: 75px;
 }
-a.btn, button {
+a.btn, .submit-button {
     border-radius: 12px;
     padding: 4px 16px;
     border: 2px solid #707070;
@@ -22,6 +23,7 @@ a.btn, button {
 form {
     margin: 50px 10%;
 }
-form button {
-    margin-top: 30px;
+.alert button {
+    display: block;
+    margin: 10px auto;
 }
