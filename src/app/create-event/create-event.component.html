@@ -4,9 +4,14 @@
       Success: Event {{event.event_title}} has been submitted!<br />
       Please wait for your event to be verify. We will send you an email when it finishs
     </div>
-    <form *ngIf="!successMessage" #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div *ngIf="unaffiliated" class="alert alert-danger text-center" >
+        Sorry! User without party cannot create event. <br/>
+        Please update your party affiliation first. Thank you
+      </div>
+    <form *ngIf="!successMessage && !unaffiliated" #f="ngForm" (ngSubmit)="onSubmit(f)">
       <p class="lead text-left">
-        Add your Event Details
+        Add your Event Details<br/>
+        You are in <strong>{{currentUser.partyAffiliation}}</strong> party
       </p>
       <div *ngIf="warning" class="alert alert-danger">
         {{warning}}

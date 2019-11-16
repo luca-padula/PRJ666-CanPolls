@@ -8,7 +8,6 @@ import {UserService} from '../../data/services/user.service';
 import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-submitted-event',
@@ -46,11 +45,7 @@ export class SubmittedEventComponent implements OnInit {
     private eService: EventService,
     private uService: UserService,
     private route:ActivatedRoute,
-<<<<<<< HEAD
-    private sanitizer: DomSanitizer
-=======
     private router: Router
->>>>>>> ac9bf11643c0f801474b94398ca2f5ad9495775d
     ) { }
 
   ngOnInit() {
