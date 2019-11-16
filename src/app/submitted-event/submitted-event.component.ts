@@ -54,7 +54,7 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       console.log(this.currentEvent.photo);
-      this.uploadImage(this.currentEvent.photo)
+      //this.uploadImage(this.currentEvent.photo)
     
     this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
       this.currentLocation = data;
@@ -89,7 +89,7 @@ export class SubmittedEventComponent implements OnInit {
       console.log(err);
     });
   }
- uploadImage(data: Blob){
+ /*uploadImage(data: Blob){
    var b = new Blob([data], {type: data.type});
   //const file: File = new File([data], "image.png");
     let objectURL = window.URL.createObjectURL(b);
@@ -110,12 +110,12 @@ export class SubmittedEventComponent implements OnInit {
     
     reader.readAsDataURL(data);
     console.log(this.src);
-    */
+    
     //this.b = base64data.split(',')[1];
     //console.log(this.b);
     //base64data = base64data.substr(base64data.indexOf(',') + 1)
     //this.src.src = 'data:image/bmp;base64,'+ Base64.encode(data);
- }
+}*/
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = true;

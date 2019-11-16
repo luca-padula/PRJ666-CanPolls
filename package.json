@@ -23,17 +23,9 @@
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
-<<<<<<< HEAD
-<<<<<<< HEAD
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "@ngrx/schematics": "^8.3.0",
-=======
-    "@ngrx/schematics": "^8.5.1",
->>>>>>> 993affc88012f9bbb188c46265317d0d2db31c17
-=======
-    "@ngrx/schematics": "^8.5.1",
->>>>>>> 993affc88012f9bbb188c46265317d0d2db31c17
-    "@types/arcgis-js-api": "^4.13.0",
+    "@types/arcgis-js-api": "^4.12.0",
     "angular-split": "^3.0.2",
     "arcgis-js-api": "^4.13.2",
     "core-js": "^2.5.4",

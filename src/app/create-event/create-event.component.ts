@@ -60,7 +60,17 @@ export class CreateEventComponent implements OnInit {
     console.log(this.selectedFile.src);
     console.log(this.selectedFile.file);
     console.log(this.sfile.type);
-   this.event.photo = new Blob([this.selectedFile.file], {type: this.sfile.type});
+    this.event.photo = this.selectedFile.src
+   //this.event.photo = new Blob([this.selectedFile.file], {type: this.sfile.type});
+   /*let img = document.querySelector('img');
+   let canvas = document.createElement('canvas');
+   canvas.width = img.clientWidth;
+   canvas.height = img.clientHeight;
+   let context = canvas.getContext('2d');
+   context.drawImage(img, 0, 0);
+   canvas.toBlob(function(blob){
+     this.event.photo = blob;
+   });*/
     this.auth.createEvent(this.event).subscribe((success)=>{
       console.log(this.event.photo);
       this.warning = null;

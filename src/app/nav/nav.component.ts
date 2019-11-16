@@ -20,14 +20,17 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.router.events.subscribe((event: Event) => {
+     
       if (event instanceof NavigationStart)
       {
         this.token = this.auth.readToken();
+        console.log(this.token.isAdmin);
         //console.log("Userid: "+JSON.stringify(this.token));
         if(this.token!= null && this.token.isAdmin == true)
         {
           //console.log("Admin: "+this.token.isAdmin);  
           this.UserIsAdmin=true;
+          
         }
       }
     });
