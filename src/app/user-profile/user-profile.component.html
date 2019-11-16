@@ -8,6 +8,9 @@
     <li class="nav-item">
       <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Change Password</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-delete" role="tab" aria-controls="pills-profile" aria-selected="false" (click)="clickMethod()">Delete Account</a>
+    </li>
   </ul>
   <!--TAB 1 CHANGE PROFILE-->
   <div class="tab-content" id="pills-tabContent">
@@ -54,12 +57,12 @@
                 <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
                 <div class="col-9">
                   <select [(ngModel)]="currentUser.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
-                    <option value=""></option>
+                    <option value="unaffiliated"></option>
                     <option value="conservative">Conservative Party</option>
                     <option value="liberal">Liberal Party</option>
                     <option value="ndp">New Democratic Party</option>
                     <option value="green">Green Party</option>
-                    <option value="people's">People's Party</option>
+                    <option value="bloc quebecois">Bloc Quebecois</option>
                   </select>
                   <small id="affiliationHelpBlock" class="form-text text-muted">
                     Select an option if you are a member of a political party. This is optional and you can change it later.
@@ -119,7 +122,7 @@
                     </div> 
               </form>
   </div>
-        <h2 class="sub-header">Past Events Organized</h2>
+     <h2 class="sub-header">Past Events Organized</h2>
          <div class="table-responsive">
                               <table class="table table-bordered">
                                       <thead>

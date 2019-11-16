@@ -21,6 +21,9 @@ export class AdminComponent implements OnInit {
   events: EventWithUserObj[];
   filteredEvents: EventWithUserObj[];
 
+  partyUsers: User[];
+  filteredPartyUsers: User[];
+  
   getUserSub: any;
   loadingError:boolean = false;
 
@@ -34,6 +37,11 @@ export class AdminComponent implements OnInit {
   constructor(private auth: AuthService, private aService: AdminService, private eService: EventService, private router: Router) { }
 
   private isuserAdmin: boolean = false;
+  private errorMessages: String = "";
+  
+  private isSuccessful: boolean = false;
+  private isUnSuccessful: boolean = false;
+
 
   ngOnInit() {
     this.token = this.auth.readToken();
@@ -46,12 +54,17 @@ export class AdminComponent implements OnInit {
         this.filteredUsers=data;
       }
       )
+      this.adminSub = this.aService.getAllUsersByParty(this.token.partyAffiliation).subscribe(data => {
+        this.partyUsers = data;
+        this.filteredPartyUsers = data;
+      }
+      )
       this.eventSub = this.eService.getAllEventsWithUser().subscribe(data => {
-        console.log(data);
         this.events = data;
         this.filteredEvents=data;
       }
       )
+
     }
     else if(this.token!=null)
     {
@@ -76,6 +89,18 @@ export class AdminComponent implements OnInit {
        || (e.email.toLowerCase().indexOf(substring) !== -1) ))
   }
 
+  onAffUserSearch(event:any)
+  {
+      let substring : string = event.target.value.toLowerCase();
+      console.log(this.partyUsers);
+      this.filteredPartyUsers = this.partyUsers.filter((e)  => (
+          (e.userName.toLowerCase().indexOf(substring) !== -1 )
+       || (e.email.toLowerCase().indexOf(substring) !== -1) 
+       || (e.userId.toString().toLowerCase().indexOf(substring) !== -1)
+       || ( (e.affiliationApproved == true ? "Approve" : "Decline").toString().toLowerCase().indexOf(substring) !== -1) 
+       ))
+  }
+
   onEventSearch(event:any)
   {
       let substring : string = event.target.value.toLowerCase();
@@ -87,22 +112,39 @@ export class AdminComponent implements OnInit {
 
   onUserStatusChange(us: any)
   {
-     // let selectedOpt = event.target.value;
       this.aService.updUserAccStatus(us).subscribe();
       this.clickedUserID = us.userId;
-      
-      console.log(us);
       console.log(this.clickedUserID)
-    //  this.aService.updUserAccStatus(selectedOpt)
   }
 
-  onEventStatusChange(us: any)
+  onAffiliationChange(us: any)
   {
-     // let selectedOpt = event.target.value;
-      this.aService.updUserAccStatus(us).subscribe();
+      this.aService.updUserAffStatus(us).subscribe();
       this.clickedUserID = us.userId;
       console.log(this.clickedUserID)
-    //  this.aService.updUserAccStatus(selectedOpt)
+  }
+
+  onEventStatusChange(event: any)
+  {
+       let adminParty = this.token.partyAffiliation; 
+      if(adminParty == event.User.partyAffiliation )
+      {
+        this.aService.approveEvent(event.event_id,event).subscribe();
+      
+        this.isSuccessful = true;
+        this.errorMessages = "Event "+(event.isApproved == 1 ? "approved" : "declined")+". An email has been sent to the user.";
+        setTimeout(()=>{
+          this.isSuccessful = false;
+        },2500);
+      }
+      else
+      {
+        this.isUnSuccessful = true;
+        this.errorMessages = "You cannot alter other parties events!!";
+        setTimeout(()=>{
+          this.isUnSuccessful = false;
+        },2500);
+      }
   }
 
   fillEvents(us: any)

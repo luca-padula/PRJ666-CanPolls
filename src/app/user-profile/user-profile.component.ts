@@ -51,7 +51,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   routeEvent(eventId: number): void {
-    this.router.navigate(['/event', eventId, 'edit']);
+    this.router.navigate(['/event', eventId]);
   }
 
   ngOnDestroy(){ 
@@ -111,9 +111,18 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }
+  }
 
 
-
+  clickMethod() {
+    if(confirm("Are you sure you want to delete your profile?")) {
+      this.uService.deleteUser(this.token).subscribe( () =>
+        {
+          this.auth.logout();
+          this.token = null;
+          this.router.navigate(['/login']);
+        });
+    }
   }
  
 }

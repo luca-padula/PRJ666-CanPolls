@@ -5,6 +5,7 @@ import {Location} from '../../data/Model/Location';
 import {EventService} from '../../data/services/event.service';
 import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
+import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -25,8 +26,11 @@ export class SubmittedEventComponent implements OnInit {
   getRegistrationSubscription: any;
   getRegistrationCountSubscription: any;
   userCanRegister: boolean = false;
+  userCanCancel: boolean = false;
+  userCanEdit: boolean = false;
   registerUserSubscription: any;
-  registrationSuccess: boolean = false;
+  cancelRegistrationSubscription: any;
+  registrationSuccess: string;
   registrationFailure: string;
   currentEvent: Event;
   currentUser: User;
@@ -42,7 +46,11 @@ export class SubmittedEventComponent implements OnInit {
     private eService: EventService,
     private uService: UserService,
     private route:ActivatedRoute,
+<<<<<<< HEAD
     private sanitizer: DomSanitizer
+=======
+    private router: Router
+>>>>>>> ac9bf11643c0f801474b94398ca2f5ad9495775d
     ) { }
 
   ngOnInit() {
@@ -70,7 +78,11 @@ export class SubmittedEventComponent implements OnInit {
           this.registration = result;
           this.getRegistrationCountSubscription = this.eService.getRegistrationCount(this.eventId).subscribe((result) => {
             this.eventRegistrationCount = result;
-            let registrationDeadline: Date = new Date(this.currentEvent.date_from);
+            let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from);
+            this.userCanEdit = this.token.userId == this.currentEvent.UserUserId
+              && this.currentTime < registrationDeadline;
+            this.userCanCancel = this.registration && this.registration.status == 'registered'
+              && this.currentTime < registrationDeadline;
             registrationDeadline.setHours(registrationDeadline.getHours() - 12);
             this.userCanRegister = this.token.userId != this.currentEvent.UserUserId
               && this.currentTime < registrationDeadline
@@ -118,13 +130,32 @@ export class SubmittedEventComponent implements OnInit {
 }*/
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
-      this.registrationSuccess = true;
+      this.registrationSuccess = success.message;
       this.userCanRegister = false;
-      setTimeout(() => this.registrationSuccess = false, 4000);
+      setTimeout(() => this.registrationSuccess = null, 4000);
     }, (err) => {
       console.log(err);
-      this.registrationFailure = err.message;
+      this.registrationFailure = err.error.message;
     })
+  }
+
+  cancelRegistration(): void {
+    this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
+      this.registrationSuccess = success.message;
+      this.registration.status = '';
+      this.userCanCancel = false;
+      setTimeout(() => {
+        this.registrationSuccess = null;
+        this.registration.status = 'cancelled';
+      }, 4000);
+    }, (err) => {
+      console.log(err);
+      this.registrationFailure = err.error.message;
+    })
+  }
+
+  routeEventEdit(eId: number): void {
+    this.router.navigate(['/event', eId, 'edit']);
   }
 
   approve(){
@@ -149,5 +180,6 @@ export class SubmittedEventComponent implements OnInit {
     if(this.getRegistrationSubscription){this.getRegistrationSubscription.unsubscribe();}
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
+    if(this.cancelRegistrationSubscription){this.cancelRegistrationSubscription.unsubscribe();}
   }
 }

@@ -38,7 +38,7 @@
                       <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.event_title}}</p>
                       <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}} - {{selectedEvent.date_to | date:'longDate'}}</i>
                       <p><b>Description: </b>{{selectedEvent.event_description}}</p>
-                      <p><a href="/event/{{selectedEvent.event_id}}"><b>More Details</b></a></p>
+                      <p><a routerLink="/event/{{selectedEvent.event_id}}"><b>More Details</b></a></p>
           
           
           
