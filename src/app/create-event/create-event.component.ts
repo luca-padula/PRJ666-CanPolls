@@ -55,6 +55,8 @@ export class CreateEventComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
     });
     reader.readAsDataURL(file);
+    
+
   }
   onSubmit(f: NgForm): void{
     if(this.currentUser.partyAffiliation=="unaffiliated"){

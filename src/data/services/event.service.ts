@@ -67,4 +67,9 @@ export class EventService {
   getAllEventsWithUser():Observable<EventWithUserObj[]>{
     return this.http.get<EventWithUserObj[]>(environment.apiUrl + '/api/eventsUser');
   }
+
+  getEventsAttendedByUser(userId: number) : Observable<Event[]>
+  {
+    return this.http.get<Event[]>(environment.apiUrl + '/api/events/attendedByUser/' + userId);
+  }
 }
