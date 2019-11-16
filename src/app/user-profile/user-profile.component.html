@@ -122,7 +122,30 @@
                     </div> 
               </form>
   </div>
+
      <h2 class="sub-header">Past Events Organized</h2>
+         <div class="table-responsive">
+                              <table class="table table-bordered">
+                                      <thead>
+                                              <tr>
+                                              <th scope="col-md-4">Title</th>
+                                              <th scope="col-md-4">Description</th>
+                                              <th scope="col-md-4">Approval Status</th>
+                                              <th scope="col-md-4">Date</th>
+                                              </tr>
+                                      </thead>
+                                          <tbody>
+                                              <tr *ngFor="let event of userSubmittedEvents">
+                                              <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
+                                              <td>{{event.event_description}}</td>
+                                              <td>{{(event.isApproved) ? "Approved" : "In Progress/Declined"}}</td>
+                                              <td>{{event.date_to | date: 'longDate'}}</td>
+                                              </tr>
+                                          </tbody>  
+                                </table>
+          </div>
+
+          <h2 class="sub-header">Past Events Attended/Upcoming Events</h2>
          <div class="table-responsive">
                               <table class="table table-bordered">
                                       <thead>
@@ -133,7 +156,7 @@
                                               </tr>
                                       </thead>
                                           <tbody>
-                                              <tr *ngFor="let event of userSubmittedEvents">
+                                              <tr *ngFor="let event of attendedEvents">
                                               <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
                                               <td>{{event.event_description}}</td>
                                               <td>{{event.date_to | date: 'longDate'}}</td>

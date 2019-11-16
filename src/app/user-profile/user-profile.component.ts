@@ -20,7 +20,11 @@ export class UserProfileComponent implements OnInit {
   private eventSubscription: any;
   currentUser: User;
   validationErrors: ValidationError[];
+
+
   userSubmittedEvents: any[];
+  attendedEvents: any[];
+
   successMessage: boolean;
   warning: String;
   updateUserMessageString: String;
@@ -43,6 +47,10 @@ export class UserProfileComponent implements OnInit {
       this.eService.getAllEventsByUser(this.token.userId).subscribe(data => {
         console.log(data);
         this.userSubmittedEvents = data;
+      });
+      this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
+        console.log(data);
+        this.attendedEvents = data;
       });
    }
 
@@ -70,20 +78,20 @@ export class UserProfileComponent implements OnInit {
       this.successMessage = true;
       setTimeout(()=>{
         this.successMessage = false;
-      },2500);
+      },3500);
     }, (err) => {
       console.log(err);
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
         setTimeout(()=>{
           this.validationErrors = null;
-        },2500);
+        },3500);
       }
       else {
         this.warning = err.error.message;
         setTimeout(()=>{
           this.warning = "";
-        },2500);
+        },3500);
       }
     });
   }
