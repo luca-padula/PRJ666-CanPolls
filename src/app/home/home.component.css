@@ -4,8 +4,10 @@
 }
 .container {
     margin: 1em;
+    display: block;
+    justify-content: center;
+    align-items: center;
 }
-
 h1 {
     font-size: 4rem;
 }
@@ -13,6 +15,7 @@ h1 {
 p {
     font-size: 2rem;
 }
+
 
 table {
     margin: 10px;
