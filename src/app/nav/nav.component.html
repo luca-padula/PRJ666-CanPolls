@@ -1,5 +1,8 @@
 <nav class="navbar navbar-dark bg-dark"> 
   <a class="navbar-brand" routerLink="/home">CanPolls</a>
+  <a class="imgClass" style="margin: 0; float: none; text-align:center" href="/home">
+      <img src="../../assets/image/Logo.png" height= "140" width="140" alt="logo">
+    </a>
   <ul class="nav justify-content-end">
     <li routerLinkActive="active">
       <a class="nav-link" routerLink="/events">Events</a>
@@ -16,5 +19,5 @@
     <li *ngIf="token" class="nav-item">
       <a class="nav-link" (click)="logout()">Logout</a>
     </li>
-  </ul>
+</ul>
 </nav>

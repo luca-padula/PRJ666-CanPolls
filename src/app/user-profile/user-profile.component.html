@@ -157,42 +157,12 @@
                                       </thead>
                                           <tbody>
                                               <tr *ngFor="let event of attendedEvents">
-                                              <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
-                                              <td>{{event.event_description}}</td>
-                                              <td>{{event.date_to | date: 'longDate'}}</td>
+                                              <td (click)="routeEvent(event.Event.event_id)" style="text-decoration: underline;">{{event.Event.event_title}}</td>
+                                              <td>{{event.Event.event_description}}</td>
+                                              <td>{{event.Event.date_to | date: 'longDate'}}</td>
                                               </tr>
                                           </tbody>  
                                 </table>
           </div>
 </div>
-<!--   
-<div class="container">
-<div class="form-group row">
-          <div class="col-md-6 col-md-offset-2">
-                  
-          </div>
-      </div>
-      <div class="col-md-6 text-left col-md-offset-2">
-              <h2 class="sub-header">Events Attended/Attending</h2>
-              <div class="table-responsive">
-                          <table class="table table-bordered">
-                                  <thead>
-                                          <tr>
-                                          <th scope="col-md-4">Description</th>
-                                          <th scope="col-md-4">Date</th>
-                                          <th scope="col-md-4">Location</th>
-                                          </tr>
-                                  </thead>
-                                      <tbody>
-                                          <tr *ngFor="let event of usersubmittedEvents" (click)="">
-                                          <td>{{Event.eventDescription}}</td>
-                                          <td>{{Event.eventDate | date: 'longDate'}}</td>
-                                          <td>{{Event.location}}</td>
-                                          </tr>
-                                      </tbody> 
-                          </table>
-                  </div>
-      </div>
-    </div>
-  </div>
-  -->
+</div>

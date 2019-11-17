@@ -59,7 +59,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   routeEvent(eventId: number): void {
-    this.router.navigate(['/event', eventId]);
+    this.router.navigate([]).then(result => {  window.open('/event/'+eventId, '_blank'); });
   }
 
   ngOnDestroy(){ 
