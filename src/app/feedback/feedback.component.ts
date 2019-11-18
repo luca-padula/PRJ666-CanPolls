@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Inject } from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {DialogData} from "../login/login.component";
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.css']
 })
 export class FeedbackComponent implements OnInit {
-
-  constructor(public activeModal: NgbActiveModal) { }
+  description:string;
+  constructor(
+    private dialogRef: MatDialogRef<FeedbackComponent>,
+    @Inject(MAT_DIALOG_DATA) public data:DialogData) { }
 
   ngOnInit() {
   }
-  closeModal() {
-    this.activeModal.close('Modal Closed');
+  close() {
+    this.dialogRef.close();
   }
+
 }

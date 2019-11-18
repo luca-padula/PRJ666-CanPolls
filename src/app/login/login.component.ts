@@ -3,7 +3,11 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/data/services/auth.service';
 import { User } from 'src/data/Model/User';
-
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import { FeedbackComponent } from '../feedback/feedback.component';
+export interface DialogData{
+  description: String;
+}
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,10 +21,11 @@ export class LoginComponent implements OnInit {
   public userNotVerified: boolean = false;
   public unverifiedUser: string;
   public rejectionCount: number = 0;
-
+  description: string;
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -32,6 +37,8 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.user).subscribe((success) => {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
+      
+      this.openDialog();
     }, (err) => {
       this.rejectionCount++;
       if (this.rejectionCount >= 5) {
@@ -55,4 +62,15 @@ export class LoginComponent implements OnInit {
       console.log(err);
     });
   }
+
+  openDialog(){
+    const dialogRef = this.dialog.open(FeedbackComponent, {
+      data: {description: this.description}
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      console.log('the dialog was closed');
+      this.description = result;
+    })
+  }
+
 }

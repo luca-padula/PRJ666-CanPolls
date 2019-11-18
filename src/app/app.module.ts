@@ -30,7 +30,8 @@ import { EditEventComponent } from './edit-event/edit-event.component'
 import {ProvinceFilterPipe} from './official-event/province-filter.pipe';
 import { AdminComponent } from './admin/admin.component';
 import { FeedbackComponent } from './feedback/feedback.component'
-import {MatDialogModule} from "@angular/material";
+import {MatDialogModule, MatButtonModule,MatFormFieldModule, MatInputModule,} from "@angular/material";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
@@ -76,6 +77,10 @@ export function tokenGetter() {
     NgxPaginationModule,
     NgbModule,
     MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

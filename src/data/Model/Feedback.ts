@@ -3,9 +3,9 @@ import { User } from './User';
 export class Feedback
 {
     feedbackId: number;
-    userId: User;
-    feedbackDate: Date;
+    feedbackDate: string;
     feedbackDesc: String;
     rating: number;
-
+    eventId: number;
+    userId: string;
 }
