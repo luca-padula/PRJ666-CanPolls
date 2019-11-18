@@ -1,16 +1,16 @@
 <h2 mat-dialog-title>Give us an feedback</h2>
-
+<p><strong>How was your experience at {{event.title}} on {{event.date_from | date:'fullDate'}} recently? </strong></p>
   <div class="rating">
       <div class="rate">
-          <input type="radio" id="star5" name="rate" value="5" />
+          <input type="radio" id="star5" name="rate" [(ngModel)]="data.rating" [value]="5" />
           <label for="star5" title="text">5 stars</label>
-          <input type="radio" id="star4" name="rate" value="4" />
+          <input type="radio" id="star4" name="rate" [(ngModel)]="data.rating" [value]="4" />
           <label for="star4" title="text">4 stars</label>
-          <input type="radio" id="star3" name="rate" value="3" />
+          <input type="radio" id="star3" name="rate" [(ngModel)]="data.rating" [value]="3" />
           <label for="star3" title="text">3 stars</label>
-          <input type="radio" id="star2" name="rate" value="2" />
+          <input type="radio" id="star2" name="rate" [(ngModel)]="data.rating"[value]="2" />
           <label for="star2" title="text">2 stars</label>
-          <input type="radio" id="star1" name="rate" value="1" />
+          <input type="radio" id="star1" name="rate" [(ngModel)]="data.rating" [value]="1" />
           <label for="star1" title="text">1 star</label>
         </div>
   </div>
@@ -25,7 +25,6 @@
   </div>
 
 <div mat-dialog-actions>
-    <button mat-button (click)="close()">Close</button>
-    <button mat-button [mat-dialog-close]="data.description" cdkFocusInitial>Save</button>
+    <button mat-button (click)="save()">Save</button>
 
 </div>

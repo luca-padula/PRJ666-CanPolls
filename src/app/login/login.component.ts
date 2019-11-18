@@ -7,10 +7,7 @@ import { User } from 'src/data/Model/User';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {Event} from 'src/data/Model/Event';
-export interface DialogData{
-  rating: number;
-  description: String;
-}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -24,10 +21,12 @@ export class LoginComponent implements OnInit {
   public userNotVerified: boolean = false;
   public unverifiedUser: string;
   public rejectionCount: number = 0;
-  attendedEvents: any[];
+  public success: boolean = false;
+  attendedEvents: Event[];
   public event: Event;
   description: string;
   rating:number;
+  currentDate = new Date();
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -48,8 +47,13 @@ export class LoginComponent implements OnInit {
         console.log(data);
         this.attendedEvents = data;
         if(this.attendedEvents.length > 0){
-          this.event = this.attendedEvents[this.attendedEvents.length-1];
-          this.openDialog();
+          for(let event of this.attendedEvents){
+            console.log(event);
+            let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
+            if(endDate < this.currentDate){
+              this.openDialog(event.event_id, this.user.userId);
+            }
+          }
         }
       });
       
@@ -77,13 +81,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  openDialog(){
+  openDialog(event_id: number, userId: string){
     const dialogRef = this.dialog.open(FeedbackComponent, {
-      data: {description: this.description, rating: this.rating}
+      data: {description: this.description, rating: this.rating, eventId: event_id, userId: userId}
     });
     dialogRef.afterClosed().subscribe(result =>{
-      console.log('the dialog was closed');
-      this.description = result;
+      console.log(result);
+      this.eService.createFeedback(result).subscribe(success=>{
+          this.success = true;
+          console.log("feedback is saved");
+      })
     })
   }
 
