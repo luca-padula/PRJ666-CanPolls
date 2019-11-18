@@ -102,7 +102,7 @@
                                 <tbody>
                                   <tr *ngFor="let eve of filteredEvents;">
                                     <td>{{eve.event_id}}</td>
-                                    <td>{{eve.event_title}}</td>
+                                    <td (click)="routeEvent(eve.event_id)" style="text-decoration: underline;">{{eve.event_title}}</td>
                                     <td>{{eve.User.partyAffiliation}}</td>
                                     <td>
                                        <select [(ngModel)]="eve.isApproved" class="form-control" id="eveStatus" name="eveStatus" (change)="onEventStatusChange(eve)" >

@@ -110,6 +110,10 @@ export class AdminComponent implements OnInit {
        //
   }
 
+  routeEvent(eventId: number): void {
+    this.router.navigate(['/event', eventId]);
+  }
+
   onUserStatusChange(us: any)
   {
       this.aService.updUserAccStatus(us).subscribe();
