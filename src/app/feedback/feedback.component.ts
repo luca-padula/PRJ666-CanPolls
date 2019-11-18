@@ -1,21 +1,26 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {DialogData} from "../login/login.component";
+import {Feedback} from 'src/data/Model/Feedback';
+import {Event} from 'src/data/Model/Event';
+import {EventService} from 'src/data/services/event.service';
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.css']
 })
 export class FeedbackComponent implements OnInit {
-  description:string;
+  event: Event;
   constructor(
+    private eService: EventService,
     private dialogRef: MatDialogRef<FeedbackComponent>,
-    @Inject(MAT_DIALOG_DATA) public data:DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data:Feedback) { }
 
   ngOnInit() {
+    this.eService.getEventById(this.data.eventId).subscribe(data=>{
+      this.event = data;
+    });
   }
-  close() {
+  save(){
     this.dialogRef.close();
   }
-
 }
