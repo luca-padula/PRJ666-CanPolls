@@ -15,7 +15,7 @@
       <br>
       <div class="form-group col-md-12 row">
           <select  class="form-control col-md-3" [(ngModel)]="selectedProv" >
-            
+            <option [ngValue]="null" >Search by Province </option>
             <option *ngFor="let p of provinces" [ngValue]="p.value">
               {{p.name}}
             </option>
