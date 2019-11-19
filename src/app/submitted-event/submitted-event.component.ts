@@ -8,6 +8,8 @@ import {UserService} from '../../data/services/user.service';
 import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
+import {HttpClient} from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-submitted-event',
@@ -40,12 +42,17 @@ export class SubmittedEventComponent implements OnInit {
   src: any;
   base64data: any;
   b: String;
+
+ 
+  imageToShow:any;
+
   constructor(
     private auth: AuthService,
     private eService: EventService,
     private uService: UserService,
     private route:ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
     ) { }
 
   ngOnInit() {
@@ -59,6 +66,7 @@ export class SubmittedEventComponent implements OnInit {
       console.log(this.currentEvent.photo);
       //this.uploadImage(this.currentEvent.photo)
     
+      this.retrieveImage();
     this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
       this.currentLocation = data;
     }, (err)=>{
@@ -95,6 +103,7 @@ export class SubmittedEventComponent implements OnInit {
     }, (err) => {
       console.log(err);
     });
+
   }
  /*uploadImage(data: Blob){
    var b = new Blob([data], {type: data.type});
@@ -152,6 +161,35 @@ export class SubmittedEventComponent implements OnInit {
   routeEventEdit(eId: number): void {
     this.router.navigate(['/event', eId, 'edit']);
   }
+
+    //RETRIEVE FROM API
+    retrieveImage()
+  {
+    var getExt = this.currentEvent.photo
+    getExt = getExt.substring(getExt.lastIndexOf('.'));
+    console.log("getext: "+getExt);
+    var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;
+    console.log(fullImgName);
+    this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
+    .subscribe( result => {
+      console.log(result+":result");
+       this.createImageFromBlob(result);
+    });
+  }
+  
+//retrieve uses this function
+createImageFromBlob(image: Blob) {
+  let reader = new FileReader();
+  reader.addEventListener("load", () => {
+     this.imageToShow = reader.result;
+    // console.log("imagetoshow: "+this.imageToShow);
+  }, false);
+
+  if (image) {
+     reader.readAsDataURL(image);
+  }
+
+}
 
   approve(){
     this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{

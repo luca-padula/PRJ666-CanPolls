@@ -74,4 +74,10 @@ export class EventService {
     return this.http.get<Event[]>(environment.apiUrl + '/api/events/attendedByUser/' + userId);
   }
   
+ 
+
+  uploadImage(filename: string):Observable<any>
+  { 
+    return this.http.post<any>(environment.apiUrl + '/api/upload/',filename);
+  }
 }

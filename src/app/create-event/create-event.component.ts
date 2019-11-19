@@ -8,6 +8,7 @@ import { User } from 'src/data/Model/User';
 import {UserService} from 'src/data/services/user.service';
 import { environment } from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http';
+import { EventService } from 'src/data/services/event.service';
 
 class ImageSnippet{
   constructor(public src: String, public file: File){}
@@ -29,7 +30,15 @@ export class CreateEventComponent implements OnInit {
   private token:any;
   unaffiliated: boolean;
   attachmentList: any;
-  constructor(private auth: AuthService, private uService: UserService, private http: HttpClient) { }
+ 
+  imageToShow:any;
+
+  selectedF: File =null;
+  fd =new FormData();
+
+  fullImageName :string="";
+
+  constructor(private auth: AuthService, private uService: UserService, private http: HttpClient, private eService: EventService) { }
   
   ngOnInit() {
     this.event = new EventToCreate;
@@ -38,10 +47,6 @@ export class CreateEventComponent implements OnInit {
       this.currentUser = us;
       this.event.userId = this.currentUser.userId;
       this.event.isApproved = false;
-      
-      console.log(this.currentUser);
-      console.log(this.currentUser.firstName);
-      console.log(this.event.userId);
     });
   }
   onFileChanged(imageInput: any){
@@ -55,18 +60,49 @@ export class CreateEventComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
     });
     reader.readAsDataURL(file);
+  }
+
+
+ //SENDING THE IMAGE TO THE API
+  onImageAdd(event)
+  {
+
+    const file: File = <File>event.target.files[0];
+    this.sfile = file;
+    const reader = new FileReader();
+   
+    reader.addEventListener('load', (event:any) =>{
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+    });
+    reader.readAsDataURL(file);
     
+    this.selectedF = <File>event.target.files[0];
+    var fileName = this.selectedF.name;
+    fileName = fileName.substring(fileName.lastIndexOf('.'));
+    this.fullImageName = "Event"+this.currentUser.userId+fileName;
+    //console.log("fileExt: "+fileName);
+    //console.log("FinalName: "+"Event"+this.currentUser.userId+fileName);
+    this.fd.append('file', this.selectedF, this.fullImageName);
 
   }
+
   onSubmit(f: NgForm): void{
     if(this.currentUser.partyAffiliation=="unaffiliated"){
       this.unaffiliated = true;
       console.log("unaffiliated");
     } else{
-    console.log(this.selectedFile.src);
+    /*console.log(this.selectedFile.src);
     console.log(this.selectedFile.file);
     console.log(this.sfile.type);
-    this.event.photo = this.selectedFile.src
+   
+*/
+        console.log("fd: "+JSON.stringify(this.fd));
+        this.http.post(environment.apiUrl + "/api/upload", this.fd)
+        .subscribe( result => {
+        console.log(result)
+        });
+
+    this.event.photo = this.fullImageName;
     this.auth.createEvent(this.event).subscribe((success)=>{
       console.log(this.event.photo);
       this.warning = null;
