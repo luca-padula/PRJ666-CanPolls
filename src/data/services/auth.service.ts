@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { Feedback } from '../Model/Feedback';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/data/Model/User';
@@ -84,5 +84,8 @@ export class AuthService {
     };
     let apiUrl: string = environment.apiUrl + '/api/event/' + id;
     return this.http.post<any>(apiUrl, body);
+  }
+  createFeedback(feedback: Feedback):Observable<any>{
+    return this.http.post<any>(environment.apiUrl + '/api/createFeedback', feedback);
   }
 }

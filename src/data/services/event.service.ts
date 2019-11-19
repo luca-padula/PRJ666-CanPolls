@@ -8,7 +8,7 @@ import {EventWithUserObj} from 'src/data/Model/EventWithUserObj'
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
-import { Feedback } from '../Model/Feedback';
+
 
 
 @Injectable({
@@ -73,13 +73,11 @@ export class EventService {
   {
     return this.http.get<Event[]>(environment.apiUrl + '/api/events/attendedByUser/' + userId);
   }
+  
  
 
   uploadImage(filename: string):Observable<any>
   { 
     return this.http.post<any>(environment.apiUrl + '/api/upload/',filename);
-  }
-  createFeedback(feedback: Feedback):Observable<any>{
-    return this.http.post<any>(environment.apiUrl + '/api/creatFeedback', feedback);
   }
 }

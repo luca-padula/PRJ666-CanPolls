@@ -16,11 +16,12 @@ export class FeedbackComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:Feedback) { }
 
   ngOnInit() {
-    this.eService.getEventById(this.data.eventId).subscribe(data=>{
+    this.eService.getEventById(this.data.eventEventId).subscribe(data=>{
       this.event = data;
     });
   }
   save(){
-    this.dialogRef.close();
+    this.dialogRef.close(this.data);
+    console.log(this.data);
   }
 }
