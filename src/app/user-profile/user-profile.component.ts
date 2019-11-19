@@ -20,10 +20,14 @@ export class UserProfileComponent implements OnInit {
   private eventSubscription: any;
   currentUser: User;
   validationErrors: ValidationError[];
+
+
   userSubmittedEvents: any[];
+  attendedEvents: any[];
+
   successMessage: boolean;
   warning: String;
-  
+  updateUserMessageString: String;
   
   
   passwordSuccess : boolean;
@@ -44,6 +48,10 @@ export class UserProfileComponent implements OnInit {
         console.log(data);
         this.userSubmittedEvents = data;
       });
+      this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
+        console.log(data);
+        this.attendedEvents = data;
+      });
    }
 
   onEdit(){
@@ -51,7 +59,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   routeEvent(eventId: number): void {
-    this.router.navigate(['/event', eventId, 'edit']);
+    this.router.navigate([]).then(result => {  window.open('/event/'+eventId, '_blank'); });
   }
 
   ngOnDestroy(){ 
@@ -63,33 +71,33 @@ export class UserProfileComponent implements OnInit {
 
     if(prof == true)
     {
-      console.log("update profile called.");
     this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
+      console.log(successMessage)
+    this.updateUserMessageString = successMessage;
       this.warning = null;
       this.successMessage = true;
       setTimeout(()=>{
         this.successMessage = false;
-      },2500);
+      },3500);
     }, (err) => {
       console.log(err);
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
         setTimeout(()=>{
           this.validationErrors = null;
-        },2500);
+        },3500);
       }
       else {
         this.warning = err.error.message;
         setTimeout(()=>{
           this.warning = "";
-        },2500);
+        },3500);
       }
     });
   }
   else
   {
-    console.log("update password called.");
-    this.uService.updatePassword(this.currentUser, this.password, this.password2).subscribe((passwordSuccess) => {
+    this.uService.updatePassword(this.currentUser, this.password, this.password2, this.curPass).subscribe((passwordSuccess) => {
       this.passwordWarning = null;
       this.passwordSuccess = true;
       setTimeout(()=>{
@@ -111,9 +119,18 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }
+  }
 
 
-
+  clickMethod() {
+    if(confirm("Are you sure you want to delete your profile?")) {
+      this.uService.deleteUser(this.token).subscribe( () =>
+        {
+          this.auth.logout();
+          this.token = null;
+          this.router.navigate(['/login']);
+        });
+    }
   }
  
 }

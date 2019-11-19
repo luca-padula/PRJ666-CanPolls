@@ -19,10 +19,15 @@
         </div>
         <div class="alert alert-danger" *ngIf="warning" role="alert">
           {{warning}}
+          <button *ngIf="userNotVerified" class="btn btn-dark" (click)="resendVerificationEmail(user)">Get a new verification link</button>
         </div>
-        <button class="btn" type="submit" [disabled]="!f.valid">Sign In</button>
+        <div class="alert alert-success" *ngIf="successMessage" role="alert">
+          Success: Check your email for your new verification link
+        </div>
+        <button class="btn submit-button" type="submit" [disabled]="!f.valid" >Sign In</button>
       </form>
       <a routerLink="/forgotPassword">Forgot your password?</a>
     </div>
+    
   </div>
 </div>

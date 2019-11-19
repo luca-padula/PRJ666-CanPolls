@@ -4,7 +4,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {NgxPaginationModule} from 'ngx-pagination';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EsriMapComponent } from './esri-map/esri-map.component';
@@ -27,9 +27,11 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PartyFilterPipe} from './official-event/party-filter.pipe';
 import { EditEventComponent } from './edit-event/edit-event.component'
-import {ProvinceFilterPipe} from './official-event/province-filter.pipe'
-
-
+import {ProvinceFilterPipe} from './official-event/province-filter.pipe';
+import { AdminComponent } from './admin/admin.component';
+import { FeedbackComponent } from './feedback/feedback.component'
+import {MatDialogModule, MatButtonModule,MatFormFieldModule, MatInputModule,} from "@angular/material";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
@@ -58,7 +60,12 @@ export function tokenGetter() {
     ResetPasswordComponent,
     PartyFilterPipe,
     EditEventComponent,
-    ProvinceFilterPipe
+    ProvinceFilterPipe, 
+    FeedbackComponent,
+    ProvinceFilterPipe,
+    AdminComponent,
+    
+
   ],
   imports: [
     BrowserModule,
@@ -68,6 +75,12 @@ export function tokenGetter() {
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    NgbModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -82,6 +95,9 @@ export function tokenGetter() {
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    FeedbackComponent
+  ]
 })
 export class AppModule { }

@@ -13,7 +13,6 @@ import { $ } from 'protractor';
   styleUrls: ['./esri-map.component.css']
 })
 export class EsriMapComponent implements OnInit {
-
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode', { static: true }) private mapViewEl: ElementRef;
 
@@ -33,6 +32,14 @@ export class EsriMapComponent implements OnInit {
       "esri/Graphic"
     ])
       .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest, Graphic]) => {
+        const resultsInfoMessage = "More information about the selected region will be displayed here.";
+        const searchLimit = 1000;
+
+        let resultsInfo = document.getElementById("resultsInfo") as HTMLTableElement;
+        let resultsTable = document.getElementById("resultsTable") as HTMLTableElement;
+
+        resultsInfo.innerHTML = resultsInfoMessage;
+
         // Create a locator task using the world geocoding service
         const locatorTask = new Locator({
           url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -44,16 +51,6 @@ export class EsriMapComponent implements OnInit {
           basemap: 'gray-vector'
         });
 
-        // var mapOnLoad = map.on("load", function(){
-        //   console.log("Here we go...");
-        //   map.graphics.on("click", myGraphicsClickHandler);
-        // });
-
-        // function myGraphicsClickHandler(evt) {
-        //   alert("User clicked on " + evt.graphic);
-        // }
-
-
         // Create the map view that the map will start on
         const view = new EsriMapView({
           container: this.mapViewEl.nativeElement,
@@ -62,9 +59,127 @@ export class EsriMapComponent implements OnInit {
           map: map
         });
 
-        // view.on("click", function(event){
+        var requestURL = 'https://represent.opennorth.ca/candidates/house-of-commons/?limit=10000';
 
-        // });
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL);
+        request.responseType = 'json';
+        request.send();
+
+        request.onload = function () {
+          var federalCandidates = request.response;
+          
+          for (var candidate of federalCandidates.objects) {
+            // var requestURL = 'https://represent.opennorth.ca' + candidate.related.boundary_url + 'shape';
+
+            // var request2 = new XMLHttpRequest();
+            // request2.open('GET', requestURL);
+            // request2.responseType = 'json';
+            // request2.send();
+
+            // request2.onload = function () {
+            //   console.log(request2.response)
+            // }
+            // console.log(candidate.related.boundary_url);
+          }
+        }
+
+        // Set up an on-click event handler on the map to extract information based on coordinates
+        view.on("click", function (event) {
+          view.hitTest(event).then(function (response) {
+            let coordinates = view.toMap({ x: event.x, y: event.y });
+            let latitude = coordinates.latitude.toFixed(3);
+            let longitude = coordinates.longitude.toFixed(3);
+
+            let requestURL = 'https://represent.opennorth.ca/representatives/?point=' + latitude + '%2C' + longitude + '?limit=' + searchLimit;
+
+            var options = {
+              query: {
+                f: 'json'
+              },
+              responseType: 'json'
+            };
+
+            return esriRequest(requestURL, options).then(function (response) {
+              console.log(requestURL);
+
+              if (response.data.objects.length <= 0) {
+                //resultsInfo.innerHTML = resultsInfoMessage;
+              } else {
+                resultsInfo.innerHTML = "";
+                resultsTable.innerHTML = "";
+
+                let resultsHeader = resultsTable.createTHead();
+                let headerRow = resultsHeader.insertRow(-1);
+                let headerCell = headerRow.insertCell(-1);
+                headerCell.colSpan = 3;
+                headerCell.innerHTML = "<h3>Representatives</h3>";
+                headerCell.setAttribute("style", "text-align:center;");
+
+                let resultsBody = resultsTable.createTBody();
+
+                for (var candidate of response.data.objects) {
+                  if (candidate.elected_office) {
+                    let resultsRow = resultsTable.insertRow(-1);
+                    let resultsCell = resultsRow.insertCell(-1);
+
+                    let resultsName = document.createElement("h4");
+                    resultsName.append(document.createTextNode(candidate.name));
+                    resultsCell.append(resultsName);
+
+                    let resultsLink = document.createElement("a");
+                    
+                    if (candidate.personal_url != "") {
+                      resultsLink.setAttribute("href", candidate.personal_url);
+                    }
+                    
+                    resultsLink.setAttribute("target", "_blank");
+
+                    let resultsPicture = document.createElement("img");
+                    resultsPicture.setAttribute("width", "200px");
+
+                    if (candidate.photo_url != "") {
+                      resultsPicture.setAttribute("src", candidate.photo_url);
+                    } else {
+                      resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
+                    }
+
+                    resultsLink.append(resultsPicture);
+                    resultsCell.append(resultsLink);
+
+                    resultsCell = resultsRow.insertCell(-1);
+                    resultsCell.append(document.createTextNode("Party: " + candidate.party_name));
+                    resultsCell.append(document.createElement("br"));
+                    resultsCell.append(document.createTextNode("District: " + candidate.district_name));
+                    resultsCell.append(document.createElement("br"));
+                    resultsCell.append(document.createTextNode("Elected Office: " + candidate.elected_office));
+
+                    if (candidate.offices[0] && candidate.offices[0].tel) {
+                      resultsCell.append(document.createElement("br"));
+                      resultsCell.append(document.createTextNode(candidate.offices[0].tel));
+                    }
+
+                    resultsCell.append(document.createElement("br"));
+                    let emailLink = document.createElement("a");
+                    emailLink.setAttribute("href", "mailto:" + candidate.email);
+                    resultsCell.append(emailLink);
+                    emailLink.append(document.createTextNode(candidate.email));
+                  }
+                }
+              }
+            });
+
+            // if (response.results.length) {
+            //   const graphic = response.results.filter(function (result) {
+            //     return result.graphic.layer === federalLayer;
+            //   });
+
+            //   let regionName = graphic.attributes.name;
+            // }
+
+
+          });
+        });
 
         // view.when(function () {
         //   // This function will execute once the promise is resolved
@@ -110,7 +225,7 @@ export class EsriMapComponent implements OnInit {
         //     expression: "return $feature[\"ed_namee\"];"
         //   }
         // };
-        
+
         var generalBoundaries = new FeatureLayer({
           url: "https://webservices.maps.canada.ca/arcgis/rest/services/ELECTIONS/federal_electoral_districts_boundaries_2015_en/MapServer/0",
           // labelingInfo: [federalLayerLabels],
@@ -141,7 +256,7 @@ export class EsriMapComponent implements OnInit {
         }
         var politicalColorRenderer = {
           type: "unique-value",
-          field: "WinningParty",
+          field: "winParty",
           defaultSymbol: {
             type: "simple-fill",
             color: "gray"
@@ -303,8 +418,6 @@ export class EsriMapComponent implements OnInit {
         // FILTER OPTION EVENT LISTENERS //
         ///////////////////////////////////
 
-        let resultsTable = document.getElementById("resultsTable") as HTMLTableElement;
-
         function clearResults() {
           resultsTable.innerHTML = "";
           view.popup.close();
@@ -318,7 +431,7 @@ export class EsriMapComponent implements OnInit {
             } else {
               layer.visible = false;
             }
-            
+
           });
         }
 
@@ -363,7 +476,7 @@ export class EsriMapComponent implements OnInit {
           var resultsInfo = document.getElementById("resultsInfo");
           resultsInfo.innerHTML = "<table>";
 
-          console.log("Number: ", target.graphic.attributes.OBJECTID);
+          // console.log("Number: ", target.graphic.attributes.OBJECTID);
 
           var query = federalLayer.createQuery();
           query.where = "OBJECTID = " + target.graphic.attributes.OBJECTID;
@@ -382,52 +495,58 @@ export class EsriMapComponent implements OnInit {
 
               return esriRequest(requestURL, options).then(function (response) {
                 //console.log(response);
-                console.log(requestURL);
+                // console.log(requestURL);
 
                 var representative = null;
 
                 // Find the representative's name from using alias checking
                 for (var field of target.graphic.layer.fields) {
-                  if (target.graphic.attributes.WinningParty == field.alias) {
+                  if (target.graphic.attributes.winParty == field.alias) {
                     representative = eval('target.graphic.attributes.' + field.name);
                     break;
                   }
                 }
 
                 //var final_results = "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}";
-                var final_results = "<b>Federal Electoral District Number:</b> {fednum}<br><b>Elected Party:</b> {WinningParty}";
+                var final_results = "<b>Federal Electoral District Number:</b> {fednum}<br><b>Elected Party:</b> {winParty}";
 
                 if (representative) {
                   final_results += "<br><b>Elected Representative:</b> " + representative;
                 }
 
-                resultsTable.innerHTML = "";
+                // resultsTable.innerHTML = "";
 
                 for (var representative of response.data.objects) {
-                  let resultsRow = resultsTable.insertRow(-1)
+                  // let resultsRow = resultsTable.insertRow(-1)
 
-                  resultsRow.insertCell(-1);
-                  resultsRow.append(document.createTextNode(representative.name));
-                  resultsRow.append(document.createElement("br"));
+                  // resultsRow.insertCell(-1);
+                  // resultsRow.append(document.createTextNode(representative.name));
+                  // resultsRow.append(document.createElement("br"));
 
-                  let resultsPicture = document.createElement("img");
-                  resultsPicture.setAttribute("src", representative.photo_url);
-                  resultsRow.append(resultsPicture);
+                  // let resultsPicture = document.createElement("img");
 
-                  resultsRow.insertCell(-1);
-                  resultsRow.append(document.createTextNode(representative.party_name));
-                  resultsRow.append(document.createElement("br"));
-                  resultsRow.append(document.createTextNode(representative.district_name));
-                  resultsRow.append(document.createElement("br"));
-                  resultsRow.append(document.createTextNode(representative.election_name));
+                  // if (representative.photo_url != "") {
+                  //   resultsPicture.setAttribute("src", representative.photo_url);
+                  // } else {
+                  //   resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
+                  // }
 
-                  if (representative.offices[0] && representative.offices[0].tel) {
-                    resultsRow.append(document.createElement("br"));
-                    resultsRow.append(document.createTextNode(representative.offices[0].tel));
-                  }
+                  // resultsRow.append(resultsPicture);
 
-                  resultsRow.append(document.createElement("br"));
-                  resultsRow.append(document.createTextNode(representative.email));
+                  // resultsRow.insertCell(-1);
+                  // resultsRow.append(document.createTextNode(representative.party_name));
+                  // resultsRow.append(document.createElement("br"));
+                  // resultsRow.append(document.createTextNode(representative.district_name));
+                  // resultsRow.append(document.createElement("br"));
+                  // resultsRow.append(document.createTextNode(representative.election_name));
+
+                  // if (representative.offices[0] && representative.offices[0].tel) {
+                  //   resultsRow.append(document.createElement("br"));
+                  //   resultsRow.append(document.createTextNode(representative.offices[0].tel));
+                  // }
+
+                  // resultsRow.append(document.createElement("br"));
+                  // resultsRow.append(document.createTextNode(representative.email));
 
                   // resultsInfo.innerHTML += "<tr>";
 

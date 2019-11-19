@@ -1,8 +1,8 @@
 .container {
-    padding: 50px;
+    padding: 20px;
 }
 h2 {
-    margin: 40px auto;
+    margin: 10px auto 20px auto;
 }
 p {
     font-size: 16px;
@@ -18,5 +18,5 @@ label {
     font-size: 20px;
 }
 button {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }

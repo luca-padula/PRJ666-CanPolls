@@ -9,7 +9,13 @@ import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
 import { User } from 'src/data/Model/User';
 import { ValidationError } from 'src/data/Model/ValidationError';
+import {HttpClient} from '@angular/common/http';
 
+import { environment } from 'src/environments/environment';
+
+class ImageSnippet{
+  constructor(public src: String, public file: File){}
+}
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -24,6 +30,7 @@ export class EditEventComponent implements OnInit {
   event: Event;
   location: Location;
   registrations: EventRegistrationWithUser[];
+  filteredRegistrations: EventRegistrationWithUser[];
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -34,11 +41,26 @@ export class EditEventComponent implements OnInit {
   validationErrors: ValidationError[];
   successMessage: string;
   warning: string;
+  removeUserSuccess: string;
+  removeUserWarning: string;
+
+
+  selectedFile: ImageSnippet;
+  sfile : File = null;
+
+  imageToShow:any;
+
+  selectedF: File =null;
+  fd =new FormData();
+
+  fullImageName :string="";
+
 
   constructor(
     private route: ActivatedRoute,
     private auth: AuthService,
-    private eventService: EventService
+    private eventService: EventService,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -65,6 +87,7 @@ export class EditEventComponent implements OnInit {
     });
     this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
       this.registrations = results;
+      this.filteredRegistrations = this.registrations.filter((reg) => reg.status == 'registered');
     }, (err) => {
       console.log('Unable to get registrations', err);
     });
@@ -72,6 +95,11 @@ export class EditEventComponent implements OnInit {
 
   onEventSubmit(f: NgForm): void {
     this.validationErrors = [];
+    this.http.post(environment.apiUrl + "/api/upload", this.fd)
+    .subscribe( result => {
+   // console.log(result)
+    });
+    this.event.photo = this.fullImageName;
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
       this.successMessage = success.message;
       setTimeout(() => this.successMessage = null, 4000);
@@ -104,12 +132,32 @@ export class EditEventComponent implements OnInit {
 
   removeRegisteredUser(userId: number): void {
     this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
-      this.successMessage = success.message;
-      setTimeout(() => this.successMessage = null, 4000);
+      this.removeUserSuccess = success.message;
+      setTimeout(() => this.removeUserSuccess = null, 4000);
     }, (err) => {
       console.log('Unable to remove user', err);
+      this.removeUserWarning = err.message;
     });
   }
+
+   //SENDING THE IMAGE TO THE API
+   onImageAdd(event)
+   {
+     const file: File = <File>event.target.files[0];
+     this.sfile = file;
+     const reader = new FileReader();
+     reader.addEventListener('load', (event:any) =>{
+       this.selectedFile = new ImageSnippet(event.target.result, file);
+     });
+     reader.readAsDataURL(file);
+     
+     this.selectedF = <File>event.target.files[0];
+     var fileName = this.selectedF.name;
+     fileName = fileName.substring(fileName.lastIndexOf('.'));
+     this.fullImageName = "Event"+this.token.userId+fileName;
+     this.fd.append('file', this.selectedF, this.fullImageName);
+   }
+
 
   ngOnDestroy() {
     if (this.paramSubscription)

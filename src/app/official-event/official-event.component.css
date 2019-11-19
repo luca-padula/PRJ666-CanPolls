@@ -51,7 +51,7 @@ ul.right
   width: 500px;
 }
   
-  ul li {
+  ul li.liclass {
     border: 1px solid #ddd; /* Add a thin border to each list item */
     margin-top: 10px; /* Prevent double borders */
     background-color: #f6f6f6; /* Add a grey background color */
@@ -88,7 +88,7 @@ ul li:hover{
   justify-content: space-between;
   margin:3px;
 }
-a{
+a.eventlink{
   margin-top: 75px;
 }
 

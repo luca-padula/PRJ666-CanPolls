@@ -21,7 +21,7 @@
       <div class="form-group row">
         <label class="col-3 col-form-label" for="name">Email:</label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="user.email" class="form-control" id="email" name="email">
+          <input type="text" [(ngModel)]="user.email" class="form-control" id="email" name="email" autofocus>
         </div>
       </div>
       <div class="form-group row">
@@ -58,17 +58,17 @@
         <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
         <div class="col-9">
           <select [(ngModel)]="user.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
-            <option value=""></option>
+            <option value="unaffiliated"></option>
             <option value="conservative">Conservative Party</option>
             <option value="liberal">Liberal Party</option>
             <option value="ndp">New Democratic Party</option>
             <option value="green">Green Party</option>
-            <option value="people's">People's Party</option>
+            <option value="bloc quebecois">Bloc Quebecois</option>
           </select>
           <small id="affiliationHelpBlock" class="form-text text-muted">
             Select an option if you are a member of a political party. This is optional and you can change it later.
             After selecting a party, an email will be sent to an administrator of that party letting them know that they
-            can approve you to create events on their behalf.
+            can approve you to create events on their behalf. You will not be able to create events until you are approved by an admin.
           </small>
         </div>
       </div>
