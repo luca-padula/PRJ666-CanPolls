@@ -97,12 +97,13 @@
         </div>
       <div class="form-group row">
         <label class="image-upload-container btn btn-bwm">
-        <span>Select Image</span>
-            <input #imageInput type="file" accept="image/*" name="file" id="file" (change)="onFileChanged(imageInput)" >
-        </label>
+          <span>Select Image</span>
+          <input type="file"  name="file" id="file" (change)="onImageAdd($event)" >
+      </label>
+      
         <div *ngIf="selectedFile"  class="img-preview-container">
                 <div class="img-preview" [ngStyle] ="{'background-image':'url(' + selectedFile.src + ')'}">
-    
+                    <img [src]="imageToShow">
                 </div>
             </div>
       </div>
