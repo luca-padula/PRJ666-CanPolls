@@ -11,7 +11,7 @@ export class NavComponent implements OnInit {
 
   public token: any;
   private UserIsAdmin: boolean = false;
-
+  private navSubs: any;
 
   constructor(
     private auth: AuthService,
@@ -19,13 +19,12 @@ export class NavComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.router.events.subscribe((event: Event) => {
+    console.log("home called");
+    this.navSubs = this.router.events.subscribe((event: Event) => {
      
       if (event instanceof NavigationStart)
       {
         this.token = this.auth.readToken();
-        console.log(this.token.isAdmin);
-        //console.log("Userid: "+JSON.stringify(this.token));
         if(this.token!= null && this.token.isAdmin == true)
         {
           //console.log("Admin: "+this.token.isAdmin);  
@@ -37,9 +36,16 @@ export class NavComponent implements OnInit {
   }
 
   logout(): void {
-    this.auth.logout();
+
     this.token = null;
+    this.UserIsAdmin=false;
+    this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy()
+  {
+    this.navSubs.unsubscribe();
   }
 
 }
