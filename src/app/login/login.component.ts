@@ -7,6 +7,7 @@ import { User } from 'src/data/Model/User';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {Event} from 'src/data/Model/Event';
+import { Feedback } from 'src/data/Model/Feedback';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import {Event} from 'src/data/Model/Event';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
+  public fd : Feedback;
   public user: User;
   public warning: string;
   public successMessage: boolean = false;
@@ -50,7 +51,7 @@ export class LoginComponent implements OnInit {
           for(let event of this.attendedEvents){
             console.log(event);
             let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
-            if(endDate < this.currentDate){
+            if(endDate > this.currentDate){
               this.openDialog(event.event_id, this.user.userId);
             }
           }
@@ -82,15 +83,19 @@ export class LoginComponent implements OnInit {
   }
 
   openDialog(event_id: number, userId: string){
+    let date = new Date();
     const dialogRef = this.dialog.open(FeedbackComponent, {
-      data: {description: this.description, rating: this.rating, eventId: event_id, userId: userId}
+      data: {feedback_desc: this.description, feedback_rating: this.rating, eventEventId: event_id, userUserId: userId, feedback_date: date}
     });
     dialogRef.afterClosed().subscribe(result =>{
-      console.log(result);
-      this.eService.createFeedback(result).subscribe(success=>{
+      this.fd = result;
+      console.log(this.fd);
+      if(this.fd){
+      this.auth.createFeedback(this.fd).subscribe(success=>{
           this.success = true;
           console.log("feedback is saved");
-      })
+      });
+      }
     })
   }
 

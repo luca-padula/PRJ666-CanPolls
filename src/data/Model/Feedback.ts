@@ -2,10 +2,10 @@ import { User } from './User';
 
 export class Feedback
 {
-    feedbackId: number;
-    feedbackDate: string;
-    feedbackDesc: String;
-    rating: number;
-    eventId: number;
-    userId: string;
+    feedback_id: number;
+    feedback_date: string;
+    feedback_desc: String;
+    feedback_rating: number;
+    eventEventId: number;
+    userUserId: string;
 }
