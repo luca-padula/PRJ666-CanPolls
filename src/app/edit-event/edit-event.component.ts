@@ -31,6 +31,7 @@ export class EditEventComponent implements OnInit {
   location: Location;
   registrations: EventRegistrationWithUser[];
   filteredRegistrations: EventRegistrationWithUser[];
+  registeredCount: number;
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -44,6 +45,15 @@ export class EditEventComponent implements OnInit {
   removeUserSuccess: string;
   removeUserWarning: string;
 
+  userFilters = [
+    {key: 'partyAffiliation', value: 'unaffiliated', filtering: false},
+    {key: 'partyAffiliation', value: 'ndp', filtering: false}
+  ];
+  registrationFilters = [
+    {key: 'status', value: 'registered', filtering: true},
+    {key: 'status', value: 'cancelled', filtering: false},
+    {key: 'status', value: 'removed', filtering: false}
+  ]
 
   selectedFile: ImageSnippet;
   sfile : File = null;
@@ -88,8 +98,32 @@ export class EditEventComponent implements OnInit {
     this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
       this.registrations = results;
       this.filteredRegistrations = this.registrations.filter((reg) => reg.status == 'registered');
+      this.registeredCount = this.filteredRegistrations.length;
     }, (err) => {
       console.log('Unable to get registrations', err);
+    });
+  }
+
+  getFilterCount(filterKey: string, filtervalue: any, onUser: boolean): number {
+    if (onUser) {
+      return this.registrations.filter((reg) => reg.User[filterKey] == filtervalue).length;
+    }
+    return this.registrations.filter((reg) => reg[filterKey] == filtervalue).length;
+  }
+
+  applyFilters(): void {
+    this.filteredRegistrations = this.registrations.filter((reg) => {
+      for (let filter of this.userFilters) {
+        if (filter.filtering && reg.User[filter.key] != filter.value) {
+          return false;
+        }
+      }
+      for (let filter of this.registrationFilters) {
+        if (filter.filtering && reg[filter.key] != filter.value) {
+          return false;
+        }
+      }
+      return true;
     });
   }
 
@@ -130,8 +164,11 @@ export class EditEventComponent implements OnInit {
     });
   }
 
-  removeRegisteredUser(userId: number): void {
+  removeRegisteredUser(userId: number, idx: number): void {
     this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
+      let reg = this.registrations[idx];
+      reg.status = 'removed';
+      this.registrations[idx] = reg;
       this.removeUserSuccess = success.message;
       setTimeout(() => this.removeUserSuccess = null, 4000);
     }, (err) => {

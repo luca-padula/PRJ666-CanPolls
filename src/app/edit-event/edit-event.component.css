@@ -14,9 +14,11 @@ label {
     font-size: 20px;
 }
 button {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
-
+table button {
+    margin: 0 auto;
+}
 .btn-bwm{
     background-color:red ;
     border-color: red;
@@ -50,6 +52,19 @@ input[type="file"]{
     height: 116px;
     width: 116px;
 }
-.table-responsive {
-    margin: 40px auto;
+.container-fluid {
+    width: 75%;
+    margin-bottom: 20px;
+}
+h3 {
+    margin-bottom: 20px;
+}
+.sidebar-sticky h4 {
+    margin: 5px auto;
+}
+.sidebar-sticky h5 {
+    margin-bottom: 10px;
+}
+.custom-checkbox label {
+    font-size: 17px;
 }
