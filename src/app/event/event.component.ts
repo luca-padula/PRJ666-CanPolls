@@ -57,7 +57,7 @@ curDate:Date;
   }
 
   eventIsExpired(event) {
-    return event.date_to < this.datePipe.transform(this.curDate,'yyyy-MM-dd');
+    return event.date_from < this.datePipe.transform(this.curDate,'yyyy-MM-dd');
   }
 
 

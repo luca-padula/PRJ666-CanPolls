@@ -133,6 +133,7 @@ export class SubmittedEventComponent implements OnInit {
     //this.src.src = 'data:image/bmp;base64,'+ Base64.encode(data);
 }*/
   registerUser(): void {
+    
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;
       this.userCanRegister = false;
@@ -165,7 +166,7 @@ export class SubmittedEventComponent implements OnInit {
     //RETRIEVE FROM API
     retrieveImage()
   {
-    var getExt = this.currentEvent.photo
+    var getExt = this.currentEvent.photo;
     getExt = getExt.substring(getExt.lastIndexOf('.'));
     console.log("getext: "+getExt);
     var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;

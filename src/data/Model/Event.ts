@@ -5,7 +5,7 @@ export class Event
     event_description: string;
     photo: string;
     //partyAffiliation: string;
-    date_to: string;
+    //date_to: string;
     date_from: string;
     time_from: string;
     time_to: string;

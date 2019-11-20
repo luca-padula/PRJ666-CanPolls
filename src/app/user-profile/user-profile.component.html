@@ -139,7 +139,7 @@
                                               <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;">{{event.event_title}}</td>
                                               <td>{{event.event_description}}</td>
                                               <td>{{(event.isApproved) ? "Approved" : "In Progress/Declined"}}</td>
-                                              <td>{{event.date_to | date: 'longDate'}}</td>
+                                              <td>{{event.date_from | date: 'longDate'}}</td>
                                               </tr>
                                           </tbody>  
                                 </table>
@@ -159,7 +159,7 @@
                                               <tr *ngFor="let event of attendedEvents">
                                               <td (click)="routeEvent(event.Event.event_id)" style="text-decoration: underline;">{{event.Event.event_title}}</td>
                                               <td>{{event.Event.event_description}}</td>
-                                              <td>{{event.Event.date_to | date: 'longDate'}}</td>
+                                              <td>{{event.Event.date_from | date: 'longDate'}}</td>
                                               </tr>
                                           </tbody>  
                                 </table>

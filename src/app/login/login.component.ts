@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         if(this.attendedEvents.length > 0){
           for(let event of this.attendedEvents){
             console.log(event);
-            let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
+            let endDate: Date = new Date(event.date_from + ' ' + event.time_to);
             if(endDate > this.currentDate){
               this.openDialog(event.event_id, this.user.userId);
             }

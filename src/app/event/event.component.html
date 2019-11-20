@@ -38,7 +38,8 @@
                   <div class="event-browsing">
                   <div class="master">
                     <p style="font-size:1rem">{{event.event_title}}</p>
-                      <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>
+                    <i> {{event.date_from | date:'shortDate'}}</i>
+                   <!--   <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>-->
                       <p *ngIf="eventIsExpired(event)" style="text-align:right;color:red">[Expired]</p>
                   </div>
                   </div>
@@ -51,7 +52,8 @@
                   <li class="liclass">
                     <div>
                       <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.event_title}}</p>
-                      <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}} - {{selectedEvent.date_to | date:'longDate'}}</i>
+                      <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}}</i>
+                     <!-- <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}} - {{selectedEvent.date_to | date:'longDate'}}</i>-->
                       <p><b>Description: </b>{{selectedEvent.event_description}}</p>
                       <p><a class="details" routerLink="/event/{{selectedEvent.event_id}}" target="_blank"><b>More Details</b></a></p>
                     </div>
