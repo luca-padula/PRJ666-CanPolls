@@ -15,9 +15,17 @@ export class EventComponent implements OnInit {
   
   loadingError: boolean = false;
   provinces = [
+    {name: "", value: ""},
     {name:"British Columbia", value: "BC"},
-    {name:"Alberta", value: "AB"}
-    
+    {name:"Alberta", value: "AB"},
+    {name:"Manitoba", value:"MN"},
+    {name:"Saskatchewan", value:"SK"},
+    {name:"Ontario", value:"ON"},
+    {name:"Quebec", value:"QC"},
+    {name:"New Brunswick", value:"NB"},
+    {name:"Nova Scotia", value:"NS"},
+    {name:"Prince Edward Island", value:"PE"},
+    {name:"Newfoundland and Labrador", value:"NL"}  
   ]
   selectedEvent : Event;
  

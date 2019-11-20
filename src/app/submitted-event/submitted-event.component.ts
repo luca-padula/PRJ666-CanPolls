@@ -105,33 +105,7 @@ export class SubmittedEventComponent implements OnInit {
     });
 
   }
- /*uploadImage(data: Blob){
-   var b = new Blob([data], {type: data.type});
-  //const file: File = new File([data], "image.png");
-    let objectURL = window.URL.createObjectURL(b);
-    console.log(objectURL);       
-    this.src = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-    console.log(this.src); 
-      //this.uploadImage(this.currentEvent.photo);
-    
-    //const reader = new FileReader();
-    //var base64data: string | String;
-    /*reader.addEventListener('load', ()=> {
-      debugger;
-      this.b = reader.result as String;  
-      this.b = this.b.split(',')[1];
-      console.log(this.b);
-      this.src = this.sanitizer.bypassSecurityTrustUrl('data:image/*;base64,' + this.b);   
-    });
-    
-    reader.readAsDataURL(data);
-    console.log(this.src);
-    
-    //this.b = base64data.split(',')[1];
-    //console.log(this.b);
-    //base64data = base64data.substr(base64data.indexOf(',') + 1)
-    //this.src.src = 'data:image/bmp;base64,'+ Base64.encode(data);
-}*/
+ 
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;

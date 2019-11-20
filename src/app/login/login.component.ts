@@ -47,13 +47,31 @@ export class LoginComponent implements OnInit {
       this.eService.getEventsAttendedByUser(+this.user.userId).subscribe(data => {
         console.log(data);
         this.attendedEvents = data;
+        console.log()
         if(this.attendedEvents.length > 0){
           for(let event of this.attendedEvents){
+            let exist :  boolean = false;
+            this.eService.getFeedbackByEventId(event.event_id).subscribe(data=>{
+              let feed : Feedback[] = data;
+              console.log(feed);
+              for(let fd of feed){
+                if(fd.userUserId == this.user.userId){
+                  console.log("Already give feedback!!");
+                  exist = true;
+                }
+                else{
+                  exist = false;
+                }
+              }
+              console.log("feedback exists: " + exist);
+            })
+            if(!exist){
             console.log(event);
             let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
             if(endDate > this.currentDate){
               this.openDialog(event.event_id, this.user.userId);
             }
+          }
           }
         }
       });
