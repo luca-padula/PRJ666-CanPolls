@@ -15,6 +15,10 @@ export class UserService {
     return this.http.get<User>(environment.apiUrl + '/api/users/' + id);
   }
 
+  getUserTokenById(id: string) : Observable<any> {
+    return this.http.get<any>(environment.apiUrl + '/api/userToken/' + id);
+  }
+
   findUserByUsername(userN: string)
   {
     return this.http.get<User>(environment.apiUrl + '/api/users/' + userN);

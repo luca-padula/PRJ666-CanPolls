@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Event} from '../../data/Model/Event';
+import { EventWithUserObj } from 'src/data/Model/EventWithUserObj';
 import { DatePipe } from '@angular/common';
 import {EventService} from '../../data/services/event.service';
+import { AuthService } from 'src/data/services/auth.service';
 
 export class DatePipeComponent {
   today: number = Date.now();
@@ -12,44 +14,42 @@ export class DatePipeComponent {
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
-  events: Event[];
-  getEventsSub: any;
-  
-curDate:Date;
 
+  events: EventWithUserObj[];
+  filteredEvents: EventWithUserObj[];
+  getEventsSub: any;
+  canCreateEvent: boolean=false;
+  curDate:Date;
+  token:any;
   loadingError: boolean = false;
-  provinces = [
-    {name:"British Columbia", value: "BC"},
-    {name:"Alberta", value: "AB"}
-    
-  ]
   selectedEvent : Event;
   showExpired : boolean = false;
 
-  checkValue(event: any){
-    if(this.showExpired == false)
+  constructor(private auth: AuthService, private eService: EventService, private datePipe: DatePipe) { }
+  ngOnInit() {
+
+    this.token = this.auth.readToken();
+    //console.log("EVE: "+JSON.stringify(this.token));
+    if(this.token!= null && this.token.partyAffiliation!="Unaffiliated")
     {
-      this.getEventsSub = this.eService.getAllEvents(true).subscribe((data)=>{
-        this.events = data;
-      },
-      ()=>{
-        this.loadingError = true;
-      });
-      this.showExpired = true;
+      this.canCreateEvent =true;
+
     }
     else
     {
-      this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
-        this.events = data;
-      },
-      ()=>{
-        this.loadingError = true;
-      });
-      this.showExpired = false;
+      this.canCreateEvent =false;
     }
+    this.curDate= new Date();
+    this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
+      this.events = data;
+      this.filteredEvents = data;
+    },
+    ()=>{
+      this.loadingError = true;
+    });
   }
-
-  constructor(private eService: EventService, private datePipe: DatePipe) { }
+  
+  
   showDetail(event: Event):void{
     
     this.selectedEvent = event;
@@ -60,16 +60,43 @@ curDate:Date;
     return event.date_from < this.datePipe.transform(this.curDate,'yyyy-MM-dd');
   }
 
-
-  ngOnInit() {
-    this.curDate= new Date();
-    this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
-      this.events = data;
-    },
-    ()=>{
-      this.loadingError = true;
-    });
+  onEventSearch(event:any)
+  {
+      let substring : string = event.target.value.toLowerCase();
+      this.filteredEvents = this.events.filter((e) => {
+        return (e.event_title.toLowerCase().indexOf(substring) !== -1 )
+      || (e.User.partyAffiliation.toLowerCase().indexOf(substring) !== -1) })
+       //
   }
+
+
+
+  checkValue(event: any){
+    if(this.showExpired == false)
+    {
+      this.getEventsSub = this.eService.getAllEvents(true).subscribe((data)=>{
+        this.events = data;
+        this.filteredEvents = data;
+      },
+      ()=>{
+        this.loadingError = true;
+      });
+      this.showExpired = true;
+    }
+    else
+    {
+      this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
+        this.events = data;
+        this.filteredEvents = data;
+      },
+      ()=>{
+        this.loadingError = true;
+      });
+      this.showExpired = false;
+    }
+  }
+
+
 
   ngOnDestroy(){
     if(this.getEventsSub){
