@@ -46,8 +46,8 @@ export class EditEventComponent implements OnInit {
   removeUserWarning: string;
 
   userFilters = [
-    {key: 'partyAffiliation', value: 'unaffiliated', filtering: false},
-    {key: 'partyAffiliation', value: 'ndp', filtering: false}
+    {key: 'partyAffiliation', value: 'Unaffiliated', filtering: false},
+    {key: 'partyAffiliation', value: 'NDP', filtering: false}
   ];
   registrationFilters = [
     {key: 'status', value: 'registered', filtering: true},

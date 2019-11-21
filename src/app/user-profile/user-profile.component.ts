@@ -45,11 +45,9 @@ export class UserProfileComponent implements OnInit {
         this.currentUser = us;
       });
       this.eService.getAllEventsByUser(this.token.userId).subscribe(data => {
-        console.log(data);
         this.userSubmittedEvents = data;
       });
       this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
-        console.log(data);
         this.attendedEvents = data;
       });
    }
@@ -72,7 +70,6 @@ export class UserProfileComponent implements OnInit {
     if(prof == true)
     {
     this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
-      console.log(successMessage)
     this.updateUserMessageString = successMessage;
       this.warning = null;
       this.successMessage = true;
@@ -80,7 +77,6 @@ export class UserProfileComponent implements OnInit {
         this.successMessage = false;
       },3500);
     }, (err) => {
-      console.log(err);
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
         setTimeout(()=>{
@@ -94,6 +90,8 @@ export class UserProfileComponent implements OnInit {
         },3500);
       }
     });
+    this.resetTokenOnUpdate();
+    console.log("UP: "+JSON.stringify(this.token));
   }
   else
   {
@@ -104,7 +102,6 @@ export class UserProfileComponent implements OnInit {
         this.passwordSuccess = false;
       },2500);
     }, (err) => {
-      console.log(err.error);
       if (err.error.validationErrors) {
         this.passwordValidation = err.error.validationErrors;
         setTimeout(()=>{
@@ -121,6 +118,14 @@ export class UserProfileComponent implements OnInit {
   }
   }
 
+  resetTokenOnUpdate()
+  {
+    this.uService.getUserTokenById(this.currentUser.userId).subscribe((success) => {
+     localStorage.clear();
+      localStorage.setItem('access_token', success.token);
+      this.token = this.auth.readToken();
+    });
+  }
 
   clickMethod() {
     if(confirm("Are you sure you want to delete your profile?")) {

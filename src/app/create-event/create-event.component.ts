@@ -87,7 +87,7 @@ export class CreateEventComponent implements OnInit {
   }
 
   onSubmit(f: NgForm): void{
-    if(this.currentUser.partyAffiliation=="unaffiliated"){
+    if(this.currentUser.partyAffiliation=="Unaffiliated"){
       this.unaffiliated = true;
       console.log("unaffiliated");
     } else{
