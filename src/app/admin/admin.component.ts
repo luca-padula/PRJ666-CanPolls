@@ -134,9 +134,9 @@ export class AdminComponent implements OnInit {
       if(adminParty == event.User.partyAffiliation )
       {
         this.aService.approveEvent(event.event_id,event).subscribe();
-      
         this.isSuccessful = true;
-        this.errorMessages = "Event "+(event.isApproved == 1 ? "approved" : "declined")+". An email has been sent to the user.";
+        this.errorMessages = "Event "+( (event.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+       
         setTimeout(()=>{
           this.isSuccessful = false;
         },2500);
