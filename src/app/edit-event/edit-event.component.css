@@ -17,7 +17,8 @@ button {
     margin-bottom: 20px;
 }
 table button {
-    margin: 0 auto;
+    margin: -5px auto;
+    padding: 3px 6px;
 }
 .btn-bwm{
     background-color:red ;
@@ -34,7 +35,6 @@ table button {
 }
 input[type="file"]{
     display: none;
-
 }
 
 .image-upload-container{
@@ -59,6 +59,16 @@ input[type="file"]{
 h3 {
     margin-bottom: 20px;
 }
+div.d-md-none {
+    margin-bottom: 20px;
+}
+div.d-md-none button {
+    margin: 0 auto;
+    display: block;
+}
+div.d-md-none #collapseFilters {
+    margin-top: 15px;
+}
 table {
     overflow-y: scroll;
 }
@@ -70,4 +80,13 @@ table {
 }
 .custom-checkbox label {
     font-size: 17px;
+}
+
+@media (max-width: 1199px) {
+    .container-fluid {
+        width: 100%;
+    }
+    .custom-checkbox label {
+        font-size: 16px;
+    }
 }
