@@ -1,23 +1,28 @@
 .navbar, .navbar-dark, .bg-dark {
-    height: 5em;
     color: #8B0000;
     background: #8B0000;
     background-color: #8B0000;
 }
-
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
 }
-
-.nav-link {
-    color: #FFFFFF;
-    font-size: 18px;
+img {
+    margin: -30px auto;
+}
+.navbar-nav li.active a {
+    color: rgb(207, 0, 0);
+}
+.nav-item a {
+    color: white;
+    outline: none;
+    font-size: 20px;
+    margin: auto 7px;
 }
 
-.imgClass {
-    position: absolute;
-    left: 50%;
-    margin-left: -50px !important;  /* 50% of your logo width */
-    display: block;
+@media (max-width: 767px) {
+    .nav-link {
+        font-size: 18px;
+        margin: auto;
+    }
 }
