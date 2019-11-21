@@ -25,12 +25,10 @@ export class EventComponent implements OnInit {
   selectedEvent : Event;
   showExpired : boolean = false;
 
-  constructor(private auth: AuthService, private eService: EventService, private datePipe: DatePipe) { }
-  ngOnInit() {
-
+  constructor(private auth: AuthService, private eService: EventService, private datePipe: DatePipe) { 
     this.token = this.auth.readToken();
-    //console.log("EVE: "+JSON.stringify(this.token));
-    if(this.token!= null && this.token.partyAffiliation!="Unaffiliated")
+    
+    if(this.token!= null && this.token.partyAffiliation!="Unaffiliated" && this.token.affiliationApproved !=false)
     {
       this.canCreateEvent =true;
 
@@ -39,6 +37,8 @@ export class EventComponent implements OnInit {
     {
       this.canCreateEvent =false;
     }
+  }
+  ngOnInit() {
     this.curDate= new Date();
     this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
       this.events = data;

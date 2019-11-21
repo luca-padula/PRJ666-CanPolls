@@ -91,11 +91,6 @@ export class CreateEventComponent implements OnInit {
       this.unaffiliated = true;
       console.log("unaffiliated");
     } else{
-    /*console.log(this.selectedFile.src);
-    console.log(this.selectedFile.file);
-    console.log(this.sfile.type);
-   
-*/
         console.log("fd: "+JSON.stringify(this.fd));
         this.http.post(environment.apiUrl + "/api/upload", this.fd)
         .subscribe( result => {

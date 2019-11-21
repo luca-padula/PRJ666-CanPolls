@@ -52,10 +52,6 @@ export class UserProfileComponent implements OnInit {
       });
    }
 
-  onEdit(){
-    
-  }
-
   routeEvent(eventId: number): void {
     this.router.navigate([]).then(result => {  window.open('/event/'+eventId, '_blank'); });
   }
@@ -70,7 +66,14 @@ export class UserProfileComponent implements OnInit {
     if(prof == true)
     {
     this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
-    this.updateUserMessageString = successMessage;
+
+      this.uService.getUserTokenById(this.currentUser.userId).subscribe((success) => {
+         window.localStorage.setItem('access_token', success.token);
+         this.token = this.auth.readToken();
+        console.log("UP: "+JSON.stringify(this.token));
+      });
+
+      this.updateUserMessageString = successMessage;
       this.warning = null;
       this.successMessage = true;
       setTimeout(()=>{
@@ -90,8 +93,7 @@ export class UserProfileComponent implements OnInit {
         },3500);
       }
     });
-    this.resetTokenOnUpdate();
-    console.log("UP: "+JSON.stringify(this.token));
+    
   }
   else
   {
@@ -116,15 +118,6 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }
-  }
-
-  resetTokenOnUpdate()
-  {
-    this.uService.getUserTokenById(this.currentUser.userId).subscribe((success) => {
-     localStorage.clear();
-      localStorage.setItem('access_token', success.token);
-      this.token = this.auth.readToken();
-    });
   }
 
   clickMethod() {
