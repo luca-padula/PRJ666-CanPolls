@@ -132,7 +132,7 @@
   </div>
 
   <div class="container-fluid">
-    <h3 class="text-center">{{registeredCount}} Registered Users</h3>
+    <h3 class="text-center">{{registeredCount}} User<span *ngIf="registeredCount > 1">s</span> Currently Registered</h3>
     <div class="row">
       <nav class="col-md-3 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
@@ -145,58 +145,19 @@
             <label class="custom-control-label" [for]="filter.value + 'filter'">{{filter.value}} ({{getFilterCount(filter.key, filter.value, true)}})</label>
           </div>
           <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Status</span>
-            </h5>
-          <div *ngFor="let filter of registrationFilters" class="custom-control custom-checkbox">
-              <input type="checkbox" [(ngModel)]="filter.filtering" class="custom-control-input" [id]="filter.value + 'filter'" (change)="applyFilters()">
-              <label class="custom-control-label" [for]="filter.value + 'filter'">{{filter.value}} ({{getFilterCount(filter.key, filter.value, false)}})</label>
-            </div>
-          <!-- <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="unaffiliated-filter">
-            <label class="custom-control-label" for="unaffiliated-filter">Unaffiliated</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="liberal-filter">
-            <label class="custom-control-label" for="liberal-filter">Liberal</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="conservative-filter">
-            <label class="custom-control-label" for="conservative-filter">Conservative</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="ndp-filter">
-            <label class="custom-control-label" for="ndp-filter">NDP</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="green-filter">
-            <label class="custom-control-label" for="green-filter">Green</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="bloc-filter">
-              <label class="custom-control-label" for="bloc-filter">Bloc Quebecois</label>
-            </div>
-          <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Status</span>
           </h5>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="registered-filter">
-            <label class="custom-control-label" for="registered-filter">Registered ({{registeredCount}})</label>
+          <div *ngFor="let filter of registrationFilters" class="custom-control custom-checkbox">
+            <input type="checkbox" [(ngModel)]="filter.filtering" class="custom-control-input" [id]="filter.value + 'filter'" (change)="applyFilters()">
+            <label class="custom-control-label" [for]="filter.value + 'filter'">{{filter.value | titlecase}} ({{getFilterCount(filter.key, filter.value, false)}})</label>
           </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="cancelled-filter">
-            <label class="custom-control-label" for="cancelled-filter">Cancelled</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="removed-filter">
-            <label class="custom-control-label" for="removed-filter">Removed</label>
-          </div> -->
         </div>
       </nav>
   
       <div class="table-responsive col-md-9">
         <table class="table table-striped text-center">
           <thead class="thead-dark">
-            <th>Attendee #</th>
+            <th>#</th>
             <th>Username</th>
             <th>Party Affiliation</th>
             <th>Status</th>
@@ -207,8 +168,8 @@
               <td>{{idx + 1}}</td>
               <td>{{reg.User.userName}}</td>
               <td>{{reg.User.partyAffiliation}}</td>
-              <td>{{reg.status}}</td>
-              <td><button class="btn btn-danger text-center" (click)="removeRegisteredUser(reg.UserUserId, idx)">Remove
+              <td>{{reg.status | titlecase}}</td>
+              <td><button *ngIf="reg.status == 'registered'" class="btn btn-danger text-center" (click)="removeRegisteredUser(reg.UserUserId, idx)">Remove
                   User</button></td>
             </tr>
           </tbody>

@@ -141,6 +141,7 @@ export class SubmittedEventComponent implements OnInit {
     }, (err) => {
       console.log(err);
       this.registrationFailure = err.error.message;
+      setTimeout(() => this.registrationFailure = null, 4000);
     })
   }
 
