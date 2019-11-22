@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(f: NgForm): void {
+    this.validationErrors = null;
     this.auth.register(this.user).subscribe((success) => {
       this.warning = null;
       this.successMessage = true;
