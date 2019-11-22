@@ -33,9 +33,9 @@ export class SubmittedEventComponent implements OnInit {
   cancelRegistrationSubscription: any;
   registrationSuccess: string;
   registrationFailure: string;
-  currentEvent: Event;
-  currentUser: User;
-  currentLocation: Location;
+  currentEvent: Event = new Event();
+  currentUser: User = new User();
+  currentLocation: Location = new Location();
   eventRegistrationCount: number;
   successMessage = false;  
   private token: any;
@@ -53,17 +53,16 @@ export class SubmittedEventComponent implements OnInit {
     private route:ActivatedRoute,
     private router: Router,
     private http: HttpClient
-    ) { }
+    ) {   this.token = this.auth.readToken(); }
 
   ngOnInit() {
-    this.token = this.auth.readToken();
+  
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
     });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
-      console.log(this.currentEvent.photo);
       //this.uploadImage(this.currentEvent.photo)
     
       this.retrieveImage();
@@ -169,12 +168,10 @@ export class SubmittedEventComponent implements OnInit {
   {
     var getExt = this.currentEvent.photo;
     getExt = getExt.substring(getExt.lastIndexOf('.'));
-    console.log("getext: "+getExt);
     var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;
-    console.log(fullImgName);
+    console.log("Retrieve");
     this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
     .subscribe( result => {
-      console.log(result+":result");
        this.createImageFromBlob(result);
     });
   }

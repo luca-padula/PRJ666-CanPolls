@@ -18,7 +18,7 @@ export class UserProfileComponent implements OnInit {
   private token: any;
   private userSubscription: any;
   private eventSubscription: any;
-  currentUser: User;
+  currentUser: User = new User();
   validationErrors: ValidationError[];
 
 
@@ -38,12 +38,20 @@ export class UserProfileComponent implements OnInit {
   password2: string;
   curPass: string;
 
-  constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){ }
+  notifSuccess: boolean = false;
+  notifsSuccessMessage: String;
+
+
+  constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){
+
+    this.token = this.auth.readToken();
+
+   }
   ngOnInit() {
-      this.token = this.auth.readToken();
-      this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
-        this.currentUser = us;
-      });
+    this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
+      this.currentUser = us;
+    });
+
       this.eService.getAllEventsByUser(this.token.userId).subscribe(data => {
         this.userSubmittedEvents = data;
       });
@@ -129,6 +137,32 @@ export class UserProfileComponent implements OnInit {
           this.router.navigate(['/login']);
         });
     }
+  }
+
+  notifications(selection: any)
+  {
+      if(selection == true)
+      {
+            this.currentUser.notificationsOn = true;
+            this.uService.updateUserInfo(this.currentUser).subscribe(() => {
+              this.successMessage = true;
+              this.updateUserMessageString = "Notifications turned on. Promise, we won't be annoying.";
+              setTimeout(()=>{
+                this.successMessage = false;
+              },2500);
+            });
+      }
+      else
+      {
+            this.currentUser.notificationsOn = false;
+            this.uService.updateUserInfo(this.currentUser).subscribe(() => {
+              this.successMessage = true;
+              this.updateUserMessageString = "Notifications turned off."
+              setTimeout(()=>{
+                this.successMessage = false;
+              },2500);
+            });
+      }
   }
  
 }

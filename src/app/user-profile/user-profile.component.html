@@ -9,6 +9,9 @@
       <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Change Password</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link" id="pills-notif-tab" data-toggle="pill" href="#pills-notif" role="tab" aria-controls="pills-notif" aria-selected="false"  data-toggle="modal" data-target="#exampleModal">Turn Notifications On/Off</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-delete" role="tab" aria-controls="pills-profile" aria-selected="false" (click)="clickMethod()">Delete Account</a>
     </li>
   </ul>
@@ -123,6 +126,12 @@
               </form>
   </div>
 
+    <div class="tab-pane fade" id="pills-notif" role="tabpanel" aria-labelledby="pills-notif-tab">
+      <div *ngIf="!notifSuccess" class="alert alert-success text-center">
+        {{notifsSuccessMessage}}<br />
+      </div>
+    </div>
+
      <h2 class="sub-header">Past Events Organized</h2>
          <div class="table-responsive">
                               <table class="table table-bordered">
@@ -164,5 +173,24 @@
                                           </tbody>  
                                 </table>
           </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Do you want to receive notifications?</h5>
+        <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Remember: turning them off would prohibit you from getting updates from Created Events and Registed Events.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="notifications(false)">Turn Off</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="notifications(true)">Turn On</button>
+      </div>
+    </div>
+  </div>
 </div>
 </div>

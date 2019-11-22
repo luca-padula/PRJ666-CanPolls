@@ -28,7 +28,7 @@ export class EditEventComponent implements OnInit {
   userCanEdit: boolean;
   loading: boolean = true;
   eventId: number;
-  event: Event;
+  event: Event = new Event();
   location: Location;
   registrations: EventRegistrationWithUser[];
   filteredRegistrations: EventRegistrationWithUser[];
