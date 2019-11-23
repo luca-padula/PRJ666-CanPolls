@@ -12,6 +12,7 @@ import { ValidationError } from 'src/data/Model/ValidationError';
 import {HttpClient} from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
+import { filter } from 'rxjs/operators';
 
 class ImageSnippet{
   constructor(public src: String, public file: File){}
@@ -27,7 +28,7 @@ export class EditEventComponent implements OnInit {
   userCanEdit: boolean;
   loading: boolean = true;
   eventId: number;
-  event: Event;
+  event: Event = new Event();
   location: Location;
   registrations: EventRegistrationWithUser[];
   filteredRegistrations: EventRegistrationWithUser[];
@@ -46,8 +47,12 @@ export class EditEventComponent implements OnInit {
   removeUserWarning: string;
 
   userFilters = [
-    {key: 'partyAffiliation', value: 'unaffiliated', filtering: false},
-    {key: 'partyAffiliation', value: 'ndp', filtering: false}
+    {key: 'partyAffiliation', value: 'Unaffiliated', filtering: false},
+    {key: 'partyAffiliation', value: 'Liberal', filtering: false},
+    {key: 'partyAffiliation', value: 'Conservative', filtering: false},
+    {key: 'partyAffiliation', value: 'NDP', filtering: false},
+    {key: 'partyAffiliation', value: 'Green', filtering: false},
+    {key: 'partyAffiliation', value: 'Bloc Quebecois', filtering: false}
   ];
   registrationFilters = [
     {key: 'status', value: 'registered', filtering: true},
@@ -113,17 +118,33 @@ export class EditEventComponent implements OnInit {
 
   applyFilters(): void {
     this.filteredRegistrations = this.registrations.filter((reg) => {
+      let atLeast1Filter: boolean = false;
       for (let filter of this.userFilters) {
-        if (filter.filtering && reg.User[filter.key] != filter.value) {
-          return false;
+        if (filter.filtering) {
+          atLeast1Filter = true;
+          if (reg.User[filter.key] == filter.value) {
+            return true;
+          }
         }
       }
+      if (!atLeast1Filter) {
+        return true;
+      }
+      return false;
+    }).filter((reg) => {
+      let atLeast1Filter: boolean = false;
       for (let filter of this.registrationFilters) {
-        if (filter.filtering && reg[filter.key] != filter.value) {
-          return false;
+        if (filter.filtering) {
+          atLeast1Filter = true;
+          if (reg[filter.key] == filter.value) {
+            return true;
+          }
         }
       }
-      return true;
+      if (!atLeast1Filter) {
+        return true;
+      }
+      return false;
     });
   }
 
@@ -131,7 +152,7 @@ export class EditEventComponent implements OnInit {
     this.validationErrors = [];
     this.http.post(environment.apiUrl + "/api/upload", this.fd)
     .subscribe( result => {
-   // console.log(result)
+    console.log("Result: "+result)
     });
     this.event.photo = this.fullImageName;
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
@@ -193,6 +214,8 @@ export class EditEventComponent implements OnInit {
      fileName = fileName.substring(fileName.lastIndexOf('.'));
      this.fullImageName = "Event"+this.token.userId+fileName;
      this.fd.append('file', this.selectedF, this.fullImageName);
+
+     console.log("imageAdded: "+this.fullImageName);
    }
 
 

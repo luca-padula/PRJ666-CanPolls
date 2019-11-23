@@ -87,15 +87,10 @@ export class CreateEventComponent implements OnInit {
   }
 
   onSubmit(f: NgForm): void{
-    if(this.currentUser.partyAffiliation=="unaffiliated"){
+    if(this.currentUser.partyAffiliation=="Unaffiliated"){
       this.unaffiliated = true;
       console.log("unaffiliated");
     } else{
-    /*console.log(this.selectedFile.src);
-    console.log(this.selectedFile.file);
-    console.log(this.sfile.type);
-   
-*/
         console.log("fd: "+JSON.stringify(this.fd));
         this.http.post(environment.apiUrl + "/api/upload", this.fd)
         .subscribe( result => {

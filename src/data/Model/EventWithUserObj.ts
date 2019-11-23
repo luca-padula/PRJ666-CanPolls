@@ -1,4 +1,5 @@
 import { User } from 'src/data/Model/User';
+import {Location} from 'src/data/Model/Location';
 export class EventWithUserObj
 {
     event_id: number;
@@ -14,4 +15,5 @@ export class EventWithUserObj
     createdAt: string;
     updatedAt: string;
     User: User;
+    Location: Location;
 }

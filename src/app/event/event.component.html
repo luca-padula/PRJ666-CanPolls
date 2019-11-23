@@ -1,6 +1,8 @@
 <div class="container">
     <h2>Welcome to Our Events</h2>
-    <p routerLinkActive="active">Do you want to create your own event? <a routerLink="/createEvent">Create Event</a></p>
+    <p routerLinkActive="active">Do you want to create your own event? <a *ngIf="canCreateEvent" routerLink="/createEvent">Create Event</a>
+      <a *ngIf="!canCreateEvent && token" routerLink="/userProfile">Change Your Affiliation</a>
+      <a *ngIf="!canCreateEvent && !token" routerLink="/login">Register/LogIn</a></p>
     <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="pills-users-tab" data-toggle="pill" href="#pills-users" role="tab" aria-controls="pills-users" aria-selected="true"  routerLink="/events">User Submitted Events</a>
@@ -18,7 +20,7 @@
 
 
     <div class="row"> 
-          <input class="form-control" id="EventSearch" name="EventSearch" type="text" placeholder="Search for Political Events"/>
+          <input class="form-control" id="EventSearch" name="EventSearch" type="text" placeholder="Search for Political Events by Name, Party, Venue name, City, Province, or Postal Code" (keyup)="onEventSearch($event)"/>
           <br/><br/>
            
           <div class="form-check">
@@ -33,14 +35,18 @@
                   <pagination-controls (pageChange)="p = $event"></pagination-controls>
                   <ul class="left">
                   <li class="liclass" routerLinkActive="active"
-                      *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p }"
+                      *ngFor="let event of filteredEvents | paginate: { itemsPerPage: 4, currentPage: p }"
                       (click)="showDetail(event)">
                   <div class="event-browsing">
                   <div class="master">
-                    <p style="font-size:1rem">{{event.event_title}}</p>
-                    <i> {{event.date_from | date:'shortDate'}}</i>
+                    <p>{{event.event_title}}</p>
+                    <i>{{event.date_from | date:'shortDate'}}</i>
+                    <i style="text-align: right;"> {{event.time_from}} - {{event.time_to}}</i>
                    <!--   <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>-->
-                      <p *ngIf="eventIsExpired(event)" style="text-align:right;color:red">[Expired]</p>
+                   <p>Party Association: {{event.User.partyAffiliation}}</p>
+                    <p>Venue: {{event.Location.venue_name}}, {{event.Location.city}}, {{event.Location.province}} - {{event.Location.postal_code}}</p>
+                   <p *ngIf="eventIsExpired(event)" style="text-align:right;color:red">[Expired]</p>
+
                   </div>
                   </div>
                   </li>
