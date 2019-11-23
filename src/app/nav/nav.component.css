@@ -1,5 +1,5 @@
 .navbar, .navbar-dark, .bg-dark {
-    height: 5em;
+    min-height: 5em;
     color: #8B0000;
     background: #8B0000;
     background-color: #8B0000;
@@ -20,4 +20,7 @@
     left: 50%;
     margin-left: -50px !important;  /* 50% of your logo width */
     display: block;
+
+    /* margin-left: auto; */
+    /* margin-right: auto; */
 }
