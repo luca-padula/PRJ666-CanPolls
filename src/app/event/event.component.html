@@ -20,7 +20,7 @@
 
 
     <div class="row"> 
-          <input class="form-control" id="EventSearch" name="EventSearch" type="text" placeholder="Search for Political Events by Name or Party" (keyup)="onEventSearch($event)"/>
+          <input class="form-control" id="EventSearch" name="EventSearch" type="text" placeholder="Search for Political Events by Name, Party, Venue name, City, Province, or Postal Code" (keyup)="onEventSearch($event)"/>
           <br/><br/>
            
           <div class="form-check">
@@ -39,11 +39,12 @@
                       (click)="showDetail(event)">
                   <div class="event-browsing">
                   <div class="master">
-                    <p style="font-size:1rem">{{event.event_title}}</p>
-                    <i style="font-size:1rem">{{event.date_from | date:'shortDate'}}</i>
-                    <br><br/>
+                    <p>{{event.event_title}}</p>
+                    <i>{{event.date_from | date:'shortDate'}}</i>
+                    <i style="text-align: right;"> {{event.time_from}} - {{event.time_to}}</i>
                    <!--   <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>-->
-                   <p style="font-size:1rem">Party Association: {{event.User.partyAffiliation}}</p>   
+                   <p>Party Association: {{event.User.partyAffiliation}}</p>
+                    <p>Venue: {{event.Location.venue_name}}, {{event.Location.city}}, {{event.Location.province}} - {{event.Location.postal_code}}</p>
                    <p *ngIf="eventIsExpired(event)" style="text-align:right;color:red">[Expired]</p>
 
                   </div>

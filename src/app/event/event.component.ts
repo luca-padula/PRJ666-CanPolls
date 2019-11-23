@@ -41,6 +41,7 @@ export class EventComponent implements OnInit {
   ngOnInit() {
     this.curDate= new Date();
     this.getEventsSub = this.eService.getAllEvents(false).subscribe((data)=>{
+      //console.log(JSON.stringify(data));
       this.events = data;
       this.filteredEvents = data;
     },
@@ -65,13 +66,17 @@ export class EventComponent implements OnInit {
       let substring : string = event.target.value.toLowerCase();
       this.filteredEvents = this.events.filter((e) => {
         return (e.event_title.toLowerCase().indexOf(substring) !== -1 )
-      || (e.User.partyAffiliation.toLowerCase().indexOf(substring) !== -1) })
-       //
+      || (e.User.partyAffiliation.toLowerCase().indexOf(substring) !== -1)
+        || (e.Location.venue_name.toLowerCase().indexOf(substring) !== -1) 
+        || (e.Location.city.toLowerCase().indexOf(substring) !== -1) 
+        || (e.Location.province.toLowerCase().indexOf(substring) !== -1) 
+        || (e.Location.postal_code.toLowerCase().indexOf(substring) !== -1) })
   }
 
 
 
-  checkValue(event: any){
+  checkValue(event: any)
+  {
     if(this.showExpired == false)
     {
       this.getEventsSub = this.eService.getAllEvents(true).subscribe((data)=>{

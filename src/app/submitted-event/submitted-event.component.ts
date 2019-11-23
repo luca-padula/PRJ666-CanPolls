@@ -169,7 +169,7 @@ export class SubmittedEventComponent implements OnInit {
     var getExt = this.currentEvent.photo;
     getExt = getExt.substring(getExt.lastIndexOf('.'));
     var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;
-    console.log("Retrieve");
+    console.log("Retrieve : "+fullImgName);
     this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
     .subscribe( result => {
        this.createImageFromBlob(result);

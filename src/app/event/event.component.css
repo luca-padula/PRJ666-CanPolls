@@ -87,6 +87,7 @@ ul li:hover{
   display:flex;
   justify-content: space-between;
   margin:3px;
+  text-align: justify;
 }
 a.details{
   margin-top: 75px;

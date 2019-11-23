@@ -152,7 +152,7 @@ export class EditEventComponent implements OnInit {
     this.validationErrors = [];
     this.http.post(environment.apiUrl + "/api/upload", this.fd)
     .subscribe( result => {
-   // console.log(result)
+    console.log("Result: "+result)
     });
     this.event.photo = this.fullImageName;
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
@@ -214,6 +214,8 @@ export class EditEventComponent implements OnInit {
      fileName = fileName.substring(fileName.lastIndexOf('.'));
      this.fullImageName = "Event"+this.token.userId+fileName;
      this.fd.append('file', this.selectedF, this.fullImageName);
+
+     console.log("imageAdded: "+this.fullImageName);
    }
 
 
