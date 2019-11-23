@@ -2,12 +2,20 @@
     margin: 0em;
     background-color: #DB7093;
     text-align: center;
+    background-image: url("../../assets/image/Banner.jpg");
+    background-size: cover;
+    background-position: 70% center;
 }
 
 #showcase {
     margin-left: auto;
     margin-right: auto;
     border: 5px solid black;
+    color: white; 
+    text-shadow: -2px 2px 0 #000, 
+                  2px 2px 0 #000, 
+                 2px -2px 0 #000, 
+                -2px -2px 0 #000; 
 }
 
 .container {
@@ -65,7 +73,6 @@ thead td {
 #calendarDiv {
     margin-left: auto;
     margin-right: auto;
-    color: silver;
     text-align: center;
     width:500px;
 }
