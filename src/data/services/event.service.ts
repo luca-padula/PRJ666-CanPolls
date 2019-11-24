@@ -21,8 +21,8 @@ export class EventService {
   getEventById(id: number) : Observable<Event>{
     return this.http.get<Event>(environment.apiUrl + '/api/event/' + id);
   }
-  getAllEvents():Observable<Event[]>{
-    return this.http.get<Event[]>(environment.apiUrl + '/api/events');
+  getAllEvents(getAll: boolean):Observable<EventWithUserObj[]>{
+    return this.http.get<EventWithUserObj[]>(environment.apiUrl + '/api/events/'+getAll);
   }
   updateEventById(id: number, event: Event): Observable<any> {
     return this.http.put<Event>(environment.apiUrl + '/api/event/' + id, event);

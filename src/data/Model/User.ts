@@ -12,6 +12,7 @@ export class User
     partyAffiliation: string;
     affiliationApproved: boolean;
     rejectionCount: number;
+    notificationsOn: boolean;
     createdAt: string;
     updatedAt: string;
 }
