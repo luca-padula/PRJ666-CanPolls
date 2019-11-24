@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
         this.attendedEvents = data;
         console.log(this.attendedEvents);
         if(this.attendedEvents.length > 0){
-<<<<<<< HEAD
           for(var i = 0; i < this.attendedEvents.length; i++){
             console.log(this.attendedEvents[i].Event.event_id);
             this.eService.getFeedbackByEventId(87).subscribe((data1: any)=>{
@@ -74,15 +73,6 @@ export class LoginComponent implements OnInit {
               
             });
           };
-=======
-          for(let event of this.attendedEvents){
-            console.log(event);
-            let endDate: Date = new Date(event.date_from + ' ' + event.time_to);
-            if(endDate > this.currentDate){
-              this.openDialog(event.event_id, this.user.userId);
-            }
-          }
->>>>>>> b2a8d896a67ad0721b2e7bb7d8ee3273f9b65703
         }
       });
       
