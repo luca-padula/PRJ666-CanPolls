@@ -23,11 +23,13 @@ export class LoginComponent implements OnInit {
   public unverifiedUser: string;
   public rejectionCount: number = 0;
   public success: boolean = false;
-  attendedEvents: Event[];
+  public feedback: Feedback[];
+  attendedEvents: any[];
   public event: Event;
   description: string;
   rating:number;
   currentDate = new Date();
+  token: any;
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -44,35 +46,33 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.user).subscribe((success) => {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
-      this.eService.getEventsAttendedByUser(+this.user.userId).subscribe(data => {
+      this.token = this.auth.readToken();
+      console.log(this.token);
+      this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
         console.log(data);
         this.attendedEvents = data;
-        console.log()
+        console.log(this.attendedEvents);
         if(this.attendedEvents.length > 0){
-          for(let event of this.attendedEvents){
-            let exist :  boolean = false;
-            this.eService.getFeedbackByEventId(event.event_id).subscribe(data=>{
-              let feed : Feedback[] = data;
-              console.log(feed);
-              for(let fd of feed){
-                if(fd.userUserId == this.user.userId){
+          for(var i = 0; i < this.attendedEvents.length; i++){
+            console.log(this.attendedEvents[i].Event.event_id);
+            this.eService.getFeedbackByEventId(87).subscribe((data1: any)=>{
+              this.feedback = data1;
+              console.log(data1);
+              for(let fd of this.feedback){
+                if(fd.userUserId == this.token.userId){
                   console.log("Already give feedback!!");
-                  exist = true;
                 }
                 else{
-                  exist = false;
+                  console.log("Not give feedback yet!");
+                  let endDate: Date = new Date(this.attendedEvents[i].Event.date_to + ' ' + this.attendedEvents[i].Event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.attendedEvents[i].Event.event_id, this.user.userId);
+                  }
                 }
               }
-              console.log("feedback exists: " + exist);
-            })
-            if(!exist){
-            console.log(event);
-            let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
-            if(endDate > this.currentDate){
-              this.openDialog(event.event_id, this.user.userId);
-            }
-          }
-          }
+              
+            });
+          };
         }
       });
       
