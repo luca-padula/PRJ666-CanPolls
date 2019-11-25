@@ -27,3 +27,32 @@ form {
     display: block;
     margin: 10px auto;
 }
+
+@media (max-width: 991px) {
+    .jumbotron {
+        margin: 0;
+        padding: 20px 10px;
+        height: 100%;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    .display-5 {
+        font-size: 24px;
+        margin: 25px auto;
+    }
+    .jumbotron p {
+        font-size: 18px;
+    }
+    .form-panel {
+        padding: 15px 10px;
+    }
+    .form-panel h2 {
+        font-size: 26px;
+    }
+    .form-panel h5 {
+        font-size: 18px;
+    }
+    form {
+        margin: 25px 8%;
+    }
+}

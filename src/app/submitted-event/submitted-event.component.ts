@@ -136,6 +136,7 @@ export class SubmittedEventComponent implements OnInit {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;
       this.userCanRegister = false;
+      this.userCanCancel = true;
       setTimeout(() => this.registrationSuccess = null, 4000);
     }, (err) => {
       console.log(err);
