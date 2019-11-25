@@ -29,9 +29,13 @@ export class EsriMapComponent implements OnInit {
       "esri/widgets/Locate",
       "esri/core/watchUtils",
       "esri/request",
-      "esri/Graphic"
+      "esri/Graphic",
+      "esri/symbols/SimpleFillSymbol",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/Color"
+
     ])
-      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest, Graphic]) => {
+      .then(([Locator, EsriMap, EsriMapView, FeatureLayer, Search, Compass, Locate, watchUtils, esriRequest, Graphic, SimpleFillSymbol, SimpleLineSymbol, Color]) => {
         const resultsInfoMessage = "More information about the selected region will be displayed here.";
         const searchLimit = 1000;
 
@@ -68,7 +72,7 @@ export class EsriMapComponent implements OnInit {
 
         request.onload = function () {
           var federalCandidates = request.response;
-          
+
           for (var candidate of federalCandidates.objects) {
             // var requestURL = 'https://represent.opennorth.ca' + candidate.related.boundary_url + 'shape';
 
@@ -109,30 +113,41 @@ export class EsriMapComponent implements OnInit {
                 resultsInfo.innerHTML = "";
                 resultsTable.innerHTML = "";
 
+                resultsTable.classList.add("resultsTable");
+
                 let resultsHeader = resultsTable.createTHead();
+
                 let headerRow = resultsHeader.insertRow(-1);
                 let headerCell = headerRow.insertCell(-1);
-                headerCell.colSpan = 3;
+                headerCell.colSpan = 8;
                 headerCell.innerHTML = "<h3>Representatives</h3>";
-                headerCell.setAttribute("style", "text-align:center;");
+                headerCell.setAttribute("style", "text-align:center; border:1px solid black");
 
                 let resultsBody = resultsTable.createTBody();
 
+                let counter = 0;
+                let resultsRow = resultsBody.insertRow(-1);
+
                 for (var candidate of response.data.objects) {
                   if (candidate.elected_office) {
-                    let resultsRow = resultsTable.insertRow(-1);
+                    if (counter++ >= 4) {
+                      resultsRow = resultsBody.insertRow(-1);
+                      counter = 1
+                    }
+
                     let resultsCell = resultsRow.insertCell(-1);
+                    resultsCell.setAttribute("style", "border:1px solid black;");
 
                     let resultsName = document.createElement("h4");
                     resultsName.append(document.createTextNode(candidate.name));
                     resultsCell.append(resultsName);
 
                     let resultsLink = document.createElement("a");
-                    
+
                     if (candidate.personal_url != "") {
                       resultsLink.setAttribute("href", candidate.personal_url);
                     }
-                    
+
                     resultsLink.setAttribute("target", "_blank");
 
                     let resultsPicture = document.createElement("img");
@@ -240,6 +255,24 @@ export class EsriMapComponent implements OnInit {
         });
 
         map.add(generalBoundaries);
+
+        // generalBoundaries.on("mouse-over", function(response) {
+        //   let graphics = response.results;
+
+        //   graphics.forEach(function (graphic) {
+        //     console.log("Graphics: ", graphic);
+  
+        //     map.graphics.add(new Graphic(graphic.geometry, new SimpleFillSymbol(
+              
+        //       SimpleFillSymbol.STYLE_SOLID,
+        //       new SimpleLineSymbol(
+        //         SimpleLineSymbol.STYLE_SOLID,
+        //         new Color([255, 0, 0]), 3
+        //       ),
+        //       new Color([125, 125, 125, 0.35])
+        //     )))
+        //   });
+        // });
 
         function colorPoliticalRegion(value, color) {
           return {
