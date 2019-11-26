@@ -56,8 +56,14 @@
                </div>
             
                <ul class="right" *ngIf="selectedEvent">
+                  
                   <li class="liclass">
                     <div>
+                      <div class="image">
+                        <span>
+                            <img [src]="imageToShow" height="150" width ="200">
+                      </span>
+                    </div>
                       <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.event_title}}</p>
                       <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}}</i>
                      <!-- <i> <b>Date: </b>{{selectedEvent.date_from | date:'longDate'}} - {{selectedEvent.date_to | date:'longDate'}}</i>-->

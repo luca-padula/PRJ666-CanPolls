@@ -4,6 +4,8 @@ import { EventWithUserObj } from 'src/data/Model/EventWithUserObj';
 import { DatePipe } from '@angular/common';
 import {EventService} from '../../data/services/event.service';
 import { AuthService } from 'src/data/services/auth.service';
+import {HttpClient} from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export class DatePipeComponent {
   today: number = Date.now();
@@ -24,8 +26,9 @@ export class EventComponent implements OnInit {
   loadingError: boolean = false;
   selectedEvent : Event;
   showExpired : boolean = false;
+  imageToShow:any;
 
-  constructor(private auth: AuthService, private eService: EventService, private datePipe: DatePipe) { 
+  constructor(private auth: AuthService, private eService: EventService, private datePipe: DatePipe, private http: HttpClient) { 
     this.token = this.auth.readToken();
     
     if(this.token!= null && this.token.partyAffiliation!="Unaffiliated" && this.token.affiliationApproved !=false)
@@ -54,7 +57,7 @@ export class EventComponent implements OnInit {
   showDetail(event: Event):void{
     
     this.selectedEvent = event;
-    
+    this.retrieveImage();
   }
 
   eventIsExpired(event) {
@@ -72,6 +75,32 @@ export class EventComponent implements OnInit {
         || (e.Location.province.toLowerCase().indexOf(substring) !== -1) 
         || (e.Location.postal_code.toLowerCase().indexOf(substring) !== -1) })
   }
+
+  retrieveImage()
+  {
+    var getExt = this.selectedEvent.photo;
+    getExt = getExt.substring(getExt.lastIndexOf('.'));
+    var fullImgName = this.selectedEvent.event_id+"Event"+this.selectedEvent.UserUserId+""+getExt;
+    console.log("Retrieve : "+fullImgName);
+    this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
+    .subscribe( result => {
+       this.createImageFromBlob(result);
+    });
+  }
+  
+//retrieve uses this function
+createImageFromBlob(image: Blob) {
+  let reader = new FileReader();
+  reader.addEventListener("load", () => {
+     this.imageToShow = reader.result;
+    // console.log("imagetoshow: "+this.imageToShow);
+  }, false);
+
+  if (image) {
+     reader.readAsDataURL(image);
+  }
+
+}
 
 
 
