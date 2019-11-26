@@ -47,29 +47,35 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
       this.token = this.auth.readToken();
-      console.log(this.token);
       this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
         console.log(data);
         this.attendedEvents = data;
-        console.log(this.attendedEvents);
         if(this.attendedEvents.length > 0){
           for(var i = 0; i < this.attendedEvents.length; i++){
             console.log(this.attendedEvents[i].Event.event_id);
-            this.eService.getFeedbackByEventId(87).subscribe((data1: any)=>{
+            this.event = this.attendedEvents[i].Event;
+            this.eService.getFeedbackByEventId(this.event.event_id).subscribe((data1: any)=>{
               this.feedback = data1;
-              console.log(data1);
+              if(this.feedback.length == 0){
+                let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.event.event_id, this.user.userId);
+                  }
+              }
+              else{
               for(let fd of this.feedback){
                 if(fd.userUserId == this.token.userId){
                   console.log("Already give feedback!!");
                 }
                 else{
                   console.log("Not give feedback yet!");
-                  let endDate: Date = new Date(this.attendedEvents[i].Event.date_to + ' ' + this.attendedEvents[i].Event.time_to);
+                  let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
                   if(endDate < this.currentDate){
-                      this.openDialog(this.attendedEvents[i].Event.event_id, this.user.userId);
+                      this.openDialog(this.event.event_id, this.user.userId);
                   }
                 }
               }
+            }
               
             });
           };

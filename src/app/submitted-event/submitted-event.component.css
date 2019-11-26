@@ -127,24 +127,45 @@ h2{
 .l-Footer {
   font-size: 1.4rem;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  margin: 12.8rem -0.8rem 3.2rem;
-  padding-top: 3.2rem;
-
+  padding-top: 5rem;
 }
 .l-Footer a {
   text-decoration: none;
-  display: inline-block;
-}
-
-.l-Footer-col {
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
-}
-
   
+}
 
+
+.score {
+  display: block;
+  font-size: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-wrap {
+  display: inline-block;
+  position: relative;
+  height: 19px;
+}
+
+.score .stars-active {
+  color: #EEBD01;
+  position: relative;
+  z-index: 10;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.score .stars-inactive {
+  color: grey;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-text-stroke: initial;
+  /* overflow: hidden; */
+}
 
 .Tag {
   color: #111;
@@ -182,3 +203,61 @@ h2{
 @page {
   margin: 2.2cm 2.2cm 1.8cm;
 }
+
+.list-type1{
+  width:600px;
+  margin:0 auto;
+  }
+  
+  .list-type1 ul{
+  counter-reset: li;
+  list-style: none;
+  *list-style: decimal;
+  font-size: 15px;
+  font-family: 'Raleway', sans-serif;
+  padding: 0;
+  margin-bottom: 4em;
+  }
+  .list-type1 ul ul{
+  margin: 0 0 0 2em;
+  }
+  
+  .list-type1 .score{
+  position: relative;
+  display: block;
+  padding: .4em .4em .4em 2em;
+  *padding: .4em;
+  margin: .5em 0;
+  background: rgb(233, 209, 217);
+  color: #000;
+  text-decoration: none;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  border-radius: 10em;
+  transition: all .2s ease-in-out;
+  }
+  
+  .list-type1 .score:hover{
+  background: #d6d4d4;
+  text-decoration:none;
+  transform: scale(1.1);
+  }
+  
+  .list-type1 .score:before{
+  content: counter(li);
+  counter-increment: li;
+  position: absolute;
+  left: -1.3em;
+  top: 50%;
+  margin-top: -1.3em;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  border: .3em solid #fff;
+  text-align: center;
+  font-weight: bold;
+  -moz-border-radius: 2em;
+  -webkit-border-radius: 2em;
+  border-radius: 2em;
+  color:#FFF;
+  }

@@ -1,4 +1,5 @@
 <body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div *ngIf="successMessage" class="alert alert-success text-center">
         Success: Event {{currentEvent.event_title}} has been approved!<br />
         Email has been sent to the creator. Thank you for your time!
@@ -19,9 +20,12 @@
         </a>
       </div>
       <div class="l-Header-col Contact">
+          <div *ngIf="isExpired" class=" alert alert-danger text-center" >
+              <strong> EXPIRED </strong>
+          </div>
           <h1 class="l-Section-title ">{{currentEvent.event_title}}</h1>
         <div>Toronto, Ontario</div>
-        <div class="text-center">
+        <div *ngIf="!isExpired" class="text-center">
             <button *ngIf="userCanRegister" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
             <div *ngIf="registration && registration.status === 'registered'" class="alert alert-success">
               You are registered for this event!
@@ -78,7 +82,7 @@
     <section class="l-Section">
       <h2 class="l-Section-title ">Attendee Limit</h2>
       <div class="l-Section-content">
-        <p>{{currentEvent.attendee_limit}}</p>
+        <p>{{att_limit}}</p>
       </div>
     </section>
 
@@ -90,6 +94,42 @@
               <input type="button" value="Approve" (click)="approve($event)">
               <input type="button" value="Decline" (click)="decline($event)">
           </div>
+          <div *ngIf="currentEvent.isApproved && isExpired"  class="list-type1">
+            <div *ngIf="!givenFeedback && registration" class="form-group row">
+              <p><strong>Look like you haven't given us your feedback yet</strong></p>
+              <button class="btn submit-button" (click)="openDialog($event)" [ngStyle]="{'background-color': ' rgb(231, 177, 195)'}">Give us your feedback</button>
+              </div>
+            <ul >
+             <li *ngFor="let fd of feedbacks" > 
+               <div>
+                 <strong>{{fd.User.userName}}</strong>
+                </div>
+                <span class="score">
+                    <div class="score-wrap">
+                        <span class="stars-active" [ngStyle] ="{'width': + fd.feedback_rating*20 + '%'}">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </span>
+                <span class="stars-inactive">
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                        </span>
+                </div>
+                <div>
+                  {{fd.feedback_desc}}
+                  </div>
+                </span>
+                
+                  
+            </li>
+            </ul>
+        </div>
         </div>
         <div class="l-Footer-col Contact">
           

@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import {Event} from '../../data/Model/Event';
 import {User} from '../../data/Model/User';
 import {Location} from '../../data/Model/Location';
+import {FeedbackDisplay} from '../../data/Model/FeedbackDisplay';
+import {Feedback} from '../../data/Model/Feedback';
 import {EventService} from '../../data/services/event.service';
 import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
@@ -10,6 +12,8 @@ import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { FeedbackComponent } from '../feedback/feedback.component';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
   selector: 'app-submitted-event',
@@ -42,9 +46,16 @@ export class SubmittedEventComponent implements OnInit {
   src: any;
   base64data: any;
   b: String;
-
- 
+  feedbacks: FeedbackDisplay[];
+  givenFeedback : boolean = false;
+  isExpired : boolean = false;
+  starList: any[] = new Array(5);
   imageToShow:any;
+  description: string;
+  rating:number;
+  public fd : Feedback;
+  success:boolean = false;
+  att_limit: string;
 
   constructor(
     private auth: AuthService,
@@ -52,6 +63,7 @@ export class SubmittedEventComponent implements OnInit {
     private uService: UserService,
     private route:ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
     private http: HttpClient
     ) {   this.token = this.auth.readToken(); }
 
@@ -64,13 +76,35 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       //this.uploadImage(this.currentEvent.photo)
-    
+      if(this.currentEvent.attendee_limit == 0){
+        this.att_limit = "Unlimited attendee";
+      }
+      else{
+        this.att_limit = this.currentEvent.attendee_limit.toString();
+      }
       this.retrieveImage();
     this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
       this.currentLocation = data;
     }, (err)=>{
       console.log(err);
     });
+    let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
+        if(endDate < this.currentTime){
+          this.isExpired = true;
+          this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
+            this.feedbacks = data;
+            
+            if(this.feedbacks.length>0){
+            for(var i = 0; i<this.feedbacks.length; i++){
+              console.log(this.feedbacks[i].User.userId);
+              if(this.feedbacks[i].User.userId == this.token.userId){
+                this.givenFeedback = true;
+              }
+            }
+            console.log("give Feedback: " +this.givenFeedback);
+            }
+          });
+      }
      
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
@@ -162,6 +196,22 @@ createImageFromBlob(image: Blob) {
      reader.readAsDataURL(image);
   }
 
+}
+openDialog(){
+  let date = new Date();
+  const dialogRef = this.dialog.open(FeedbackComponent, {
+    data: {feedback_desc: this.description, feedback_rating: this.rating, eventEventId: this.currentEvent.event_id, userUserId: this.token.userId, feedback_date: date}
+  });
+  dialogRef.afterClosed().subscribe(result =>{
+    this.fd = result;
+    console.log(this.fd);
+    if(this.fd){
+    this.auth.createFeedback(this.fd).subscribe(success=>{
+        this.success = true;
+        console.log("feedback is saved");
+    });
+    }
+  })
 }
 
   approve(){
