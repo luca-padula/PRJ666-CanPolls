@@ -1,3 +1,30 @@
+<div class="modal fade" id="cancelRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="cancelRegistrationModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelRegistrationModalLabel">Confirm Cancellation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel your registration? You will not be able to register again after.</p>
+        <div *ngIf="cancellationSuccess" class="alert alert-success text-center">
+          {{cancellationSuccess}}
+        </div>
+        <div *ngIf="cancellationFailure" class="alert alert-danger text-center">
+          {{cancellationFailure}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="cancelRegistration()">Cancel Registration</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <body>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div *ngIf="successMessage" class="alert alert-success text-center">
@@ -26,22 +53,22 @@
           <h1 class="l-Section-title ">{{currentEvent.event_title}}</h1>
         <div>Toronto, Ontario</div>
         <div *ngIf="!isExpired" class="text-center">
-            <button *ngIf="userCanRegister" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
-            <div *ngIf="registration && registration.status === 'registered'" class="alert alert-success">
-              You are registered for this event!
-            </div>
-            <button *ngIf="userCanCancel" class="btn btn-danger btn-lg" (click)="cancelRegistration()">Cancel Registration</button>
-            <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
-              You have previously been removed from this event.
-            </div>
-            <div *ngIf="registration && registration.status === 'cancelled'" class="alert alert-danger">
-              You cancelled your registration for this event.
-            </div>
             <div *ngIf="registrationSuccess" class="alert alert-success">
               {{registrationSuccess}}
             </div>
             <div *ngIf="registrationFailure" class="alert alert-danger">
               {{registrationFailure}}
+            </div>
+            <button *ngIf="userCanRegister" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
+            <div *ngIf="registration && registration.status === 'registered'" class="alert alert-success">
+              You are registered for this event!
+            </div>
+            <button *ngIf="userCanCancel" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#cancelRegistrationModal">Cancel Registration</button>
+            <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
+              You have previously been removed from this event.
+            </div>
+            <div *ngIf="registration && registration.status === 'cancelled'" class="alert alert-danger">
+              You cancelled your registration for this event.
             </div>
             <button *ngIf="userCanEdit" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
           </div>

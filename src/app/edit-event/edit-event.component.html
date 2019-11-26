@@ -192,11 +192,26 @@
               <td>{{reg.User.userName}}</td>
               <td>{{reg.User.partyAffiliation}}</td>
               <td>{{reg.status | titlecase}}</td>
-              <td><button *ngIf="reg.status == 'registered'" class="btn btn-danger text-center" (click)="removeRegisteredUser(reg.UserUserId, idx)">Remove
-                  User</button></td>
+              <td><button *ngIf="reg.status == 'registered'" class="btn btn-danger text-center" (click)="onSelectForRemoval(reg)">Remove User</button></td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="removeUserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove User - {{selectedRegistration.User.userName}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this user? They will not be able to register for this event after they have been removed.</p>
         <div *ngIf="removeUserSuccess" class="alert alert-success text-center">
           Success: {{removeUserSuccess}}!
         </div>
@@ -204,6 +219,10 @@
           {{removeUserWarning}}
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="removeRegisteredUser(selectedRegistration.UserUserId)">Remove User</button>
+      </div>
     </div>
   </div>
-</section>
+</div>

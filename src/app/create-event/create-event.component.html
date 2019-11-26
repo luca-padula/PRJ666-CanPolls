@@ -2,16 +2,16 @@
     <h2 class="text-left">Create an Event</h2>
     <div *ngIf="successMessage" class="alert alert-success text-center">
       Success: Event {{event.event_title}} has been submitted!<br />
-      Please wait for your event to be verify. We will send you an email when it finishs
+      Please wait for your event to be verified. You will receive an email confirming acceptance if valid.
     </div>
     <div *ngIf="unaffiliated" class="alert alert-danger text-center" >
-        Sorry! User without party cannot create event. <br/>
-        Please update your party affiliation first. Thank you
+        Sorry! Users without a party affiliation cannot create an event. <br/>
+        Please update your party affiliation first.
       </div>
     <form *ngIf="!successMessage && !unaffiliated" #f="ngForm" (ngSubmit)="onSubmit(f)">
       <p class="lead text-left">
         Add your Event Details<br/>
-        You are in <strong>{{currentUser.partyAffiliation}}</strong> party
+        You are registered as a supporter of the <strong>{{currentUser.partyAffiliation}}</strong> party.
       </p>
       <div *ngIf="warning" class="alert alert-danger">
         {{warning}}
@@ -109,7 +109,7 @@
       <div class="form-group row">
         <label class="col-3 col-form-label" >Attendee Limit</label>
         <div class="col-9">
-          <input type="number" [(ngModel)]="event.attendee_limit" class="form-control" id="attendee_limit" name="attendee_limit" placeholder="put 0 for unlimited attendee" maxlength="5">
+          <input type="number" [(ngModel)]="event.attendee_limit" class="form-control" id="attendee_limit" name="attendee_limit" placeholder="Put 0 to indicate no attendee limit" maxlength="5">
           
         </div>
         </div>

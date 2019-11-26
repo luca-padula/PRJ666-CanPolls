@@ -10,9 +10,10 @@ import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithU
 import { User } from 'src/data/Model/User';
 import { ValidationError } from 'src/data/Model/ValidationError';
 import {HttpClient} from '@angular/common/http';
-
 import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs/operators';
+
+declare var $: any;
 
 class ImageSnippet{
   constructor(public src: String, public file: File){}
@@ -33,6 +34,7 @@ export class EditEventComponent implements OnInit {
   registrations: EventRegistrationWithUser[];
   filteredRegistrations: EventRegistrationWithUser[];
   registeredCount: number;
+  selectedRegistration: EventRegistrationWithUser;
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -111,9 +113,9 @@ export class EditEventComponent implements OnInit {
 
   getFilterCount(filterKey: string, filtervalue: any, onUser: boolean): number {
     if (onUser) {
-      return this.registrations.filter((reg) => reg.User[filterKey] == filtervalue).length;
+      return this.registrations.filter((reg) => reg.User[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
     }
-    return this.registrations.filter((reg) => reg[filterKey] == filtervalue).length;
+    return this.registrations.filter((reg) => reg[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
   }
 
   applyFilters(): void {
@@ -122,7 +124,7 @@ export class EditEventComponent implements OnInit {
       for (let filter of this.userFilters) {
         if (filter.filtering) {
           atLeast1Filter = true;
-          if (reg.User[filter.key] == filter.value) {
+          if (reg.User[filter.key].toLowerCase() == filter.value.toLowerCase()) {
             return true;
           }
         }
@@ -136,7 +138,7 @@ export class EditEventComponent implements OnInit {
       for (let filter of this.registrationFilters) {
         if (filter.filtering) {
           atLeast1Filter = true;
-          if (reg[filter.key] == filter.value) {
+          if (reg[filter.key].toLowerCase() == filter.value.toLowerCase()) {
             return true;
           }
         }
@@ -185,17 +187,25 @@ export class EditEventComponent implements OnInit {
     });
   }
 
-  removeRegisteredUser(userId: number, idx: number): void {
-    this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
-      let reg = this.registrations[idx];
-      reg.status = 'removed';
-      this.registrations[idx] = reg;
-      this.removeUserSuccess = success.message;
-      setTimeout(() => this.removeUserSuccess = null, 4000);
-    }, (err) => {
-      console.log('Unable to remove user', err);
-      this.removeUserWarning = err.message;
-    });
+  onSelectForRemoval(reg: EventRegistrationWithUser): void {
+    this.selectedRegistration = reg;
+    $('#removeUserModal').modal();
+  }
+
+  removeRegisteredUser(userId: number): void {
+    if (this.selectedRegistration.status == 'registered') {
+      this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
+        this.selectedRegistration.status = 'removed';
+        let idx = this.registrations.findIndex((reg) => reg.UserUserId == userId.toString());
+        this.registrations[idx] = this.selectedRegistration;
+        this.applyFilters();
+        this.removeUserSuccess = success.message;
+        setTimeout(() => this.removeUserSuccess = null, 4000);
+      }, (err) => {
+        console.log('Unable to remove user', err);
+        this.removeUserWarning = err.error.message;
+      });
+    }
   }
 
    //SENDING THE IMAGE TO THE API

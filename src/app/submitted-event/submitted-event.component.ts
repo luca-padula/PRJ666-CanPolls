@@ -37,6 +37,8 @@ export class SubmittedEventComponent implements OnInit {
   cancelRegistrationSubscription: any;
   registrationSuccess: string;
   registrationFailure: string;
+  cancellationSuccess: string;
+  cancellationFailure: string;
   currentEvent: Event = new Event();
   currentUser: User = new User();
   currentLocation: Location = new Location();
@@ -140,10 +142,10 @@ export class SubmittedEventComponent implements OnInit {
   }
  
   registerUser(): void {
-    
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;
       this.userCanRegister = false;
+      this.userCanCancel = true;
       setTimeout(() => this.registrationSuccess = null, 4000);
     }, (err) => {
       console.log(err);
@@ -153,18 +155,20 @@ export class SubmittedEventComponent implements OnInit {
   }
 
   cancelRegistration(): void {
-    this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
-      this.registrationSuccess = success.message;
-      this.registration.status = '';
-      this.userCanCancel = false;
-      setTimeout(() => {
-        this.registrationSuccess = null;
-        this.registration.status = 'cancelled';
-      }, 4000);
-    }, (err) => {
-      console.log(err);
-      this.registrationFailure = err.error.message;
-    })
+    if (this.userCanCancel) {
+      this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
+        this.cancellationSuccess = success.message;
+        this.registration.status = '';
+        this.userCanCancel = false;
+        setTimeout(() => {
+          this.cancellationSuccess = null;
+          this.registration.status = 'cancelled';
+        }, 4000);
+      }, (err) => {
+        console.log(err);
+        this.cancellationFailure = err.error.message;
+      })
+    }
   }
 
   routeEventEdit(eId: number): void {
