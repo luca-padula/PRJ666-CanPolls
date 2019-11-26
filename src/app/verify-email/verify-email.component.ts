@@ -22,13 +22,11 @@ export class VerifyEmailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Don't think I need to store subscription in class variable like in WEB422
     this.route.params.subscribe((params) => {
       this.id = params['id'];
       this.token = params['token'];
       this.auth.verifyUser(this.id, this.token).subscribe(() => {
         this.successMessage = true;
-        setTimeout(() => this.router.navigate(['/login']), 10000);
       }, (err) => {
         this.errorMessage = true;
       });
