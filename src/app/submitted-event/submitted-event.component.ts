@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import {Event} from '../../data/Model/Event';
+import {EventWithUserObj} from '../../data/Model/EventWithUserObj';
 import {User} from '../../data/Model/User';
 import {Location} from '../../data/Model/Location';
 import {FeedbackDisplay} from '../../data/Model/FeedbackDisplay';
@@ -7,6 +8,7 @@ import {Feedback} from '../../data/Model/Feedback';
 import {EventService} from '../../data/services/event.service';
 import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
+import {AdminService} from '../../data/services/admin.service';
 import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
@@ -39,11 +41,12 @@ export class SubmittedEventComponent implements OnInit {
   registrationFailure: string;
   cancellationSuccess: string;
   cancellationFailure: string;
-  currentEvent: Event = new Event();
+  currentEvent: EventWithUserObj = new EventWithUserObj();
   currentUser: User = new User();
   currentLocation: Location = new Location();
   eventRegistrationCount: number;
-  successMessage = false;  
+  successStatus: boolean = false;  
+  message: string;
   private token: any;
   src: any;
   base64data: any;
@@ -58,11 +61,13 @@ export class SubmittedEventComponent implements OnInit {
   public fd : Feedback;
   success:boolean = false;
   att_limit: string;
+  
 
   constructor(
     private auth: AuthService,
     private eService: EventService,
     private uService: UserService,
+    private aService: AdminService,
     private route:ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -218,20 +223,24 @@ openDialog(){
   })
 }
 
-  approve(){
-    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{
-      this.successMessage = true;
-    }, (err)=>{
-      console.log(err);
-    })
+  approve(isApp: boolean){
+    if(this.token.isAdmin){
+      console.log(isApp);
+      let adminParty = this.token.partyAffiliation;
+      if(adminParty == this.currentEvent.User.partyAffiliation){
+        this.currentEvent.isApproved = isApp;
+        this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
+        this.successStatus = true;
+        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+      }
+      else
+      {
+        
+        this.message = "You cannot alter other parties events!!";
+      }
+    }
   }
-  decline(){
-    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, false).subscribe((success)=>{
-      this.successMessage = true;
-    }, (err)=>{
-      console.log(err);
-    })
-  }
+  
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
     if(this.eventSubscription){this.eventSubscription.unsubscribe();}

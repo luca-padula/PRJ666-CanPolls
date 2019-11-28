@@ -27,10 +27,6 @@
 
 <body>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div *ngIf="successMessage" class="alert alert-success text-center">
-        Success: Event {{currentEvent.event_title}} has been approved!<br />
-        Email has been sent to the creator. Thank you for your time!
-      </div>
       <form *ngIf="!successMessage">
 <article class="l-Wrapper">
     
@@ -118,13 +114,13 @@
       <div class="l-Footer">
         <div  class="l-Footer-col" >
           <div *ngIf="!currentEvent.isApproved" class="form-group row">
-              <input type="button" value="Approve" (click)="approve($event)">
-              <input type="button" value="Decline" (click)="decline($event)">
+              <input type="button" [(ngModel)]="currentEvent.isApproved" value="Approve" (click)="approve(true)" data-toggle="modal" data-target="#approveModal">
+              <input type="button" [(ngModel)]="currentEvent.isApproved" value="Decline" (click)="approve(false)" data-toggle="modal" data-target="#approveModal">  
           </div>
           <div *ngIf="currentEvent.isApproved && isExpired"  class="list-type1">
             <div *ngIf="!givenFeedback && registration" class="form-group row">
               <p><strong>Look like you haven't given us your feedback yet</strong></p>
-              <button class="btn submit-button" (click)="openDialog($event)" [ngStyle]="{'background-color': ' rgb(231, 177, 195)'}">Give us your feedback</button>
+              <button class="btn submit-button" (click)="openDialog($event)" [ngStyle]="{'background-color': ' rgb(231, 177, 195)'}">Your feedback helps</button>
               </div>
             <ul >
              <li *ngFor="let fd of feedbacks" > 
@@ -165,3 +161,24 @@
     </div>
   </form>
   </body>
+
+
+  <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="approveModalLabel">Thank You for your time !</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{message}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
