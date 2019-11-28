@@ -18,7 +18,7 @@ export class UserProfileComponent implements OnInit {
   private token: any;
   private userSubscription: any;
   private eventSubscription: any;
-  currentUser: User;
+  currentUser: User = new User();
   validationErrors: ValidationError[];
 
 
@@ -38,25 +38,27 @@ export class UserProfileComponent implements OnInit {
   password2: string;
   curPass: string;
 
-  constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){ }
+  notifSuccess: boolean = false;
+  notifsSuccessMessage: String;
+
+
+  constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){
+
+    this.token = this.auth.readToken();
+
+   }
   ngOnInit() {
-      this.token = this.auth.readToken();
-      this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
-        this.currentUser = us;
-      });
+    this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
+      this.currentUser = us;
+    });
+
       this.eService.getAllEventsByUser(this.token.userId).subscribe(data => {
-        console.log(data);
         this.userSubmittedEvents = data;
       });
       this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
-        console.log(data);
         this.attendedEvents = data;
       });
    }
-
-  onEdit(){
-    
-  }
 
   routeEvent(eventId: number): void {
     this.router.navigate([]).then(result => {  window.open('/event/'+eventId, '_blank'); });
@@ -72,15 +74,20 @@ export class UserProfileComponent implements OnInit {
     if(prof == true)
     {
     this.uService.updateUserInfo(this.currentUser).subscribe((successMessage) => {
-      console.log(successMessage)
-    this.updateUserMessageString = successMessage;
+
+      this.uService.getUserTokenById(this.currentUser.userId).subscribe((success) => {
+         window.localStorage.setItem('access_token', success.token);
+         this.token = this.auth.readToken();
+        console.log("UP: "+JSON.stringify(this.token));
+      });
+
+      this.updateUserMessageString = successMessage;
       this.warning = null;
       this.successMessage = true;
       setTimeout(()=>{
         this.successMessage = false;
       },3500);
     }, (err) => {
-      console.log(err);
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
         setTimeout(()=>{
@@ -94,6 +101,7 @@ export class UserProfileComponent implements OnInit {
         },3500);
       }
     });
+    
   }
   else
   {
@@ -104,7 +112,6 @@ export class UserProfileComponent implements OnInit {
         this.passwordSuccess = false;
       },2500);
     }, (err) => {
-      console.log(err.error);
       if (err.error.validationErrors) {
         this.passwordValidation = err.error.validationErrors;
         setTimeout(()=>{
@@ -121,7 +128,6 @@ export class UserProfileComponent implements OnInit {
   }
   }
 
-
   clickMethod() {
     if(confirm("Are you sure you want to delete your profile?")) {
       this.uService.deleteUser(this.token).subscribe( () =>
@@ -131,6 +137,32 @@ export class UserProfileComponent implements OnInit {
           this.router.navigate(['/login']);
         });
     }
+  }
+
+  notifications(selection: any)
+  {
+      if(selection == true)
+      {
+            this.currentUser.notificationsOn = true;
+            this.uService.updateUserInfo(this.currentUser).subscribe(() => {
+              this.successMessage = true;
+              this.updateUserMessageString = "Notifications turned on. Promise, we won't be annoying.";
+              setTimeout(()=>{
+                this.successMessage = false;
+              },2500);
+            });
+      }
+      else
+      {
+            this.currentUser.notificationsOn = false;
+            this.uService.updateUserInfo(this.currentUser).subscribe(() => {
+              this.successMessage = true;
+              this.updateUserMessageString = "Notifications turned off."
+              setTimeout(()=>{
+                this.successMessage = false;
+              },2500);
+            });
+      }
   }
  
 }

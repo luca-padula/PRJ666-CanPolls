@@ -45,7 +45,7 @@ ul.left {
 ul.right
 {
   list-style-type: none; /* Remove bullets */
-  padding: 0; /* Remove padding */
+  padding-top: 10rem; /* Remove padding */
   margin: 0; /* Remove margins */
   float:right;
   width: 500px;
@@ -82,11 +82,14 @@ ul li:hover{
     background-color: #777;
     color: white;
 }
-
+.image{
+  padding-bottom: 12px;
+}
 .event-browsing{
   display:flex;
   justify-content: space-between;
   margin:3px;
+  text-align: justify;
 }
 a.details{
   margin-top: 75px;

@@ -23,11 +23,13 @@ export class LoginComponent implements OnInit {
   public unverifiedUser: string;
   public rejectionCount: number = 0;
   public success: boolean = false;
-  attendedEvents: Event[];
+  public feedback: Feedback[];
+  attendedEvents: any[];
   public event: Event;
   description: string;
   rating:number;
   currentDate = new Date();
+  token: any;
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -44,17 +46,39 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.user).subscribe((success) => {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
-      this.eService.getEventsAttendedByUser(+this.user.userId).subscribe(data => {
+      this.token = this.auth.readToken();
+      this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
         console.log(data);
         this.attendedEvents = data;
         if(this.attendedEvents.length > 0){
-          for(let event of this.attendedEvents){
-            console.log(event);
-            let endDate: Date = new Date(event.date_to + ' ' + event.time_to);
-            if(endDate > this.currentDate){
-              this.openDialog(event.event_id, this.user.userId);
+          for(var i = 0; i < this.attendedEvents.length; i++){
+            console.log(this.attendedEvents[i].Event.event_id);
+            this.event = this.attendedEvents[i].Event;
+            this.eService.getFeedbackByEventId(this.event.event_id).subscribe((data1: any)=>{
+              this.feedback = data1;
+              if(this.feedback.length == 0){
+                let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.event.event_id, this.user.userId);
+                  }
+              }
+              else{
+              for(let fd of this.feedback){
+                if(fd.userUserId == this.token.userId){
+                  console.log("Already give feedback!!");
+                }
+                else{
+                  console.log("Not give feedback yet!");
+                  let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.event.event_id, this.user.userId);
+                  }
+                }
+              }
             }
-          }
+              
+            });
+          };
         }
       });
       

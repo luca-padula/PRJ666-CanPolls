@@ -1,15 +1,21 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import {Event} from '../../data/Model/Event';
+import {EventWithUserObj} from '../../data/Model/EventWithUserObj';
 import {User} from '../../data/Model/User';
 import {Location} from '../../data/Model/Location';
+import {FeedbackDisplay} from '../../data/Model/FeedbackDisplay';
+import {Feedback} from '../../data/Model/Feedback';
 import {EventService} from '../../data/services/event.service';
 import {AuthService} from '../../data/services/auth.service';
 import {UserService} from '../../data/services/user.service';
+import {AdminService} from '../../data/services/admin.service';
 import { Router } from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { FeedbackComponent } from '../feedback/feedback.component';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 @Component({
   selector: 'app-submitted-event',
@@ -33,45 +39,79 @@ export class SubmittedEventComponent implements OnInit {
   cancelRegistrationSubscription: any;
   registrationSuccess: string;
   registrationFailure: string;
-  currentEvent: Event;
-  currentUser: User;
-  currentLocation: Location;
+  cancellationSuccess: string;
+  cancellationFailure: string;
+  currentEvent: EventWithUserObj = new EventWithUserObj();
+  currentUser: User = new User();
+  currentLocation: Location = new Location();
   eventRegistrationCount: number;
-  successMessage = false;  
+  successStatus: boolean = false;  
+  message: string;
   private token: any;
   src: any;
   base64data: any;
   b: String;
-
- 
+  feedbacks: FeedbackDisplay[];
+  givenFeedback : boolean = false;
+  isExpired : boolean = false;
+  starList: any[] = new Array(5);
   imageToShow:any;
+  description: string;
+  rating:number;
+  public fd : Feedback;
+  success:boolean = false;
+  att_limit: string;
+  
 
   constructor(
     private auth: AuthService,
     private eService: EventService,
     private uService: UserService,
+    private aService: AdminService,
     private route:ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
     private http: HttpClient
-    ) { }
+    ) {   this.token = this.auth.readToken(); }
 
   ngOnInit() {
-    this.token = this.auth.readToken();
+  
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
     });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
-      console.log(this.currentEvent.photo);
       //this.uploadImage(this.currentEvent.photo)
-    
+      if(this.currentEvent.attendee_limit == 0){
+        this.att_limit = "Unlimited attendee";
+      }
+      else{
+        this.att_limit = this.currentEvent.attendee_limit.toString();
+      }
       this.retrieveImage();
     this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
       this.currentLocation = data;
     }, (err)=>{
       console.log(err);
     });
+    let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
+        if(endDate < this.currentTime){
+          this.isExpired = true;
+          this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
+            this.feedbacks = data;
+            
+            if(this.feedbacks.length>0){
+            for(var i = 0; i<this.feedbacks.length; i++){
+              console.log(this.feedbacks[i].User.userId);
+              if(this.feedbacks[i].User.userId == this.token.userId){
+                this.givenFeedback = true;
+              }
+            }
+            console.log("give Feedback: " +this.givenFeedback);
+            }
+          });
+      }
      
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
@@ -105,57 +145,35 @@ export class SubmittedEventComponent implements OnInit {
     });
 
   }
- /*uploadImage(data: Blob){
-   var b = new Blob([data], {type: data.type});
-  //const file: File = new File([data], "image.png");
-    let objectURL = window.URL.createObjectURL(b);
-    console.log(objectURL);       
-    this.src = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-    console.log(this.src); 
-      //this.uploadImage(this.currentEvent.photo);
-    
-    //const reader = new FileReader();
-    //var base64data: string | String;
-    /*reader.addEventListener('load', ()=> {
-      debugger;
-      this.b = reader.result as String;  
-      this.b = this.b.split(',')[1];
-      console.log(this.b);
-      this.src = this.sanitizer.bypassSecurityTrustUrl('data:image/*;base64,' + this.b);   
-    });
-    
-    reader.readAsDataURL(data);
-    console.log(this.src);
-    
-    //this.b = base64data.split(',')[1];
-    //console.log(this.b);
-    //base64data = base64data.substr(base64data.indexOf(',') + 1)
-    //this.src.src = 'data:image/bmp;base64,'+ Base64.encode(data);
-}*/
+ 
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;
       this.userCanRegister = false;
+      this.userCanCancel = true;
       setTimeout(() => this.registrationSuccess = null, 4000);
     }, (err) => {
       console.log(err);
       this.registrationFailure = err.error.message;
+      setTimeout(() => this.registrationFailure = null, 4000);
     })
   }
 
   cancelRegistration(): void {
-    this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
-      this.registrationSuccess = success.message;
-      this.registration.status = '';
-      this.userCanCancel = false;
-      setTimeout(() => {
-        this.registrationSuccess = null;
-        this.registration.status = 'cancelled';
-      }, 4000);
-    }, (err) => {
-      console.log(err);
-      this.registrationFailure = err.error.message;
-    })
+    if (this.userCanCancel) {
+      this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
+        this.cancellationSuccess = success.message;
+        this.registration.status = '';
+        this.userCanCancel = false;
+        setTimeout(() => {
+          this.cancellationSuccess = null;
+          this.registration.status = 'cancelled';
+        }, 4000);
+      }, (err) => {
+        console.log(err);
+        this.cancellationFailure = err.error.message;
+      })
+    }
   }
 
   routeEventEdit(eId: number): void {
@@ -165,14 +183,12 @@ export class SubmittedEventComponent implements OnInit {
     //RETRIEVE FROM API
     retrieveImage()
   {
-    var getExt = this.currentEvent.photo
+    var getExt = this.currentEvent.photo;
     getExt = getExt.substring(getExt.lastIndexOf('.'));
-    console.log("getext: "+getExt);
     var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;
-    console.log(fullImgName);
+    console.log("Retrieve : "+fullImgName);
     this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
     .subscribe( result => {
-      console.log(result+":result");
        this.createImageFromBlob(result);
     });
   }
@@ -190,21 +206,41 @@ createImageFromBlob(image: Blob) {
   }
 
 }
+openDialog(){
+  let date = new Date();
+  const dialogRef = this.dialog.open(FeedbackComponent, {
+    data: {feedback_desc: this.description, feedback_rating: this.rating, eventEventId: this.currentEvent.event_id, userUserId: this.token.userId, feedback_date: date}
+  });
+  dialogRef.afterClosed().subscribe(result =>{
+    this.fd = result;
+    console.log(this.fd);
+    if(this.fd){
+    this.auth.createFeedback(this.fd).subscribe(success=>{
+        this.success = true;
+        console.log("feedback is saved");
+    });
+    }
+  })
+}
 
-  approve(){
-    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, true).subscribe((success)=>{
-      this.successMessage = true;
-    }, (err)=>{
-      console.log(err);
-    })
+  approve(isApp: boolean){
+    if(this.token.isAdmin){
+      console.log(isApp);
+      let adminParty = this.token.partyAffiliation;
+      if(adminParty == this.currentEvent.User.partyAffiliation){
+        this.currentEvent.isApproved = isApp;
+        this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
+        this.successStatus = true;
+        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+      }
+      else
+      {
+        
+        this.message = "You cannot alter other parties events!!";
+      }
+    }
   }
-  decline(){
-    this.auth.sendRespondEmail(this.currentEvent.event_id, this.currentUser.userId, false).subscribe((success)=>{
-      this.successMessage = true;
-    }, (err)=>{
-      console.log(err);
-    })
-  }
+  
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
     if(this.eventSubscription){this.eventSubscription.unsubscribe();}

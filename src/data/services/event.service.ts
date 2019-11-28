@@ -8,7 +8,8 @@ import {EventWithUserObj} from 'src/data/Model/EventWithUserObj'
 import { Location } from 'src/data/Model/Location'
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithUser';
-
+import {Feedback} from 'src/data/Model/Feedback';
+import { FeedbackDisplay } from '../Model/FeedbackDisplay';
 
 
 @Injectable({
@@ -18,11 +19,11 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  getEventById(id: number) : Observable<Event>{
-    return this.http.get<Event>(environment.apiUrl + '/api/event/' + id);
+  getEventById(id: number) : Observable<EventWithUserObj>{
+    return this.http.get<EventWithUserObj>(environment.apiUrl + '/api/event/' + id);
   }
-  getAllEvents():Observable<Event[]>{
-    return this.http.get<Event[]>(environment.apiUrl + '/api/events');
+  getAllEvents(getAll: boolean):Observable<EventWithUserObj[]>{
+    return this.http.get<EventWithUserObj[]>(environment.apiUrl + '/api/events/'+getAll);
   }
   updateEventById(id: number, event: Event): Observable<any> {
     return this.http.put<Event>(environment.apiUrl + '/api/event/' + id, event);
@@ -79,5 +80,8 @@ export class EventService {
   uploadImage(filename: string):Observable<any>
   { 
     return this.http.post<any>(environment.apiUrl + '/api/upload/',filename);
+  }
+  getFeedbackByEventId(eventId: number):Observable<FeedbackDisplay[]>{
+    return this.http.get<FeedbackDisplay[]>(environment.apiUrl+'/api/feedback/' + eventId);
   }
 }

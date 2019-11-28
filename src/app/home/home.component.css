@@ -1,13 +1,30 @@
 .jumbotron {
-    margin: 0em;
-    background-color: #DB7093;
+    margin             : 0em;
+    background-color   : #DB7093;
+    text-align         : center;
+    background-image   : url("../../assets/image/Banner.jpg");
+    background-size    : cover;
+    background-position: 70% center;
 }
+
+#showcase {
+    margin-left : auto;
+    margin-right: auto;
+    border      : 5px solid black;
+    color       : white;
+    text-shadow : -2px 2px 0 #000,
+        2px 2px 0 #000,
+        2px -2px 0 #000,
+        -2px -2px 0 #000;
+}
+
 .container {
-    margin: 1em;
-    display: block;
+    margin         : 1em;
+    display        : block;
     justify-content: center;
-    align-items: center;
+    align-items    : center;
 }
+
 h1 {
     font-size: 4rem;
 }
@@ -21,44 +38,55 @@ table {
     margin: 10px;
 }
 
-table, th, td {
-    border: 2px solid black;
-    padding: 10px;
+table,
+th,
+td {
+    border         : 2px solid black;
+    padding        : 10px;
     border-collapse: collapse;
 }
 
 #filterPane {
-    padding: 10px;
-    text-align: center;
+    padding       : 10px;
+    text-align    : center;
     vertical-align: middle;
 }
 
 .filterOptions * {
-    display: inline-block;
+    display       : inline-block;
     vertical-align: middle;
-    margin: 0px 2.5px;
+    margin        : 0px 2.5px;
 }
 
-#resultsDiv {
+/* #resultsDiv {
     border: 1px solid black;
-}
+} */
 
 #resultsTable {
     border-bottom: 1px solid #666666;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left  : auto;
+    margin-right : auto;
 }
 
 thead td {
-    margin-left: auto;
+    margin-left : auto;
     margin-right: auto;
 }
 
 #calendarDiv {
-    margin-left: auto;
+    margin-left : auto;
     margin-right: auto;
-    color: silver;
-    text-align: center;
-    width:500px;
+    text-align  : center;
+    width       : 500px;
 }
 
+/* .resultsTable {
+    background-color: blue;
+}
+
+@media screen and (max-width: 600px) {
+    .resultsTable {
+        display         : block;
+        background-color: olive;
+    }
+} */

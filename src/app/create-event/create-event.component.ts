@@ -19,6 +19,7 @@ class ImageSnippet{
   styleUrls: ['./create-event.component.css']
 })
 export class CreateEventComponent implements OnInit {
+  currentDate: string;
   selectedFile: ImageSnippet;
   sfile : File = null;
   event: EventToCreate;
@@ -38,9 +39,13 @@ export class CreateEventComponent implements OnInit {
 
   fullImageName :string="";
 
-  constructor(private auth: AuthService, private uService: UserService, private http: HttpClient, private eService: EventService) { }
+  constructor(private auth: AuthService, private uService: UserService, private http: HttpClient, private eService: EventService) { 
+    this.currentDate = new Date().toISOString().split('T')[0];
+  }
   
   ngOnInit() {
+    
+    console.log(this.currentDate);
     this.event = new EventToCreate;
     this.token = this.auth.readToken();
     this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) =>{
@@ -87,15 +92,10 @@ export class CreateEventComponent implements OnInit {
   }
 
   onSubmit(f: NgForm): void{
-    if(this.currentUser.partyAffiliation=="unaffiliated"){
+    if(this.currentUser.partyAffiliation=="Unaffiliated"){
       this.unaffiliated = true;
       console.log("unaffiliated");
     } else{
-    /*console.log(this.selectedFile.src);
-    console.log(this.selectedFile.file);
-    console.log(this.sfile.type);
-   
-*/
         console.log("fd: "+JSON.stringify(this.fd));
         this.http.post(environment.apiUrl + "/api/upload", this.fd)
         .subscribe( result => {

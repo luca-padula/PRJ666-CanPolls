@@ -10,8 +10,10 @@ import { EventRegistrationWithUser } from 'src/data/Model/EventRegistrationWithU
 import { User } from 'src/data/Model/User';
 import { ValidationError } from 'src/data/Model/ValidationError';
 import {HttpClient} from '@angular/common/http';
-
 import { environment } from 'src/environments/environment';
+import { filter } from 'rxjs/operators';
+
+declare var $: any;
 
 class ImageSnippet{
   constructor(public src: String, public file: File){}
@@ -27,10 +29,12 @@ export class EditEventComponent implements OnInit {
   userCanEdit: boolean;
   loading: boolean = true;
   eventId: number;
-  event: Event;
+  event: Event = new Event();
   location: Location;
   registrations: EventRegistrationWithUser[];
   filteredRegistrations: EventRegistrationWithUser[];
+  registeredCount: number;
+  selectedRegistration: EventRegistrationWithUser;
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -44,6 +48,19 @@ export class EditEventComponent implements OnInit {
   removeUserSuccess: string;
   removeUserWarning: string;
 
+  userFilters = [
+    {key: 'partyAffiliation', value: 'Unaffiliated', filtering: false},
+    {key: 'partyAffiliation', value: 'Liberal', filtering: false},
+    {key: 'partyAffiliation', value: 'Conservative', filtering: false},
+    {key: 'partyAffiliation', value: 'NDP', filtering: false},
+    {key: 'partyAffiliation', value: 'Green', filtering: false},
+    {key: 'partyAffiliation', value: 'Bloc Quebecois', filtering: false}
+  ];
+  registrationFilters = [
+    {key: 'status', value: 'registered', filtering: true},
+    {key: 'status', value: 'cancelled', filtering: false},
+    {key: 'status', value: 'removed', filtering: false}
+  ]
 
   selectedFile: ImageSnippet;
   sfile : File = null;
@@ -88,8 +105,48 @@ export class EditEventComponent implements OnInit {
     this.getRegistrationsSubscription = this.eventService.getRegistrationsWithUsersByEventId(this.eventId).subscribe((results) => {
       this.registrations = results;
       this.filteredRegistrations = this.registrations.filter((reg) => reg.status == 'registered');
+      this.registeredCount = this.filteredRegistrations.length;
     }, (err) => {
       console.log('Unable to get registrations', err);
+    });
+  }
+
+  getFilterCount(filterKey: string, filtervalue: any, onUser: boolean): number {
+    if (onUser) {
+      return this.registrations.filter((reg) => reg.User[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
+    }
+    return this.registrations.filter((reg) => reg[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
+  }
+
+  applyFilters(): void {
+    this.filteredRegistrations = this.registrations.filter((reg) => {
+      let atLeast1Filter: boolean = false;
+      for (let filter of this.userFilters) {
+        if (filter.filtering) {
+          atLeast1Filter = true;
+          if (reg.User[filter.key].toLowerCase() == filter.value.toLowerCase()) {
+            return true;
+          }
+        }
+      }
+      if (!atLeast1Filter) {
+        return true;
+      }
+      return false;
+    }).filter((reg) => {
+      let atLeast1Filter: boolean = false;
+      for (let filter of this.registrationFilters) {
+        if (filter.filtering) {
+          atLeast1Filter = true;
+          if (reg[filter.key].toLowerCase() == filter.value.toLowerCase()) {
+            return true;
+          }
+        }
+      }
+      if (!atLeast1Filter) {
+        return true;
+      }
+      return false;
     });
   }
 
@@ -97,7 +154,7 @@ export class EditEventComponent implements OnInit {
     this.validationErrors = [];
     this.http.post(environment.apiUrl + "/api/upload", this.fd)
     .subscribe( result => {
-   // console.log(result)
+    console.log("Result: "+result)
     });
     this.event.photo = this.fullImageName;
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
@@ -130,14 +187,25 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  onSelectForRemoval(reg: EventRegistrationWithUser): void {
+    this.selectedRegistration = reg;
+    $('#removeUserModal').modal();
+  }
+
   removeRegisteredUser(userId: number): void {
-    this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
-      this.removeUserSuccess = success.message;
-      setTimeout(() => this.removeUserSuccess = null, 4000);
-    }, (err) => {
-      console.log('Unable to remove user', err);
-      this.removeUserWarning = err.message;
-    });
+    if (this.selectedRegistration.status == 'registered') {
+      this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {
+        this.selectedRegistration.status = 'removed';
+        let idx = this.registrations.findIndex((reg) => reg.UserUserId == userId.toString());
+        this.registrations[idx] = this.selectedRegistration;
+        this.applyFilters();
+        this.removeUserSuccess = success.message;
+        setTimeout(() => this.removeUserSuccess = null, 4000);
+      }, (err) => {
+        console.log('Unable to remove user', err);
+        this.removeUserWarning = err.error.message;
+      });
+    }
   }
 
    //SENDING THE IMAGE TO THE API
@@ -156,6 +224,8 @@ export class EditEventComponent implements OnInit {
      fileName = fileName.substring(fileName.lastIndexOf('.'));
      this.fullImageName = "Event"+this.token.userId+fileName;
      this.fd.append('file', this.selectedF, this.fullImageName);
+
+     console.log("imageAdded: "+this.fullImageName);
    }
 
 

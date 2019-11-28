@@ -82,7 +82,8 @@ export class AuthService {
       userId: userId,
       isApproved: isApproved
     };
-    let apiUrl: string = environment.apiUrl + '/api/event/' + id;
+    console.log(id + " ," + userId + "," + isApproved);
+    let apiUrl: string = environment.apiUrl + '/api/updateEventStatus/' + id;
     return this.http.post<any>(apiUrl, body);
   }
   createFeedback(feedback: Feedback):Observable<any>{

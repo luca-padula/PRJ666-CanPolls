@@ -1,73 +1,76 @@
 <div class="container">
-  <h2 class="text-center">Registration</h2>
+  <h3 class="text-center">Registration</h3>
   <div *ngIf="successMessage" class="alert alert-success text-center">
     Success: User {{user.userName}} has been registered!<br />
     Check your email for the link to verify your account before signing in.
   </div>
   <form *ngIf="!successMessage" #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div *ngIf="warning" class="alert alert-danger">
+          {{warning}}
+        </div>
+        <div *ngFor="let err of validationErrors" class="alert alert-danger">
+          {{err.msg}}
+        </div>
     <p class="lead text-center">
-      *Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
+      <span class="form-asterisk">*</span> indicates a required field
     </p>
-    <p class="lead text-center">
-      *Username must not contain an @ symbol or more than 1 consecutive space, leading and trailing whitespace will be removed
-    </p>
-    <div *ngIf="warning" class="alert alert-danger">
-      {{warning}}
-    </div>
-    <div *ngFor="let err of validationErrors" class="alert alert-danger">
-      {{err.msg}}
-    </div>
     <div class="form-well">
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">Email:</label>
+        <label class="col-3 col-form-label" for="email">Email<span class="form-asterisk">*</span></label>
         <div class="col-9">
           <input type="text" [(ngModel)]="user.email" class="form-control" id="email" name="email" autofocus>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">Username:</label>
+        <label class="col-3 col-form-label" for="userName">Username<span class="form-asterisk">*</span></label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="user.userName" class="form-control" id="userName" name="userName">
+          <input type="text" [(ngModel)]="user.userName" class="form-control" id="userName" name="userName" aria-describedby="userNameHelpBlock">
+          <small id="userNameHelpBlock" class="form-text text-muted">
+            Username must not contain an @ symbol or more than 1 consecutive space. Leading and trailing whitespace will be removed
+          </small>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">Password:</label>
+        <label class="col-3 col-form-label" for="password">Password<span class="form-asterisk">*</span></label>
         <div class="col-9">
-          <input type="password" [(ngModel)]="user.password" class="form-control" id="password" name="password">
+          <input type="password" [(ngModel)]="user.password" class="form-control" id="password" name="password" aria-describedby="passwordHelpBlock">
+          <small id="passwordHelpBlock" class="form-text text-muted">
+            Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number
+          </small>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">Re-enter Password:</label>
+        <label class="col-3 col-form-label" for="password2">Re-enter Password<span class="form-asterisk">*</span></label>
         <div class="col-9">
           <input type="password" [(ngModel)]="user.password2" class="form-control" id="password2" name="password2">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">First Name:</label>
+        <label class="col-3 col-form-label" for="firstName">First Name<span class="form-asterisk">*</span></label>
         <div class="col-9">
           <input type="text" [(ngModel)]="user.firstName" class="form-control" id="firstName" name="firstName">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="name">Last Name:</label>
+        <label class="col-3 col-form-label" for="lastName">Last Name<span class="form-asterisk">*</span></label>
         <div class="col-9">
           <input type="text" [(ngModel)]="user.lastName" class="form-control" id="lastName" name="lastName">
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation:</label>
+        <label class="col-3 col-form-label" for="partyAffiliationSelect">Party Affiliation</label>
         <div class="col-9">
-          <select [(ngModel)]="user.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect">
-            <option value="unaffiliated"></option>
-            <option value="conservative">Conservative Party</option>
-            <option value="liberal">Liberal Party</option>
-            <option value="ndp">New Democratic Party</option>
-            <option value="green">Green Party</option>
-            <option value="bloc quebecois">Bloc Quebecois</option>
+          <select [(ngModel)]="user.partyAffiliation" class="form-control" id="partyAffiliationSelect" name="partyAffiliationSelect" aria-describedby="affiliationHelpBlock">
+            <option value="Unaffiliated">No Affiliation</option>
+            <option value="Conservative">Conservative Party</option>
+            <option value="Liberal">Liberal Party</option>
+            <option value="NDP">New Democratic Party</option>
+            <option value="Green">Green Party</option>
+            <option value="Bloc Quebecois">Bloc Quebecois</option>
           </select>
           <small id="affiliationHelpBlock" class="form-text text-muted">
             Select an option if you are a member of a political party. This is optional and you can change it later.
-            After selecting a party, an email will be sent to an administrator of that party letting them know that they
+            After selecting a party, the party administrator will be notified and they
             can approve you to create events on their behalf. You will not be able to create events until you are approved by an admin.
           </small>
         </div>
