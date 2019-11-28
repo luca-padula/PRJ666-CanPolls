@@ -89,7 +89,7 @@ export class EditEventComponent implements OnInit {
     });
     this.getEventSubscription = this.eventService.getEventById(this.eventId).subscribe((result) => {
       let now = new Date();
-      let eventStartTime = new Date(result.date_from);
+      let eventStartTime = new Date(result.date_from + ' ' + result.time_from);
       this.userCanEdit = (this.token.userId == result.UserUserId && now < eventStartTime);
       this.event = result;
       this.loading = false;
@@ -152,6 +152,7 @@ export class EditEventComponent implements OnInit {
 
   onEventSubmit(f: NgForm): void {
     this.validationErrors = [];
+    this.warning = null;
     this.http.post(environment.apiUrl + "/api/upload", this.fd)
     .subscribe( result => {
     console.log("Result: "+result)
@@ -173,6 +174,7 @@ export class EditEventComponent implements OnInit {
 
   onLocationSubmit(f: NgForm): void {
     this.validationErrors = [];
+    this.warning = null;
     this.updateLocationSubscription = this.eventService.updateLocationById(this.eventId, this.location).subscribe((success) => {
       this.successMessage = success.message;
       setTimeout(() => this.successMessage = null, 4000);

@@ -61,7 +61,7 @@
             </div>
             <button *ngIf="userCanCancel" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#cancelRegistrationModal">Cancel Registration</button>
             <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
-              You have previously been removed from this event.
+              You have been removed from this event by the owner.
             </div>
             <div *ngIf="registration && registration.status === 'cancelled'" class="alert alert-danger">
               You cancelled your registration for this event.
