@@ -39,6 +39,16 @@ provinces = [
   
 ]
 
+party = [
+  {name:"Liberal", value: "Liberal"},
+  {name:"Conservative", value: "Conservative"},
+  {name:"NDP", value:"NDP"},
+  {name:"Coalition Avenir Québec", value:"CAQ"},
+  {name:"Saskatchewan Party", value:"Saskatchewan Party"}
+
+  
+]
+
 
 //get all events 
   constructor(private ofEService : OfficialEventService) { }
