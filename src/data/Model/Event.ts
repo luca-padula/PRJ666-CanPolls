@@ -10,7 +10,7 @@ export class Event
     time_from: string;
     time_to: string;
     attendee_limit: number;
-    isApproved: boolean;
+    status: string;
     UserUserId: string;
     createdAt: string;
     updatedAt: string;
