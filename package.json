@@ -26,7 +26,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
-    "@ngrx/schematics": "^8.3.0",
+    "@ngrx/schematics": "^8.5.2",
     "@types/arcgis-js-api": "^4.12.0",
     "angular-split": "^3.0.2",
     "arcgis-js-api": "^4.13.2",
@@ -40,8 +40,8 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.18",
-    "@angular/cli": "^8.3.18",
+    "@angular-devkit/build-angular": "^0.803.20",
+    "@angular/cli": "^8.3.20",
     "@angular/compiler-cli": "^8.2.13",
     "@angular/language-service": "^8.2.13",
     "@fortawesome/fontawesome-free": "^5.11.2",
