@@ -22,7 +22,7 @@ export class AdminService {
   }
 
   approveEvent(id: number, event: EventWithUserObj): Observable<any> {
-   //console.log("id ="+id+"\nevent: "+event);
+  console.log("id ="+id+"\nevent: "+event);
     return this.http.put<any>(environment.apiUrl + '/api/updateEventStatus/' + id, event);
   }
 

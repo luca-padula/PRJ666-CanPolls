@@ -86,19 +86,19 @@ export class UserProfileComponent implements OnInit {
       this.successMessage = true;
       setTimeout(()=>{
         this.successMessage = false;
-      },3500);
+      },4500);
     }, (err) => {
       if (err.error.validationErrors) {
         this.validationErrors = err.error.validationErrors;
         setTimeout(()=>{
           this.validationErrors = null;
-        },3500);
+        },4500);
       }
       else {
         this.warning = err.error.message;
         setTimeout(()=>{
           this.warning = "";
-        },3500);
+        },4500);
       }
     });
     
@@ -110,19 +110,19 @@ export class UserProfileComponent implements OnInit {
       this.passwordSuccess = true;
       setTimeout(()=>{
         this.passwordSuccess = false;
-      },2500);
+      },4500);
     }, (err) => {
       if (err.error.validationErrors) {
         this.passwordValidation = err.error.validationErrors;
         setTimeout(()=>{
           this.passwordValidation = null;
-        },2500);
+        },4500);
       }
       else {
         this.passwordWarning = err.error.message;
         setTimeout(()=>{
           this.passwordWarning = "";
-        },2500);
+        },4500);
       }
     });
   }
@@ -149,7 +149,7 @@ export class UserProfileComponent implements OnInit {
               this.updateUserMessageString = "Notifications turned on. Promise, we won't be annoying.";
               setTimeout(()=>{
                 this.successMessage = false;
-              },2500);
+              },4500);
             });
       }
       else
@@ -160,7 +160,7 @@ export class UserProfileComponent implements OnInit {
               this.updateUserMessageString = "Notifications turned off."
               setTimeout(()=>{
                 this.successMessage = false;
-              },2500);
+              },4500);
             });
       }
   }

@@ -105,9 +105,10 @@
                                     <td (click)="routeEvent(eve.event_id)" style="text-decoration: underline;">{{eve.event_title}}</td>
                                     <td>{{eve.User.partyAffiliation}}</td>
                                     <td>
-                                       <select [(ngModel)]="eve.isApproved" class="form-control" id="eveStatus" name="eveStatus" (change)="onEventStatusChange(eve)" >
-                                           <option value="true">Approve</option>
-                                           <option value="false">Decline</option>
+                                       <select [(ngModel)]="eve.status" class="form-control" id="eveStatus" name="eveStatus" (change)="onEventStatusChange(eve,$event)" >
+                                           <option value="A">Approve</option>
+                                           <option value="D">Decline</option>
+                                           <option value="P">Pending</option>
                                          </select>
                                     </td>
                                   </tr>
