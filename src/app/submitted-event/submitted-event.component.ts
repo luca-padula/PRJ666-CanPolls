@@ -225,21 +225,21 @@ openDialog(){
 
   approve(isApp: boolean){
     
-    /*if(this.token.isAdmin){
+    if(this.token.isAdmin){
       console.log(isApp);
       let adminParty = this.token.partyAffiliation;
       if(adminParty == this.currentEvent.User.partyAffiliation){
-        this.currentEvent.status = isApp;
+        this.currentEvent.status = isApp ? "true" : "false";
         this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
         this.successStatus = true;
-        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+        this.message = "Event "+( (this.currentEvent.status.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
       }
       else
       {
         
         this.message = "You cannot alter other parties events!!";
       }
-    }*/
+    }
   }
   
   ngOnDestroy(){

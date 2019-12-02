@@ -1,9 +1,10 @@
 * {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 footer {
     background-color: #DB7093;
+    min-height: 100vh;
 }
 
 a {
