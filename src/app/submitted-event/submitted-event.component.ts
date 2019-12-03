@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, DebugElement } from '@angular/core';
 import {Event} from '../../data/Model/Event';
 import {EventWithUserObj} from '../../data/Model/EventWithUserObj';
 import {User} from '../../data/Model/User';
@@ -16,6 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 @Component({
   selector: 'app-submitted-event',
@@ -27,7 +28,9 @@ export class SubmittedEventComponent implements OnInit {
   private eventSubscription: any;
   private userSubscription: any;
   private locationSubscription: any;
+  private feedbackSubscription: any;
   private eventId: number;
+
   currentTime: Date;
   registration: EventRegistration;
   getRegistrationSubscription: any;
@@ -45,8 +48,9 @@ export class SubmittedEventComponent implements OnInit {
   currentUser: User = new User();
   currentLocation: Location = new Location();
   eventRegistrationCount: number;
-  successStatus: boolean = false;  
+  successStatus: boolean;  
   message: string;
+  messageP: string;
   private token: any;
   src: any;
   base64data: any;
@@ -61,7 +65,9 @@ export class SubmittedEventComponent implements OnInit {
   public fd : Feedback;
   success:boolean = false;
   att_limit: string;
-  
+  isAd: boolean = false;
+  isCreator: boolean = false;
+  timeP: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -82,25 +88,90 @@ export class SubmittedEventComponent implements OnInit {
     });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
-      //this.uploadImage(this.currentEvent.photo)
-      if(this.currentEvent.attendee_limit == 0){
-        this.att_limit = "Unlimited attendee";
+      let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
+      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){
+        console.log("event status: " + this.currentEvent.status);
+        if((this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation) || this.token.userId == this.currentEvent.UserUserId){
+          this.successStatus = true;
+          if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
+            this.isAd = true;
+          } 
+          else{
+            this.isCreator = true;
+          }
+          //this.uploadImage(this.currentEvent.photo)
+          if(this.currentEvent.attendee_limit == 0){
+            this.att_limit = "Unlimited attendee";
+          }
+          else{
+            this.att_limit = this.currentEvent.attendee_limit.toString();
+          }
+          this.retrieveImage();
+        this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+          this.currentLocation = data;
+        }, (err)=>{
+          console.log(err);
+        });
+        }
+        else{
+          this.isAd = false;
+          this.isCreator = false;
+          this.successStatus = false;
+        }
+      }
+      else if(this.currentEvent.status == "D"){
+        console.log("event status: " + this.currentEvent.status);
+        if(this.currentEvent.UserUserId == this.token.userId || (this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation )){
+          this.successStatus = true;
+        if(this.currentEvent.attendee_limit == 0){
+          this.att_limit = "Unlimited attendee";
+        }
+        else{
+          this.att_limit = this.currentEvent.attendee_limit.toString();
+        }
+        this.retrieveImage();
+      this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+        this.currentLocation = data;
+      });
+      if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
+        
+        this.isAd = true;
+        let eDate = new Date();
+        console.log(endDate.getDate()-2);
+        eDate.setDate(endDate.getDate()-2);
+        console.log(eDate);
+        if(this.currentTime < eDate){ 
+        this.messageP = "This event has been declined by you. But you can still change your mind.";
+        this.timeP = false;
+        }
+        else{
+          this.messageP = "Sorry! This event has been declined and It passed the valid time to change the status."
+          this.timeP = true;
+        }
       }
       else{
-        this.att_limit = this.currentEvent.attendee_limit.toString();
+        this.isCreator = true;
       }
-      this.retrieveImage();
-    this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
-      this.currentLocation = data;
-    }, (err)=>{
-      console.log(err);
-    });
-    let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
+    }
+      }
+      else{
+        this.successStatus=true;
+        console.log("event status: " + this.currentEvent.status);
+        if(this.currentEvent.attendee_limit == 0){
+          this.att_limit = "Unlimited attendee";
+        }
+        else{
+          this.att_limit = this.currentEvent.attendee_limit.toString();
+        }
+        this.retrieveImage();
+      this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+        this.currentLocation = data;
+      });
         if(endDate < this.currentTime){
           this.isExpired = true;
-          this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
+          this.feedbackSubscription = this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
             this.feedbacks = data;
-            
+          }); 
             if(this.feedbacks.length>0){
             for(var i = 0; i<this.feedbacks.length; i++){
               console.log(this.feedbacks[i].User.userId);
@@ -110,9 +181,9 @@ export class SubmittedEventComponent implements OnInit {
             }
             console.log("give Feedback: " +this.givenFeedback);
             }
-          });
+          
       }
-     
+    }
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
           this.currentUser=data;
@@ -218,28 +289,31 @@ openDialog(){
     this.auth.createFeedback(this.fd).subscribe(success=>{
         this.success = true;
         console.log("feedback is saved");
+    },(err) => {
+      console.log(err);
     });
     }
   })
 }
 
-  approve(isApp: boolean){
-    if(this.token.isAdmin){
-      console.log(isApp);
-      let adminParty = this.token.partyAffiliation;
-      if(adminParty == this.currentEvent.User.partyAffiliation){
-        this.currentEvent.status = isApp ? "true" : "false";
-        this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
-        this.successStatus = true;
-        this.message = "Event "+( (this.currentEvent.status.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
-      }
-      else
-      {
-        
-        this.message = "You cannot alter other parties events!!";
-      }
+approve(isApp: boolean){
+    
+  if(this.token.isAdmin){
+    console.log(isApp);
+    let adminParty = this.token.partyAffiliation;
+    if(adminParty == this.currentEvent.User.partyAffiliation){
+      this.currentEvent.status = isApp ? "A" : "D";
+      this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
+      this.message = "Event "+( (this.currentEvent.status.toString() == "A") ? "approved" : "declined")+". An email has been sent to the user.";
     }
+    else
+    {
+      
+      this.message = "You cannot alter other parties events!!";
+    }
+    debugger;
   }
+}
   
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
@@ -250,5 +324,6 @@ openDialog(){
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
     if(this.cancelRegistrationSubscription){this.cancelRegistrationSubscription.unsubscribe();}
+    if(this.feedbackSubscription){this.feedbackSubscription.unsubscribe();}
   }
 }

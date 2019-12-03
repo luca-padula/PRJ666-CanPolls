@@ -77,7 +77,7 @@ export class AuthService {
     return this.http.post<any>(environment.apiUrl + '/api/createEvent', eventToCreate);
   }
 
-  sendRespondEmail(id: number, userId: string, isApproved: boolean): Observable<any>{
+  sendRespondEmail(id: number, userId: string, isApproved: string): Observable<any>{
     let body = {
       userId: userId,
       isApproved: isApproved
