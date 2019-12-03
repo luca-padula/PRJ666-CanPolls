@@ -84,7 +84,7 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
-      if(this.currentEvent.isApproved=="p"){
+      if(this.currentEvent.status=="p"){
         if(this.token.isAdmin){
           this.isAd = true;
           //this.uploadImage(this.currentEvent.photo)
@@ -106,7 +106,7 @@ export class SubmittedEventComponent implements OnInit {
           this.message="Sorry but you are not authorized to see this event";
         }
       }
-      else if(this.currentEvent.isApproved == "d"){
+      else if(this.currentEvent.status == "d"){
         if(endDate > this.currentTime){
           if(this.currentEvent.attendee_limit == 0){
             this.att_limit = "Unlimited attendee";
@@ -247,23 +247,24 @@ openDialog(){
   })
 }
 
-  approve(status: string){
-    if(this.token.isAdmin){
-      console.log(status);
-      let adminParty = this.token.partyAffiliation;
-      if(adminParty == this.currentEvent.User.partyAffiliation){
-        this.currentEvent.isApproved = status;
-        this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
-        this.successStatus = true;
-        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "a") ? "approved" : "declined")+". An email has been sent to the user.";
-      }
-      else
-      {
-        
-        this.message = "You cannot alter other parties events!!";
-      }
+approve(isApp: boolean){
+    
+  if(this.token.isAdmin){
+    console.log(isApp);
+    let adminParty = this.token.partyAffiliation;
+    if(adminParty == this.currentEvent.User.partyAffiliation){
+      this.currentEvent.status = isApp ? "true" : "false";
+      this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
+      this.successStatus = true;
+      this.message = "Event "+( (this.currentEvent.status.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+    }
+    else
+    {
+      
+      this.message = "You cannot alter other parties events!!";
     }
   }
+}
   
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}

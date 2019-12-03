@@ -26,4 +26,9 @@ img {
         font-size: 18px;
         margin: auto;
     }
+    img {
+        margin: -40px auto;
+        width: 90px;
+        height: 90px;
+    }
 }

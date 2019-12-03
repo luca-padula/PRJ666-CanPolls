@@ -62,6 +62,7 @@ export class AdminComponent implements OnInit {
       this.eventSub = this.eService.getAllEventsWithUser().subscribe(data => {
         this.events = data;
         this.filteredEvents=data;
+        console.log(this.filteredEvents);
       }
       )
 
@@ -128,18 +129,28 @@ export class AdminComponent implements OnInit {
       console.log(this.clickedUserID)
   }
 
-  onEventStatusChange(event: any)
+  onEventStatusChange(eve: any, event: any)
   {
        let adminParty = this.token.partyAffiliation; 
-      if(adminParty == event.User.partyAffiliation )
+       let eventStatusString : string = event.target.value.toString();
+ 
+      if(adminParty == eve.User.partyAffiliation)
       {
-        this.aService.approveEvent(event.event_id,event).subscribe();
+        eve.status = eventStatusString;
+        this.aService.approveEvent(eve.event_id,eve).subscribe();
         this.isSuccessful = true;
-        this.errorMessages = "Event "+( (event.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+
+        if(eve.status.toString() == "A")
+          eventStatusString = "Approved";
+        else   if(eve.status.toString() == "D")
+        eventStatusString = "Declined";
+        else 
+        eventStatusString = "In Progress";
+        this.errorMessages = "Event "+eventStatusString+"." + ((eve.status.toString() == "P") ? "": " An email has been sent to the user.");
        
         setTimeout(()=>{
           this.isSuccessful = false;
-        },2500);
+        },4500);
       }
       else
       {
@@ -147,7 +158,7 @@ export class AdminComponent implements OnInit {
         this.errorMessages = "You cannot alter other parties events!!";
         setTimeout(()=>{
           this.isUnSuccessful = false;
-        },2500);
+        },4500);
       }
   }
 

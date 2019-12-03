@@ -88,6 +88,9 @@ export class EsriMapComponent implements OnInit {
           }
         }
 
+        var pointGraphic = null;
+        var pointColor = null;
+
         // Set up an on-click event handler on the map to extract information based on coordinates
         view.on("click", function (event) {
           view.hitTest(event).then(function (response) {
@@ -107,9 +110,18 @@ export class EsriMapComponent implements OnInit {
             return esriRequest(requestURL, options).then(function (response) {
               console.log(requestURL);
 
+              if (pointGraphic != null) {
+                view.graphics.remove(pointGraphic);
+              }
+
               if (response.data.objects.length <= 0) {
                 //resultsInfo.innerHTML = resultsInfoMessage;
+
+                // Red color here symbolizes that the clicked spot does not have any valid representatives
+                pointColor = [202, 0, 0];
               } else {
+                pointColor = [0, 202, 0];
+
                 resultsInfo.innerHTML = "";
                 resultsTable.innerHTML = "";
 
@@ -144,27 +156,42 @@ export class EsriMapComponent implements OnInit {
 
                     let resultsLink = document.createElement("a");
 
-                    if (candidate.personal_url != "") {
-                      resultsLink.setAttribute("href", candidate.personal_url);
-                    }
-
-                    resultsLink.setAttribute("target", "_blank");
-
                     let resultsPicture = document.createElement("img");
                     resultsPicture.setAttribute("width", "200px");
 
+                    // Check to see if data has a provided URL
                     if (candidate.photo_url != "") {
-                      resultsPicture.setAttribute("src", candidate.photo_url);
+                      // Check to see if the URL is actually valid by checking img height
+                      let img = new Image();
+                      img.src = candidate.photo_url;
+                      if (img.height != 0) {
+                        resultsPicture.setAttribute("src", candidate.photo_url);
+                      } else {
+                        resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
+                      }
                     } else {
                       resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
+                    }
+
+                    // Add a link on the image to their provided website if applicable
+                    // Also apply border to let users know the picture has a link
+                    if (candidate.personal_url != "") {
+                      resultsLink.setAttribute("href", candidate.personal_url);
+                      resultsLink.setAttribute("target", "_blank");
+                      resultsPicture.setAttribute("style", "border:2px ridge blue");
                     }
 
                     resultsLink.append(resultsPicture);
                     resultsCell.append(resultsLink);
 
                     resultsCell = resultsRow.insertCell(-1);
-                    resultsCell.append(document.createTextNode("Party: " + candidate.party_name));
-                    resultsCell.append(document.createElement("br"));
+
+                    // Append Party text node if the extracted data is not blank
+                    if (candidate.party_name != "") {
+                      resultsCell.append(document.createTextNode("Party: " + candidate.party_name));
+                      resultsCell.append(document.createElement("br"));
+                    }
+
                     resultsCell.append(document.createTextNode("District: " + candidate.district_name));
                     resultsCell.append(document.createElement("br"));
                     resultsCell.append(document.createTextNode("Elected Office: " + candidate.elected_office));
@@ -182,6 +209,24 @@ export class EsriMapComponent implements OnInit {
                   }
                 }
               }
+
+              pointGraphic = new Graphic({
+                geometry: {
+                  type: "point",
+                  longitude: longitude,
+                  latitude: latitude
+                },
+                symbol: {
+                  type: "simple-marker",
+                  color: pointColor,
+                  outline: {
+                    color: [255, 255, 255],
+                    width: 2
+                  }
+                }
+              });
+
+              view.graphics.add(pointGraphic);
             });
 
             // if (response.results.length) {
@@ -261,9 +306,9 @@ export class EsriMapComponent implements OnInit {
 
         //   graphics.forEach(function (graphic) {
         //     console.log("Graphics: ", graphic);
-  
+
         //     map.graphics.add(new Graphic(graphic.geometry, new SimpleFillSymbol(
-              
+
         //       SimpleFillSymbol.STYLE_SOLID,
         //       new SimpleLineSymbol(
         //         SimpleLineSymbol.STYLE_SOLID,
@@ -308,12 +353,12 @@ export class EsriMapComponent implements OnInit {
           // labelingInfo: [federalLayerLabels],
           renderer: politicalColorRenderer,
           opacity: 0.40,
-          outFields: ["*"],
-          popupTemplate: {
-            title: "<b>{name}</b>",
-            outFields: ["*"],
-            content: queryDivisionInformation
-          }
+          outFields: ["*"]
+          // popupTemplate: {
+          //   title: "<b>{name}</b>",
+          //   outFields: ["*"],
+          //   content: queryDivisionInformation
+          // }
         });
 
         map.add(federalLayer);
@@ -504,106 +549,6 @@ export class EsriMapComponent implements OnInit {
           // When the checkbox is checked (true), set the layer's visibility to true
           pollingStations.visible = pollingLayerToggle.checked;
         });
-
-        function queryDivisionInformation(target) {
-          var resultsInfo = document.getElementById("resultsInfo");
-          resultsInfo.innerHTML = "<table>";
-
-          // console.log("Number: ", target.graphic.attributes.OBJECTID);
-
-          var query = federalLayer.createQuery();
-          query.where = "OBJECTID = " + target.graphic.attributes.OBJECTID;
-          query.outFields = ["*"];
-
-          return federalLayer.queryFeatures(query)
-            .then(function (response) {
-              var requestURL = 'https://represent.opennorth.ca/boundaries/federal-electoral-districts/' + response.features[0].attributes.fednum + '/candidates/';
-
-              var options = {
-                query: {
-                  f: 'json'
-                },
-                responseType: 'json'
-              };
-
-              return esriRequest(requestURL, options).then(function (response) {
-                //console.log(response);
-                // console.log(requestURL);
-
-                var representative = null;
-
-                // Find the representative's name from using alias checking
-                for (var field of target.graphic.layer.fields) {
-                  if (target.graphic.attributes.winParty == field.alias) {
-                    representative = eval('target.graphic.attributes.' + field.name);
-                    break;
-                  }
-                }
-
-                //var final_results = "<b>FID:</b> {FID}<br><b>OBJECTID:</b> {OBJECTID}<br><b>FED_NUM:</b> {FED_NUM}<br><b>ED_ID:</b> {ED_ID}";
-                var final_results = "<b>Federal Electoral District Number:</b> {fednum}<br><b>Elected Party:</b> {winParty}";
-
-                if (representative) {
-                  final_results += "<br><b>Elected Representative:</b> " + representative;
-                }
-
-                // resultsTable.innerHTML = "";
-
-                for (var representative of response.data.objects) {
-                  // let resultsRow = resultsTable.insertRow(-1)
-
-                  // resultsRow.insertCell(-1);
-                  // resultsRow.append(document.createTextNode(representative.name));
-                  // resultsRow.append(document.createElement("br"));
-
-                  // let resultsPicture = document.createElement("img");
-
-                  // if (representative.photo_url != "") {
-                  //   resultsPicture.setAttribute("src", representative.photo_url);
-                  // } else {
-                  //   resultsPicture.setAttribute("src", "/assets/image/image_not_found.png");
-                  // }
-
-                  // resultsRow.append(resultsPicture);
-
-                  // resultsRow.insertCell(-1);
-                  // resultsRow.append(document.createTextNode(representative.party_name));
-                  // resultsRow.append(document.createElement("br"));
-                  // resultsRow.append(document.createTextNode(representative.district_name));
-                  // resultsRow.append(document.createElement("br"));
-                  // resultsRow.append(document.createTextNode(representative.election_name));
-
-                  // if (representative.offices[0] && representative.offices[0].tel) {
-                  //   resultsRow.append(document.createElement("br"));
-                  //   resultsRow.append(document.createTextNode(representative.offices[0].tel));
-                  // }
-
-                  // resultsRow.append(document.createElement("br"));
-                  // resultsRow.append(document.createTextNode(representative.email));
-
-                  // resultsInfo.innerHTML += "<tr>";
-
-                  // resultsInfo.innerHTML += "<td>" + representative.name;
-                  // resultsInfo.innerHTML += "<br><a href='" + representative.personal_url + "' target='_blank'><img src='" + representative.photo_url + "'></a></td>";
-
-                  // resultsInfo.innerHTML += "<td>" + representative.party_name + "<br>";
-                  // resultsInfo.innerHTML += representative.district_name + "<br>";
-                  // resultsInfo.innerHTML += representative.election_name + "<br>";
-
-                  // if (representative.offices[0] && representative.offices[0].tel) {
-                  //   resultsInfo.innerHTML += representative.offices[0].tel + "<br>";
-                  // }
-                  // resultsInfo.innerHTML += representative.email + "<br></td>";
-
-                  // resultsInfo.innerHTML += "</tr>";
-                }
-
-                // resultsInfo.innerHTML += "</table>";
-
-                return final_results;
-              });
-            });
-        }
       })
       .catch(err => {
         console.error(err);
