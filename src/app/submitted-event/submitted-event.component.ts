@@ -28,7 +28,9 @@ export class SubmittedEventComponent implements OnInit {
   private eventSubscription: any;
   private userSubscription: any;
   private locationSubscription: any;
+  private feedbackSubscription: any;
   private eventId: number;
+
   currentTime: Date;
   registration: EventRegistration;
   getRegistrationSubscription: any;
@@ -167,9 +169,9 @@ export class SubmittedEventComponent implements OnInit {
       });
         if(endDate < this.currentTime){
           this.isExpired = true;
-          this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
+          this.feedbackSubscription = this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
             this.feedbacks = data;
-            
+          }); 
             if(this.feedbacks.length>0){
             for(var i = 0; i<this.feedbacks.length; i++){
               console.log(this.feedbacks[i].User.userId);
@@ -179,7 +181,7 @@ export class SubmittedEventComponent implements OnInit {
             }
             console.log("give Feedback: " +this.givenFeedback);
             }
-          });
+          
       }
     }
       if (this.auth.isAuthenticated()) {
@@ -287,6 +289,8 @@ openDialog(){
     this.auth.createFeedback(this.fd).subscribe(success=>{
         this.success = true;
         console.log("feedback is saved");
+    },(err) => {
+      console.log(err);
     });
     }
   })
@@ -320,5 +324,6 @@ approve(isApp: boolean){
     if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
     if(this.cancelRegistrationSubscription){this.cancelRegistrationSubscription.unsubscribe();}
+    if(this.feedbackSubscription){this.feedbackSubscription.unsubscribe();}
   }
 }
