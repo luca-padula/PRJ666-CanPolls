@@ -15,6 +15,6 @@ export class EventToCreate
 	city:String;
 	province:String;
     postal_code:String;
-    isApproved: boolean;
+    isApproved: string;
     userId: String;
 }

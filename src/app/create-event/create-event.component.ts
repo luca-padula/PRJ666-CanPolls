@@ -51,7 +51,7 @@ export class CreateEventComponent implements OnInit {
     this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) =>{
       this.currentUser = us;
       this.event.userId = this.currentUser.userId;
-      this.event.isApproved = false;
+      this.event.isApproved = "p";
     });
   }
   onFileChanged(imageInput: any){

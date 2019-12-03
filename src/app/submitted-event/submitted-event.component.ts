@@ -16,6 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 @Component({
   selector: 'app-submitted-event',
@@ -61,7 +62,7 @@ export class SubmittedEventComponent implements OnInit {
   public fd : Feedback;
   success:boolean = false;
   att_limit: string;
-  
+  isAd: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -82,20 +83,43 @@ export class SubmittedEventComponent implements OnInit {
     });
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
-      //this.uploadImage(this.currentEvent.photo)
-      if(this.currentEvent.attendee_limit == 0){
-        this.att_limit = "Unlimited attendee";
+      let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
+      if(this.currentEvent.isApproved=="p"){
+        if(this.token.isAdmin){
+          this.isAd = true;
+          //this.uploadImage(this.currentEvent.photo)
+          if(this.currentEvent.attendee_limit == 0){
+            this.att_limit = "Unlimited attendee";
+          }
+          else{
+            this.att_limit = this.currentEvent.attendee_limit.toString();
+          }
+          this.retrieveImage();
+        this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+          this.currentLocation = data;
+        }, (err)=>{
+          console.log(err);
+        });
+        }
+        else{
+          this.isAd = false;
+          this.message="Sorry but you are not authorized to see this event";
+        }
       }
-      else{
-        this.att_limit = this.currentEvent.attendee_limit.toString();
+      else if(this.currentEvent.isApproved == "d"){
+        if(endDate > this.currentTime){
+          if(this.currentEvent.attendee_limit == 0){
+            this.att_limit = "Unlimited attendee";
+          }
+          else{
+            this.att_limit = this.currentEvent.attendee_limit.toString();
+          }
+          this.retrieveImage();
+        this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+          this.currentLocation = data;
+        });
+        }
       }
-      this.retrieveImage();
-    this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
-      this.currentLocation = data;
-    }, (err)=>{
-      console.log(err);
-    });
-    let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
         if(endDate < this.currentTime){
           this.isExpired = true;
           this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
@@ -223,15 +247,15 @@ openDialog(){
   })
 }
 
-  approve(isApp: boolean){
+  approve(status: string){
     if(this.token.isAdmin){
-      console.log(isApp);
+      console.log(status);
       let adminParty = this.token.partyAffiliation;
       if(adminParty == this.currentEvent.User.partyAffiliation){
-        this.currentEvent.isApproved = isApp;
+        this.currentEvent.isApproved = status;
         this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
         this.successStatus = true;
-        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+        this.message = "Event "+( (this.currentEvent.isApproved.toString() == "a") ? "approved" : "declined")+". An email has been sent to the user.";
       }
       else
       {
