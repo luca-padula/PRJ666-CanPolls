@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, DebugElement } from '@angular/core';
 import {Event} from '../../data/Model/Event';
 import {EventWithUserObj} from '../../data/Model/EventWithUserObj';
 import {User} from '../../data/Model/User';
@@ -46,8 +46,9 @@ export class SubmittedEventComponent implements OnInit {
   currentUser: User = new User();
   currentLocation: Location = new Location();
   eventRegistrationCount: number;
-  successStatus: boolean = false;  
+  successStatus: boolean;  
   message: string;
+  messageP: string;
   private token: any;
   src: any;
   base64data: any;
@@ -63,6 +64,8 @@ export class SubmittedEventComponent implements OnInit {
   success:boolean = false;
   att_limit: string;
   isAd: boolean = false;
+  isCreator: boolean = false;
+  timeP: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -84,9 +87,16 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
-      if(this.currentEvent.status=="p"){
-        if(this.token.isAdmin){
-          this.isAd = true;
+      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){
+        console.log("event status: " + this.currentEvent.status);
+        if((this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation) || this.token.userId == this.currentEvent.UserUserId){
+          this.successStatus = true;
+          if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
+            this.isAd = true;
+          } 
+          else{
+            this.isCreator = true;
+          }
           //this.uploadImage(this.currentEvent.photo)
           if(this.currentEvent.attendee_limit == 0){
             this.att_limit = "Unlimited attendee";
@@ -103,23 +113,58 @@ export class SubmittedEventComponent implements OnInit {
         }
         else{
           this.isAd = false;
-          this.message="Sorry but you are not authorized to see this event";
+          this.isCreator = false;
+          this.successStatus = false;
         }
       }
-      else if(this.currentEvent.status == "d"){
-        if(endDate > this.currentTime){
-          if(this.currentEvent.attendee_limit == 0){
-            this.att_limit = "Unlimited attendee";
-          }
-          else{
-            this.att_limit = this.currentEvent.attendee_limit.toString();
-          }
-          this.retrieveImage();
-        this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
-          this.currentLocation = data;
-        });
+      else if(this.currentEvent.status == "D"){
+        console.log("event status: " + this.currentEvent.status);
+        if(this.currentEvent.UserUserId == this.token.userId || (this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation )){
+          this.successStatus = true;
+        if(this.currentEvent.attendee_limit == 0){
+          this.att_limit = "Unlimited attendee";
+        }
+        else{
+          this.att_limit = this.currentEvent.attendee_limit.toString();
+        }
+        this.retrieveImage();
+      this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+        this.currentLocation = data;
+      });
+      if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
+        
+        this.isAd = true;
+        let eDate = new Date();
+        console.log(endDate.getDate()-2);
+        eDate.setDate(endDate.getDate()-2);
+        console.log(eDate);
+        if(this.currentTime < eDate){ 
+        this.messageP = "This event has been declined by you. But you can still change your mind.";
+        this.timeP = false;
+        }
+        else{
+          this.messageP = "Sorry! This event has been declined and It passed the valid time to change the status."
+          this.timeP = true;
         }
       }
+      else{
+        this.isCreator = true;
+      }
+    }
+      }
+      else{
+        this.successStatus=true;
+        console.log("event status: " + this.currentEvent.status);
+        if(this.currentEvent.attendee_limit == 0){
+          this.att_limit = "Unlimited attendee";
+        }
+        else{
+          this.att_limit = this.currentEvent.attendee_limit.toString();
+        }
+        this.retrieveImage();
+      this.locationSubscription= this.eService.getLocationByEventId(this.currentEvent.event_id).subscribe((data)=>{
+        this.currentLocation = data;
+      });
         if(endDate < this.currentTime){
           this.isExpired = true;
           this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
@@ -136,7 +181,7 @@ export class SubmittedEventComponent implements OnInit {
             }
           });
       }
-     
+    }
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
           this.currentUser=data;
@@ -253,16 +298,16 @@ approve(isApp: boolean){
     console.log(isApp);
     let adminParty = this.token.partyAffiliation;
     if(adminParty == this.currentEvent.User.partyAffiliation){
-      this.currentEvent.status = isApp ? "true" : "false";
+      this.currentEvent.status = isApp ? "A" : "D";
       this.aService.approveEvent(this.currentEvent.event_id, this.currentEvent).subscribe();
-      this.successStatus = true;
-      this.message = "Event "+( (this.currentEvent.status.toString() == "true") ? "approved" : "declined")+". An email has been sent to the user.";
+      this.message = "Event "+( (this.currentEvent.status.toString() == "A") ? "approved" : "declined")+". An email has been sent to the user.";
     }
     else
     {
       
       this.message = "You cannot alter other parties events!!";
     }
+    debugger;
   }
 }
   

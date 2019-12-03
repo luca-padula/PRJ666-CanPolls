@@ -27,7 +27,7 @@
 
 <body>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <form *ngIf="!successMessage">
+      <form *ngIf="successStatus">
 <article class="l-Wrapper">
     
       
@@ -45,6 +45,13 @@
       <div class="l-Header-col Contact">
           <div *ngIf="isExpired" class=" alert alert-danger text-center" >
               <strong> EXPIRED </strong>
+          </div>
+          <div *ngIf="currentEvent.status=='C'" class=" alert alert-danger text-center" >
+              <strong> CANCELLED </strong>
+          </div>
+          <div *ngIf="currentEvent.status=='D'" class=" alert alert-danger text-center" >
+              <strong> DECLINED </strong>
+              <p *ngIf="isAd">{{messageP}}</p>
           </div>
           <h1 class="l-Section-title ">{{currentEvent.event_title}}</h1>
         <div>Toronto, Ontario</div>
@@ -113,10 +120,10 @@
   <div class="l-Wrapper u-keyline">
       <div class="l-Footer">
         <div  class="l-Footer-col" >
-       <!-- <div *ngIf="currentEvent.status == 'A'" class="form-group row">
+          <div *ngIf="currentEvent.status == 'P' || (currentEvent.status == 'D' &&  !timeP && isAd)" class="form-group row">
               <input type="button" [(ngModel)]="currentEvent.status" value="Approve" (click)="approve(true)" data-toggle="modal" data-target="#approveModal">
               <input type="button" [(ngModel)]="currentEvent.status" value="Decline" (click)="approve(false)" data-toggle="modal" data-target="#approveModal">  
-          </div>-->
+          </div>
           <div *ngIf="(currentEvent.status == 'A')  && isExpired"  class="list-type1">
             <div *ngIf="!givenFeedback && registration" class="form-group row">
               <p><strong>Look like you haven't given us your feedback yet</strong></p>
@@ -160,6 +167,10 @@
       </div>
     </div>
   </form>
+  <div *ngIf="!successStatus" class="alert alert-danger text-center">
+      Sorry! Your are not authorized to access this event.
+      Please click here to return <a class="home" routerLink="/" target="_blank">Home</a>
+    </div>
   </body>
 
 

@@ -31,7 +31,7 @@ export class CreateEventComponent implements OnInit {
   private token: any;
   unaffiliated: boolean;
   attachmentList: any;
-
+  maxDate: string;
   imageToShow: any;
 
   selectedF: File = null;
@@ -41,6 +41,10 @@ export class CreateEventComponent implements OnInit {
 
   constructor(private auth: AuthService, private uService: UserService, private http: HttpClient, private eService: EventService) {
     this.currentDate = new Date().toISOString().split('T')[0];
+    let date = new Date();
+    date.setFullYear(date.getFullYear()+2);
+    console.log(date);
+    this.maxDate = date.toISOString().split('T')[0];
   }
 
   ngOnInit() {
@@ -51,7 +55,7 @@ export class CreateEventComponent implements OnInit {
     this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
       this.currentUser = us;
       this.event.userId = this.currentUser.userId;
-      this.event.isApproved = "p";
+      this.event.isApproved = "P";
     });
   }
   onFileChanged(imageInput: any) {

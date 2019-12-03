@@ -23,28 +23,28 @@
       <div class="form-group row">
         <label class="col-3 col-form-label">Event Title</label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="event.event_title" class="form-control" id="event_title" name="event_title">
+          <input type="text" [(ngModel)]="event.event_title" class="form-control" id="event_title" name="event_title" maxlength="100">
 
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label">Venue Name</label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="event.venue_name" class="form-control" id="venue_name" name="venue_name">
+          <input type="text" [(ngModel)]="event.venue_name" class="form-control" id="venue_name" name="venue_name" maxlength="100">
 
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label">Street Name</label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="event.street_name" class="form-control" id="street_name" name="street_name">
+          <input type="text" [(ngModel)]="event.street_name" class="form-control" id="street_name" name="street_name" maxlength="80">
 
         </div>
       </div>
       <div class="form-group row">
         <label class="col-3 col-form-label">City</label>
         <div class="col-9">
-          <input type="text" [(ngModel)]="event.city" class="form-control" id="city" name="city">
+          <input type="text" [(ngModel)]="event.city" class="form-control" id="city" name="city" maxlength="30">
 
         </div>
       </div>
@@ -73,7 +73,7 @@
         <label class="col-3 col-form-label">Postal Code</label>
         <div class="col-9">
           <input type="text" [(ngModel)]="event.postal_code" class="form-control" id="postal_code" name="postal_code"
-            maxlength="6">
+            maxlength="7">
 
         </div>
       </div>
@@ -82,7 +82,7 @@
         <div class="col-9" style="display:inline-flex">
 
           <input type="date" [(ngModel)]="event.date_from" class="form-control" id="date_from" name="date_from"
-            min="{{currentDate}}">
+            min="{{currentDate}}" max={{maxDate}}>
           <!-- <p>&nbsp;&nbsp;-&nbsp;&nbsp;</p>
           <input type="date" [(ngModel)]="event.date_to" class="form-control" id="date_to" name="date_to">-->
         </div>
@@ -112,7 +112,7 @@
         <label class="col-3 col-form-label">Attendee Limit</label>
         <div class="col-9">
           <input type="number" [(ngModel)]="event.attendee_limit" class="form-control" id="attendee_limit"
-            name="attendee_limit" placeholder="Put 0 to indicate no attendee limit" maxlength="5">
+            name="attendee_limit" placeholder="Put 0 to indicate no attendee limit" min="0" maxlength="5">
 
         </div>
       </div>
@@ -120,7 +120,7 @@
         <label class="col-3 col-form-label">Event Description</label>
         <div class="col-9">
           <textarea [(ngModel)]="event.event_description" class="form-control" id="event_description"
-            name="event_description" cols="40" rows="5"></textarea>
+            name="event_description" cols="40" rows="5" maxlength="255"></textarea>
 
         </div>
       </div>
