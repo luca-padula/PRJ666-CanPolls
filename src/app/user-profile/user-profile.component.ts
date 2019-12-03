@@ -40,12 +40,11 @@ export class UserProfileComponent implements OnInit {
 
   notifSuccess: boolean = false;
   notifsSuccessMessage: String;
-
+ 
 
   constructor(private auth: AuthService, private uService: UserService, private eService: EventService, private router: Router){
 
-    this.token = this.auth.readToken();
-
+    this.token = this.auth.readToken(); 
    }
   ngOnInit() {
     this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((us) => {
