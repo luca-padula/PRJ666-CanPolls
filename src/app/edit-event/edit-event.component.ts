@@ -30,11 +30,11 @@ export class EditEventComponent implements OnInit {
   loading: boolean = true;
   eventId: number;
   event: Event = new Event();
-  location: Location;
-  registrations: EventRegistrationWithUser[];
-  filteredRegistrations: EventRegistrationWithUser[];
+  location: Location = new Location();
+  registrations: EventRegistrationWithUser[] = [];
+  filteredRegistrations: EventRegistrationWithUser[] = [];
   registeredCount: number;
-  selectedRegistration: EventRegistrationWithUser;
+  selectedRegistration: EventRegistrationWithUser = new EventRegistrationWithUser();
   paramSubscription: any;
   getEventSubscription: any;
   updateEventSubscription: any;
@@ -42,7 +42,7 @@ export class EditEventComponent implements OnInit {
   updateLocationSubscription: any;
   getRegistrationsSubscription: any;
   removeUserSubscription: any;
-  validationErrors: ValidationError[];
+  validationErrors: ValidationError[] = [];
   successMessage: string;
   warning: string;
   removeUserSuccess: string;
@@ -160,7 +160,9 @@ export class EditEventComponent implements OnInit {
     .subscribe( result => {
     console.log("Result: "+result)
     });
-    this.event.photo = this.fullImageName;
+    if (this.fullImageName) {
+      this.event.photo = this.fullImageName;
+    }
     this.updateEventSubscription = this.eventService.updateEventById(this.eventId, this.event).subscribe((success) => {
       this.successMessage = success.message;
       setTimeout(() => this.successMessage = null, 4000);
