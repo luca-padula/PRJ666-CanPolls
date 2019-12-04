@@ -69,7 +69,8 @@ div.d-md-none button {
 div.d-md-none #collapseFilters {
     margin-top: 15px;
 }
-table {
+.table-responsive {
+    max-height: 500px;
     overflow-y: scroll;
 }
 .sidebar-sticky h4 {

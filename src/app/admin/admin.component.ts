@@ -144,13 +144,15 @@ export class AdminComponent implements OnInit {
           eventStatusString = "Approved";
         else   if(eve.status.toString() == "D")
         eventStatusString = "Declined";
+        else   if(eve.status.toString() == "C")
+        eventStatusString = "Cancelled";
         else 
         eventStatusString = "In Progress";
         this.errorMessages = "Event "+eventStatusString+"." + ((eve.status.toString() == "P") ? "": " An email has been sent to the user.");
        
         setTimeout(()=>{
           this.isSuccessful = false;
-        },4500);
+        },5000);
       }
       else
       {
@@ -158,7 +160,7 @@ export class AdminComponent implements OnInit {
         this.errorMessages = "You cannot alter other parties events!!";
         setTimeout(()=>{
           this.isUnSuccessful = false;
-        },4500);
+        },5000);
       }
   }
 

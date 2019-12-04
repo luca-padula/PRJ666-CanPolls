@@ -158,7 +158,12 @@
             <td (click)="routeEvent(event.event_id)" style="text-decoration: underline;" class="link">
               {{event.event_title}}</td>
             <td>{{event.event_description}}</td>
-            <td>{{(event.isApproved) ? "Approved" : "In Progress/Declined"}}</td>
+            <td>
+              <span *ngIf="event.status == 'A'">Approved</span>
+              <span *ngIf="event.status == 'P'">Pending</span>
+              <span *ngIf="event.status == 'D'">Declined</span>
+              <span *ngIf="event.status == 'C'">Cancelled</span>
+            </td>
             <td>{{event.date_from | date: 'longDate'}}</td>
           </tr>
         </tbody>
