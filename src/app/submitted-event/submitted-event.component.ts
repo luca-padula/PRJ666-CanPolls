@@ -198,7 +198,8 @@ export class SubmittedEventComponent implements OnInit {
             this.eventRegistrationCount = result;
             let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from);
             this.userCanEdit = this.token.userId == this.currentEvent.UserUserId
-              && this.currentTime < registrationDeadline;
+              && this.currentTime < registrationDeadline
+              && this.currentEvent.status != 'C';
             this.userCanCancel = this.registration && this.registration.status == 'registered'
               && this.currentTime < registrationDeadline;
             registrationDeadline.setHours(registrationDeadline.getHours() - 12);
