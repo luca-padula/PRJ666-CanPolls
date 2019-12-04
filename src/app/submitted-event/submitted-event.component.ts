@@ -259,15 +259,15 @@ export class SubmittedEventComponent implements OnInit {
     retrieveImage()
   {
     var getExt = this.currentEvent.photo;
-    getExt = getExt.substring(getExt.lastIndexOf('.'));
-    var fullImgName = this.eventId+"Event"+this.currentEvent.UserUserId+""+getExt;
-    console.log("Retrieve : "+fullImgName);
-    this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
+    console.log("Retrieve : "+getExt);
+    this.http.get(environment.apiUrl + "/api/getimage/"+getExt,{responseType: 'blob'})
     .subscribe( result => {
        this.createImageFromBlob(result);
+    },
+    (err)=>{
+      console.log(err);
     });
   }
-  
 //retrieve uses this function
 createImageFromBlob(image: Blob) {
   let reader = new FileReader();
