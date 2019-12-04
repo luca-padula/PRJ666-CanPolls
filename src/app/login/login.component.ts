@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
   public feedback: Feedback[];
   attendedEvents: any[];
   public event: Event;
-  description: string;
-  rating:number;
+  description: string = "";
+  rating:number = 0;
   currentDate = new Date();
   token: any;
   constructor(
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
               if(this.feedback.length == 0){
                 let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
                   if(endDate < this.currentDate){
-                      this.openDialog(this.event.event_id, this.user.userId);
+                      this.openDialog(this.event.event_id, this.token.userId);
                   }
               }
               else{
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
                   console.log("Not give feedback yet!");
                   let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
                   if(endDate < this.currentDate){
-                      this.openDialog(this.event.event_id, this.user.userId);
+                      this.openDialog(this.event.event_id, this.token.userId);
                   }
                 }
               }

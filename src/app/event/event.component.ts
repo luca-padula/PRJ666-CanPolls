@@ -79,12 +79,14 @@ export class EventComponent implements OnInit {
   retrieveImage()
   {
     var getExt = this.selectedEvent.photo;
-    getExt = getExt.substring(getExt.lastIndexOf('.'));
-    var fullImgName = this.selectedEvent.event_id+"Event"+this.selectedEvent.UserUserId+""+getExt;
-    console.log("Retrieve : "+fullImgName);
-    this.http.get(environment.apiUrl + "/api/getimage/"+fullImgName,{responseType: 'blob'})
+    console.log("Retrieve : "+getExt);
+    this.http.get(environment.apiUrl + "/api/getimage/"+getExt,{responseType: 'blob'})
     .subscribe( result => {
        this.createImageFromBlob(result);
+    },
+    (err)=>{
+      console.log(err);
+      
     });
   }
   
@@ -93,7 +95,6 @@ createImageFromBlob(image: Blob) {
   let reader = new FileReader();
   reader.addEventListener("load", () => {
      this.imageToShow = reader.result;
-    // console.log("imagetoshow: "+this.imageToShow);
   }, false);
 
   if (image) {

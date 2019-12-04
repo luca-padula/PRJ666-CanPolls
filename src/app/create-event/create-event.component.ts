@@ -76,6 +76,8 @@ export class CreateEventComponent implements OnInit {
   onImageAdd(event) {
 
     const file: File = <File>event.target.files[0];
+    console.log(file);
+    if(file){
     this.sfile = file;
     const reader = new FileReader();
 
@@ -83,7 +85,7 @@ export class CreateEventComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
     });
     reader.readAsDataURL(file);
-
+  
     this.selectedF = <File>event.target.files[0];
     var fileName = this.selectedF.name;
     fileName = fileName.substring(fileName.lastIndexOf('.'));
@@ -91,7 +93,10 @@ export class CreateEventComponent implements OnInit {
     //console.log("fileExt: "+fileName);
     //console.log("FinalName: "+"Event"+this.currentUser.userId+fileName);
     this.fd.append('file', this.selectedF, this.fullImageName);
-
+    }
+    else{
+      console.log("image is empty");
+    }
   }
 
   onSubmit(f: NgForm): void {
@@ -104,8 +109,7 @@ export class CreateEventComponent implements OnInit {
         .subscribe(result => {
           console.log(result)
         });
-
-      this.event.photo = this.fullImageName;
+        this.event.photo= this.fullImageName;
       this.auth.createEvent(this.event).subscribe((success) => {
         console.log(this.event.photo);
         this.warning = null;

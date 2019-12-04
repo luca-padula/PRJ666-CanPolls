@@ -99,7 +99,7 @@
       <div class="form-group row">
         <label class="image-upload-container btn btn-bwm">
           <span>Select Image</span>
-          <input type="file" name="file" id="file" (change)="onImageAdd($event)">
+          <input type="file" accept=".jpg,.jpeg,.png" name="file" id="file" (change)="onImageAdd($event)">
         </label>
 
         <div *ngIf="selectedFile" class="img-preview-container">
