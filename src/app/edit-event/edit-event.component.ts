@@ -47,6 +47,9 @@ export class EditEventComponent implements OnInit {
   warning: string;
   removeUserSuccess: string;
   removeUserWarning: string;
+  cancelReason: string;
+  cancelEventSuccess: string;
+  cancelEventWarning: string;
 
   userFilters = [
     {key: 'partyAffiliation', value: 'Unaffiliated', filtering: false},
@@ -90,8 +93,8 @@ export class EditEventComponent implements OnInit {
     this.getEventSubscription = this.eventService.getEventById(this.eventId).subscribe((result) => {
       let now = new Date();
       let eventStartTime = new Date(result.date_from + ' ' + result.time_from);
-      this.userCanEdit = (this.token.userId == result.UserUserId && now < eventStartTime && result.status != 'C');
       this.event = result;
+      this.userCanEdit = (this.token.userId == this.event.UserUserId && now < eventStartTime && this.event.status != 'C');
       this.loading = false;
     }, (err) => {
       this.loading = false;
@@ -189,6 +192,31 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  onCancelClick(): void {
+    this.cancelReason = '';
+    this.cancelEventWarning = null;
+    $('#cancelEventModal').modal();
+  }
+
+  onCancelSubmit(f: NgForm): void {
+    this.cancelEventWarning = null;
+    this.cancelReason = this.cancelReason.trim();
+    let validInput: boolean = !this.cancelReason.match(/[^a-zA-Z\d.,' ]/) && !this.cancelReason.match(/[ ]{2,}/);
+    if (validInput) {
+      this.eventService.cancelEvent(this.eventId, this.cancelReason).subscribe((success) => {
+        this.event.status = 'C';
+        this.cancelEventSuccess = success.message;
+        this.userCanEdit = false;
+      }, (err) => {
+        console.log('Unable to remove user', err);
+        this.cancelEventWarning = err.error.message;
+      });
+    }
+    else {
+      this.cancelEventWarning = 'Invalid input entered for cancellation reason';
+    }
+  }
+
   onSelectForRemoval(reg: EventRegistrationWithUser): void {
     this.selectedRegistration = reg;
     $('#removeUserModal').modal();
@@ -202,7 +230,6 @@ export class EditEventComponent implements OnInit {
         this.registrations[idx] = this.selectedRegistration;
         this.applyFilters();
         this.removeUserSuccess = success.message;
-        setTimeout(() => this.removeUserSuccess = null, 4000);
       }, (err) => {
         console.log('Unable to remove user', err);
         this.removeUserWarning = err.error.message;
