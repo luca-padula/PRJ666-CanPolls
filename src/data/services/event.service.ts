@@ -57,6 +57,10 @@ export class EventService {
     return this.http.delete<any>(environment.apiUrl + '/api/event/' + eventId + '/user/' + userId);
   }
 
+  cancelEvent(eventId: number, reason: string): Observable<any> {
+    return this.http.put<any>(environment.apiUrl + '/api/event/' + eventId + '/cancel', {reason});
+  }
+
   cancelRegistration(eventId: number, userId: number): Observable<any> {
     return this.http.delete<any>(environment.apiUrl + '/api/event/' + eventId + '/cancelRegistration/' + userId)
   }

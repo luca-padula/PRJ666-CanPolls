@@ -90,7 +90,7 @@ export class EditEventComponent implements OnInit {
     this.getEventSubscription = this.eventService.getEventById(this.eventId).subscribe((result) => {
       let now = new Date();
       let eventStartTime = new Date(result.date_from + ' ' + result.time_from);
-      this.userCanEdit = (this.token.userId == result.UserUserId && now < eventStartTime);
+      this.userCanEdit = (this.token.userId == result.UserUserId && now < eventStartTime && result.status != 'C');
       this.event = result;
       this.loading = false;
     }, (err) => {
