@@ -128,7 +128,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   clickMethod() {
-    if(confirm("Are you sure you want to delete your profile?")) {
+    if(confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       this.uService.deleteUser(this.token).subscribe( () =>
         {
           this.auth.logout();
