@@ -120,7 +120,7 @@
   <div class="l-Wrapper u-keyline">
       <div class="l-Footer">
         <div  class="l-Footer-col" >
-          <div *ngIf="currentEvent.status == 'P' || (currentEvent.status == 'D' &&  !timeP && isAd)" class="form-group row">
+          <div *ngIf="(currentEvent.status == 'P' || currentEvent.status == 'D') && !timeP && isAd" class="form-group row">
               <input type="button" [(ngModel)]="currentEvent.status" value="Approve" (click)="approve(true)" data-toggle="modal" data-target="#approveModal">
               <input type="button" [(ngModel)]="currentEvent.status" value="Decline" (click)="approve(false)" data-toggle="modal" data-target="#approveModal">  
           </div>

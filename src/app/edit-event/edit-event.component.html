@@ -86,7 +86,7 @@
           <label class="col-3 col-form-label">Attendee Limit</label>
           <div class="col-9">
             <input type="number" min="0" [(ngModel)]="event.attendee_limit" class="form-control" id="attendee_limit"
-              name="attendee_limit" placeholder="put 0 for unlimited attendee" maxlength="5">
+              name="attendee_limit" placeholder="put 0 for unlimited attendee, maximum 99,999" max="99999">
   
           </div>
         </div>
