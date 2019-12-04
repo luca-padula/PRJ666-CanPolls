@@ -7,5 +7,5 @@ export class EventRegistrationWithUser {
     updatedAt: string;
     EventEventId: string;
     UserUserId: string;
-    User: User;
+    User: User = new User();
 }
