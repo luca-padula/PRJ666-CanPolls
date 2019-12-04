@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
                   console.log("Not give feedback yet!");
                   let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
                   if(endDate < this.currentDate){
-                      this.openDialog(this.event.event_id, this.user.userId);
+                      this.openDialog(this.event.event_id, this.token.userId);
                   }
                 }
               }

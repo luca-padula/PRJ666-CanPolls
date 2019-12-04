@@ -171,16 +171,20 @@ export class SubmittedEventComponent implements OnInit {
           this.isExpired = true;
           this.feedbackSubscription = this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
             this.feedbacks = data;
-          }); 
+            console.log(this.feedbacks);
+
             if(this.feedbacks.length>0){
-            for(var i = 0; i<this.feedbacks.length; i++){
-              console.log(this.feedbacks[i].User.userId);
-              if(this.feedbacks[i].User.userId == this.token.userId){
-                this.givenFeedback = true;
+              for(var i = 0; i<this.feedbacks.length; i++){
+                console.log(this.feedbacks[i].User.userId);
+                if(this.feedbacks[i].User.userId == this.token.userId){
+                  this.givenFeedback = true;
+                }
               }
-            }
-            console.log("give Feedback: " +this.givenFeedback);
-            }
+              console.log("give Feedback: " +this.givenFeedback);
+              }
+          }); 
+          
+            
           
       }
     }
