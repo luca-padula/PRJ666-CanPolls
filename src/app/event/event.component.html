@@ -29,13 +29,12 @@
                 &nbsp;Include Expired Events
               </label>
             </div>   
-
           <div class="col-md-12">
               
               <div class="list">
                   <pagination-controls (pageChange)="p = $event"></pagination-controls>
                   <ul class="left">
-                  <li [ngClass]="event.user.partyAffiliation" routerLinkActive="active"
+                  <li [ngClass]="event.User.partyAffiliation" routerLinkActive="active"
                       *ngFor="let event of filteredEvents | paginate: { itemsPerPage: 10, currentPage: p }"
                       (click)="showDetail(event)">
                   <div class="event-browsing">
@@ -43,7 +42,6 @@
                     <p>{{event.event_title}}</p>
                     <i>{{event.date_from | date:'longDate'}}</i>
                     <i style="text-align: right;"> {{event.time_from}} - {{event.time_to}}</i>
-                   <!--   <i> {{event.date_from | date:'shortDate'}}-{{event.date_to | date:'shortDate'}}</i>-->
                    <p>Party Association: {{event.User.partyAffiliation}}</p>
                     <p>Venue: {{event.Location.venue_name}}, {{event.Location.city}}, {{event.Location.province}} - {{event.Location.postal_code}}</p>
                    <p *ngIf="eventIsExpired(event)" style="text-align:right;color:red">[Expired]</p>
@@ -57,7 +55,7 @@
             
                <ul class="right" *ngIf="selectedEvent">
                   
-                  <li [ngClass]="event.user.partyAffiliation" [ngStyle]= "{'position':'fixed'}">
+                  <li [ngClass]="selectedEvent.User.partyAffiliation" [ngStyle]="{'position':'fixed'}">
                     <div>
                       <div class="image">
                         <span>
