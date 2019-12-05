@@ -13,10 +13,12 @@ export class FeedbackComponent implements OnInit {
   constructor(
     private eService: EventService,
     private dialogRef: MatDialogRef<FeedbackComponent>,
-    @Inject(MAT_DIALOG_DATA) public data:Feedback) { }
+    @Inject(MAT_DIALOG_DATA) public data:Feedback) {
+      this.data.feedback_rating=0;
+      this.data.feedback_desc = ""}
 
   ngOnInit() {
-    this.eService.getEventById(this.data.eventEventId).subscribe(data=>{
+    this.eService.getEventById(this.data.EventEventId).subscribe(data=>{
       this.event = data;
     });
   }

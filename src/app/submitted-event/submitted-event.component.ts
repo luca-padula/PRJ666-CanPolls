@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {MatDialog, MatDialogConfig} from '@angular/material';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+
 
 @Component({
   selector: 'app-submitted-event',
@@ -60,8 +60,8 @@ export class SubmittedEventComponent implements OnInit {
   isExpired : boolean = false;
   starList: any[] = new Array(5);
   imageToShow:any;
-  description: string;
-  rating:number;
+  description: string="";
+  rating:number=0;
   public fd : Feedback;
   success:boolean = false;
   att_limit: string;
@@ -116,7 +116,8 @@ export class SubmittedEventComponent implements OnInit {
         else{
           this.isAd = false;
           this.isCreator = false;
-          this.successStatus = false;
+          //this.successStatus = false;
+          this.router.navigate(['/notAvailable']);
         }
       }
       else if(this.currentEvent.status == "D"){
@@ -152,6 +153,8 @@ export class SubmittedEventComponent implements OnInit {
       else{
         this.isCreator = true;
       }
+    }else{
+      this.router.navigate(['/notAvailable']);
     }
       }
       else{
@@ -298,6 +301,7 @@ openDialog(){
     this.auth.createFeedback(this.fd).subscribe(success=>{
         this.success = true;
         console.log("feedback is saved");
+        window.location.reload();
     },(err) => {
       console.log(err);
     });

@@ -7,7 +7,9 @@ import { User } from 'src/data/Model/User';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {Event} from 'src/data/Model/Event';
+import { FeedbackDisplay } from 'src/data/Model/FeedbackDisplay';
 import { Feedback } from 'src/data/Model/Feedback';
+import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,7 @@ import { Feedback } from 'src/data/Model/Feedback';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  public feedbackSubscription: any;
   public fd : Feedback;
   public user: User;
   public warning: string;
@@ -23,13 +26,15 @@ export class LoginComponent implements OnInit {
   public unverifiedUser: string;
   public rejectionCount: number = 0;
   public success: boolean = false;
-  public feedback: Feedback[];
+  public feedback: FeedbackDisplay[];
+  public feedbacks: Feedback[];
   attendedEvents: any[];
   public event: Event;
   description: string = "";
-  rating:number = 0;
+  rating: number = 0;
   currentDate = new Date();
   token: any;
+  gfb : boolean = false;
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -48,14 +53,51 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
       this.token = this.auth.readToken();
+
       this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
         console.log(data);
         this.attendedEvents = data;
-        if(this.attendedEvents.length > 0){
+        this.eService.getFeedbacksByUserId(this.token.userId).subscribe((data2)=>{
+          this.feedbacks = data2;
+          console.log(this.attendedEvents);
+          console.log(this.feedbacks);
+          if(this.attendedEvents.length>0 && this.feedbacks.length==0){
+            for(var i = 0; i < this.attendedEvents.length; i++){
+              console.log(this.attendedEvents[i].Event.event_id);
+              this.event = this.attendedEvents[i].Event;
+              let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.event.event_id, this.token.userId);
+                  }
+            }
+          }
+          else if(this.attendedEvents.length>0 && this.feedbacks.length>0){
+            for(var i = 0; i < this.attendedEvents.length; i++){
+              console.log(this.attendedEvents[i].Event.event_id);
+              this.event = this.attendedEvents[i].Event;
+              for(var j = 0; j<this.feedbacks.length; j++){
+                console.log(this.feedbacks[j].EventEventId);
+                if(this.event.event_id == this.feedbacks[j].EventEventId){
+                    console.log("Already give feedback!");
+                    this.gfb = true;
+                }
+              }
+              if(!this.gfb){
+                console.log("Not give feedback yet");
+                let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
+                  if(endDate < this.currentDate){
+                      this.openDialog(this.event.event_id, this.token.userId);
+                  }
+              }
+              this.gfb=false;
+            }
+          }
+        });
+        /*if(this.attendedEvents.length > 0){
           for(var i = 0; i < this.attendedEvents.length; i++){
             console.log(this.attendedEvents[i].Event.event_id);
             this.event = this.attendedEvents[i].Event;
-            this.eService.getFeedbackByEventId(this.event.event_id).subscribe((data1: any)=>{
+            this.feedbackSubscription = this.eService.getFeedbackByEventId(this.event.event_id).subscribe((data1: any)=>{
               this.feedback = data1;
               if(this.feedback.length == 0){
                 let endDate: Date = new Date(this.event.date_from + ' ' + this.event.time_to);
@@ -65,7 +107,8 @@ export class LoginComponent implements OnInit {
               }
               else{
               for(let fd of this.feedback){
-                if(fd.userUserId == this.token.userId){
+                console.log(fd.User.userId);
+                if(fd.User.userId == this.token.userId){
                   console.log("Already give feedback!!");
                 }
                 else{
@@ -80,7 +123,7 @@ export class LoginComponent implements OnInit {
               
             });
           };
-        }
+        }*/
       });
       
     }, (err) => {
@@ -111,18 +154,24 @@ export class LoginComponent implements OnInit {
   openDialog(event_id: number, userId: string){
     let date = new Date();
     const dialogRef = this.dialog.open(FeedbackComponent, {
-      data: {feedback_desc: this.description, feedback_rating: this.rating, eventEventId: event_id, userUserId: userId, feedback_date: date}
+      data: {feedback_desc: this.description, feedback_rating: this.rating, EventEventId: event_id, UserUserId: userId, feedback_date: date}
     });
     dialogRef.afterClosed().subscribe(result =>{
       this.fd = result;
       console.log(this.fd);
       if(this.fd){
       this.auth.createFeedback(this.fd).subscribe(success=>{
+        if(success){
           this.success = true;
           console.log("feedback is saved");
+        }
       });
       }
     })
+  }
+
+  onDestroy(){
+    if(this.feedbackSubscription){this.feedbackSubscription.unsubscribe()};
   }
 
 }

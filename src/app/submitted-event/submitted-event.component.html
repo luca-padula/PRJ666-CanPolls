@@ -122,7 +122,7 @@
         <div  class="l-Footer-col" >
           <div *ngIf="(currentEvent.status == 'P' || currentEvent.status == 'D') && !timeP && isAd" class="form-group row">
               <input type="button" [(ngModel)]="currentEvent.status" value="Approve" (click)="approve(true)" data-toggle="modal" data-target="#approveModal">
-              <input type="button" [(ngModel)]="currentEvent.status" value="Decline" (click)="approve(false)" data-toggle="modal" data-target="#approveModal">  
+              <input *ngIf="currentEvent.status != 'D'"type="button" [(ngModel)]="currentEvent.status" value="Decline" (click)="approve(false)" data-toggle="modal" data-target="#declineModal">  
           </div>
           <div *ngIf="(currentEvent.status == 'A')  && isExpired"  class="list-type1">
             <div *ngIf="!givenFeedback && registration" class="form-group row">
@@ -167,10 +167,7 @@
       </div>
     </div>
   </form>
-  <div *ngIf="!successStatus" class="alert alert-danger text-center">
-      Sorry! Your are not authorized to access this event.
-      Please click here to return <a class="home" routerLink="/" target="_blank">Home</a>
-    </div>
+  
   </body>
 
 
@@ -185,7 +182,27 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>{{message}}</p>
+        <p>Event approved. An email has been sent to the user.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="declineModal" tabindex="-1" role="dialog" aria-labelledby="declineModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="declineModalLabel">Thank You for your time !</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Event declined. An email has been sent to the user.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>

@@ -99,4 +99,7 @@ export class EventService {
   getFeedbackByEventId(eventId: number):Observable<FeedbackDisplay[]>{
     return this.http.get<FeedbackDisplay[]>(environment.apiUrl+'/api/feedback/' + eventId);
   }
+  getFeedbacksByUserId(userId: string) : Observable<Feedback[]>{
+    return this.http.get<Feedback[]>(environment.apiUrl+'/api/feedbacks/' + userId);
+  }
 }

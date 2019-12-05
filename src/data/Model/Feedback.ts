@@ -6,6 +6,6 @@ export class Feedback
     feedback_date: string;
     feedback_desc: String;
     feedback_rating: number;
-    eventEventId: number;
-    userUserId: string;
+    EventEventId: number;
+    UserUserId: string;
 }
