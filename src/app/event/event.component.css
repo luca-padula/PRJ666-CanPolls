@@ -40,7 +40,7 @@ ul.left {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margins */
     float:left;
-    width: 500px;
+    width: 45%;
   }
 ul.right
 {
@@ -48,15 +48,9 @@ ul.right
   padding-top: 10rem; /* Remove padding */
   margin: 0; /* Remove margins */
   float:right;
-  width: 500px;
+  width: 50%;
 }
-  
-  ul li.liclass {
-    border: 1px solid #ddd; /* Add a thin border to each list item */
-    margin-top: 10px; /* Prevent double borders */
-    background-color: #f6f6f6; /* Add a grey background color */
-    padding: 12px; /* Add some padding */
-  }
+
   div.gallery {
     margin-top: 45px;
     border: 1px solid #ccc;
@@ -93,4 +87,44 @@ ul li:hover{
 }
 a.details{
   margin-top: 75px;
+}
+
+  
+.Conservative
+{
+  border: 1px solid blue; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+  
+}
+.Liberal
+{
+  border: 1px solid red; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+    
+}
+.NDP
+{
+  border: 1px solid orange; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+    
+}
+.Bloc.Quebecois
+{
+  border: 1px solid teal; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+}
+.Green
+{
+  border: 1px solid darkgreen; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
 }

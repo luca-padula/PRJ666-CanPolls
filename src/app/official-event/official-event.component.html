@@ -24,7 +24,7 @@
                       <div class="form-group col-md-12 row ">
                           <p class="col-md-6">Search By Province</p>
                           <select  class="form-control col-md-6" [(ngModel)]="selectedProv" >
-                           
+                           <option value="">All Provinces</option>
                             <option *ngFor="let p of provinces" [ngValue]="p.value">
                               {{p.name}}
                             </option>
@@ -32,7 +32,7 @@
                       
                         <p class="col-md-6">Search By Party</p>
                         <select  class="form-control col-md-6" [(ngModel)]="searchParty" >
-                          
+                          <option value="">All Parties</option>
                           <option *ngFor="let p of party" [ngValue]="p.value">
                             {{p.name}}
                           </option>
@@ -42,11 +42,11 @@
                   <div class="list">
                     <pagination-controls (pageChange)="p = $event"></pagination-controls>
                     <ul class="left">
-                      <li class= "liclass" routerLinkActive="active"
-                        *ngFor="let ofEvent of ofEvent | provinceFilter:selectedProv |partyFilter:searchParty | paginate: { itemsPerPage: 4, currentPage: p }"
+                      <li [ngClass]="ofEvent.party"routerLinkActive="active"
+                        *ngFor="let ofEvent of ofEvent | provinceFilter:selectedProv |partyFilter:searchParty | paginate: { itemsPerPage: 10, currentPage: p }"
                         (click)="showDetail(ofEvent)">
-                        <div class="ofEvent-browsing">
-                          <div class="master">
+                        <div >
+                          <div >
                             <p style="font-size:1rem">{{ofEvent.title}}-{{ofEvent.party}}</p>
                             <i> {{ofEvent.date}}</i>
                           </div>
@@ -56,8 +56,8 @@
             
                   </div>
                   <ul class="right" *ngIf="selectedEvent">
-                    <li class= "liclass">
-                      <div>
+                    <li [ngClass]= "selectedEvent.party" [ngStyle]= "{'position':'fixed'}">
+                      <div >
                         <p style="font-size:1rem"><b>Title: </b>{{selectedEvent.title}}</p>
                         <i> <b>Date: </b>{{selectedEvent.date}}</i>
                         <p *ngIf="selectedEvent.location"><b>Locations: </b>{{selectedEvent.location}}</p>
