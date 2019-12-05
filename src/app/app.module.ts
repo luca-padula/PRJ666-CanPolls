@@ -32,7 +32,7 @@ import { AdminComponent } from './admin/admin.component';
 import { FeedbackComponent } from './feedback/feedback.component'
 import {MatDialogModule, MatButtonModule,MatFormFieldModule, MatInputModule,} from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { DatePipe } from '@angular/common';
+import { DatePipe,NgClass,NgStyle } from '@angular/common';
 
 // retrieves the Json Web Token from local storage
 export function tokenGetter() {
@@ -96,7 +96,9 @@ export function tokenGetter() {
       multi: true
 
     },
-    DatePipe
+    DatePipe,
+    NgClass,
+    NgStyle
   ],
   bootstrap: [AppComponent],
   entryComponents: [

@@ -35,8 +35,8 @@
               <div class="list">
                   <pagination-controls (pageChange)="p = $event"></pagination-controls>
                   <ul class="left">
-                  <li class="liclass" routerLinkActive="active"
-                      *ngFor="let event of filteredEvents | paginate: { itemsPerPage: 4, currentPage: p }"
+                  <li [ngClass]="event.user.partyAffiliation" routerLinkActive="active"
+                      *ngFor="let event of filteredEvents | paginate: { itemsPerPage: 10, currentPage: p }"
                       (click)="showDetail(event)">
                   <div class="event-browsing">
                   <div class="master">
@@ -57,7 +57,7 @@
             
                <ul class="right" *ngIf="selectedEvent">
                   
-                  <li class="liclass">
+                  <li [ngClass]="event.user.partyAffiliation" [ngStyle]= "{'position':'fixed'}">
                     <div>
                       <div class="image">
                         <span>

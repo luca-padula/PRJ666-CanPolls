@@ -48,15 +48,10 @@ ul.right
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
   float:right;
+  
   width: 500px;
 }
   
-  ul li.liclass {
-    border: 1px solid #ddd; /* Add a thin border to each list item */
-    margin-top: 10px; /* Prevent double borders */
-    background-color: #f6f6f6; /* Add a grey background color */
-    padding: 12px; /* Add some padding */
-  }
   div.gallery {
     margin-top: 45px;
     border: 1px solid #ccc;
@@ -91,4 +86,43 @@ ul li:hover{
 a.eventlink{
   margin-top: 75px;
 }
+.Conservative
+{
+  border: 1px solid blue; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+  
+}
+.Liberal
+{
+  border: 1px solid red; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+    
+}
+.NDP
+{
+  border: 1px solid orange; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+    
+}
+.CAQ
+{
+  border: 1px solid teal; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+}
+.Saskatchewan
+{
+  border: 1px solid darkgreen; /* Add a thin border to each list item */
+  margin-top: 10px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Add a grey background color */
+  padding: 12px; /* Add some padding */
+}
+
 
