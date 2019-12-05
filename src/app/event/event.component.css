@@ -40,7 +40,7 @@ ul.left {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margins */
     float:left;
-    width: 500px;
+    width: 45%;
   }
 ul.right
 {
@@ -48,7 +48,7 @@ ul.right
   padding-top: 10rem; /* Remove padding */
   margin: 0; /* Remove margins */
   float:right;
-  width: 500px;
+  width: 50%;
 }
 
   div.gallery {

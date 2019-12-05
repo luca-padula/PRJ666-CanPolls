@@ -40,7 +40,7 @@ ul.left {
     padding: 0; /* Remove padding */
     margin: 0; /* Remove margins */
     float:left;
-    width: 500px;
+    width: 45%;
   }
 ul.right
 {
@@ -49,7 +49,7 @@ ul.right
   margin: 0; /* Remove margins */
   float:right;
   
-  width: 500px;
+  width: 50%;
 }
   
   div.gallery {
@@ -92,6 +92,7 @@ a.eventlink{
   margin-top: 10px; /* Prevent double borders */
   background-color: #f6f6f6; /* Add a grey background color */
   padding: 12px; /* Add some padding */
+  
   
 }
 .Liberal
