@@ -21,6 +21,7 @@ export class VerifyEmailComponent implements OnInit {
     private auth: AuthService
   ) { }
 
+  // This function verifies the user's account
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params['id'];

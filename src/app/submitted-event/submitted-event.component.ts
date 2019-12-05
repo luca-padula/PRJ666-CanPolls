@@ -188,6 +188,7 @@ export class SubmittedEventComponent implements OnInit {
           
       }
     }
+    // Determine which actions should be available to the user - edit, register, cancel, etc.
       if (this.auth.isAuthenticated()) {
         this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
           this.currentUser=data;
@@ -222,6 +223,7 @@ export class SubmittedEventComponent implements OnInit {
 
   }
  
+  // This function registers the logged in user for the current event
   registerUser(): void {
     this.registerUserSubscription = this.eService.registerUserForEvent(this.eventId, this.token.userId).subscribe((success) => {
       this.registrationSuccess = success.message;
@@ -235,6 +237,7 @@ export class SubmittedEventComponent implements OnInit {
     })
   }
 
+  // This function cancels the logged in user's registration for the current event
   cancelRegistration(): void {
     if (this.userCanCancel) {
       this.cancelRegistrationSubscription = this.eService.cancelRegistration(this.eventId, this.token.userId).subscribe((success) => {
@@ -252,6 +255,7 @@ export class SubmittedEventComponent implements OnInit {
     }
   }
 
+  // This function navigates to the edit page for the current event
   routeEventEdit(eId: number): void {
     this.router.navigate(['/event', eId, 'edit']);
   }

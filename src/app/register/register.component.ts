@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
     this.user = new UserToRegister;
   }
 
+  // This function registers a new user with the data entered in the registration form
   onSubmit(f: NgForm): void {
     this.validationErrors = null;
     this.auth.register(this.user).subscribe((success) => {

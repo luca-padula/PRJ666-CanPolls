@@ -114,6 +114,7 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  // This function returns a count of the number of registrations that meet a filter criteria
   getFilterCount(filterKey: string, filtervalue: any, onUser: boolean): number {
     if (onUser) {
       return this.registrations.filter((reg) => reg.User[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
@@ -121,6 +122,7 @@ export class EditEventComponent implements OnInit {
     return this.registrations.filter((reg) => reg[filterKey].toLowerCase() == filtervalue.toLowerCase()).length;
   }
 
+  // This function filters the registrations table with the selected filters
   applyFilters(): void {
     this.filteredRegistrations = this.registrations.filter((reg) => {
       let atLeast1Filter: boolean = false;
@@ -153,6 +155,7 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  // This function updates the event data
   onEventSubmit(f: NgForm): void {
     this.validationErrors = [];
     this.warning = null;
@@ -177,6 +180,7 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  // This function updates the location data
   onLocationSubmit(f: NgForm): void {
     this.validationErrors = [];
     this.warning = null;
@@ -194,12 +198,14 @@ export class EditEventComponent implements OnInit {
     });
   }
 
+  // This function triggers the modal to confirm cancellation of the event
   onCancelClick(): void {
     this.cancelReason = '';
     this.cancelEventWarning = null;
     $('#cancelEventModal').modal();
   }
 
+  // This function cancels the event
   onCancelSubmit(f: NgForm): void {
     this.cancelEventWarning = null;
     this.cancelReason = this.cancelReason.trim();
@@ -219,11 +225,13 @@ export class EditEventComponent implements OnInit {
     }
   }
 
+  // This function triggers the modal to confirm removal of a registered user
   onSelectForRemoval(reg: EventRegistrationWithUser): void {
     this.selectedRegistration = reg;
     $('#removeUserModal').modal();
   }
 
+  // This function takes a user id and removed that user from the event registration
   removeRegisteredUser(userId: number): void {
     if (this.selectedRegistration.status == 'registered') {
       this.removeUserSubscription = this.eventService.removeRegisteredUser(this.eventId, userId).subscribe((success) => {

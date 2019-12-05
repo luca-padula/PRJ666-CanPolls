@@ -25,7 +25,6 @@ export class ResetPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Don't think I need to store subscription in class variable like in WEB422
     this.route.params
       .subscribe((params) => {
         this.id = params['id'];
@@ -35,6 +34,7 @@ export class ResetPasswordComponent implements OnInit {
       });
   }
 
+  // This function resets the user's password with the data entered in the password reset form
   onSubmit(f: NgForm): void {
     this.errorMessage = false;
     this.validationErrors = [];

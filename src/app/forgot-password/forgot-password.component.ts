@@ -17,6 +17,7 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit() {
   }
 
+  // This function sends a password reset email to the email entered in the form
   submitEmail(): void {
     this.successMessage = false;
     this.errorMessage = '';

@@ -12,6 +12,8 @@ export class GuardAuthService implements CanActivate {
     private router: Router
   ) { }
 
+  // This function checks if a user can access a route, it returns true if the user is logged in,
+  // false otherwise
   canActivate(): boolean {
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login']);

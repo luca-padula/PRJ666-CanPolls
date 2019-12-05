@@ -18,15 +18,18 @@ export class AuthService {
     private jwtHelper: JwtHelperService
   ) { }
 
+  // This function returns the access token from local storage
   public getToken(): string {
     return localStorage.getItem('access_token');
   }
 
+  // This function returns the access token decoded from local storage
   public readToken(): any {
     const token = localStorage.getItem('access_token');
     return this.jwtHelper.decodeToken(token);
   }
 
+  // This function checks if the user is logged in
   isAuthenticated(): boolean {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -39,31 +42,39 @@ export class AuthService {
     }
   }
 
+  // This function takes a user object and authenticates the user
   login(user: User): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/login', user);
   }
 
+  // This function takes data from a user registration form and registers the user to the database
   register(user: UserToRegister): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/register', user);
   }
 
+  // This function takes a user object sends the user a new account verification email
   resendVerificationEmail(user: User): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/resendVerificationEmail', user);
   }
 
+  // This function takes a user id and a token for a verification hash and verifies the user's account
   verifyUser(id: string, token: string): Observable<any> {
     let apiUrl: string = environment.apiUrl + '/api/verifyEmail/' + id + '/' + token;
     return this.http.post<any>(apiUrl, {});
   }
 
+  // This functions logs the user out
   logout(): void {
     localStorage.clear();
   }
 
+  // This function takes a user's email and sends that user a password reset email
   sendPasswordResetEmail(email: string): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/forgotPassword', { email: email });
   }
 
+  // This function takes a user id, a password reset token, and new password data
+  // and resets the user's password
   resetPassword(id: string, token: string, password: string, password2: string): Observable<any> {
     let body = {
       password: password,

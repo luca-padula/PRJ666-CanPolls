@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
     this.user = new User;
   }
 
+  // This function logs in a user with the credentials entered in the login form
   onSubmit(f: NgForm): void {
     this.userNotVerified = false;
     this.auth.login(this.user).subscribe((success) => {
@@ -95,6 +96,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // This function takes a user object and sends the user a new account verification email
   resendVerificationEmail(p_user: User): void {
     this.userNotVerified = false
     p_user.userName = this.unverifiedUser;
