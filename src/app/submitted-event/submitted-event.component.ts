@@ -259,9 +259,11 @@ export class SubmittedEventComponent implements OnInit {
   }
 
   // This function navigates to the edit page for the current event
+  // ***Modified*** - from web422 angular assignment
   routeEventEdit(eId: number): void {
     this.router.navigate(['/event', eId, 'edit']);
   }
+  // ***End-Modified***
 
     //RETRIEVE FROM API
     retrieveImage()

@@ -4,6 +4,7 @@
     Success: User {{user.userName}} has been registered!<br />
     Check your email for the link to verify your account before signing in.
   </div>
+  <!-- ***Modified*** - from bootstrap documentation -->
   <form *ngIf="!successMessage" #f="ngForm" (ngSubmit)="onSubmit(f)">
       <div *ngIf="warning" class="alert alert-danger">
           {{warning}}
@@ -80,4 +81,5 @@
       <button class="btn btn-dark btn-lg" type="submit">Submit</button>
     </div>
   </form>
+  <!-- ***End-Modified*** -->
 </div>

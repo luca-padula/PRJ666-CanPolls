@@ -4,6 +4,7 @@
   </div>
 </div>
 
+<!-- ***Modified*** - from bootstrap documentation -->
 <div class="modal fade" id="cancelEventModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -39,11 +40,13 @@
     </div>
   </div>
 </div>
+<!-- ***End-Modified -->
 
 <section *ngIf="userCanEdit">
   <div *ngIf="userCanEdit" class="container">
     <h2 class="text-left">Edit Event - {{event.event_title}}</h2>
     <button class="btn btn-danger btn-lg" (click)="onCancelClick()">Cancel Event</button>
+    <!-- ***Modified*** - from bootstrap documentation -->
     <form #eventForm="ngForm" (ngSubmit)="onEventSubmit(eventForm)">
       <p class="lead text-left">
         Update your Event Details
@@ -95,7 +98,7 @@
           <div class="col-9">
             <textarea [(ngModel)]="event.event_description" maxlength="255" class="form-control" id="event_description"
               name="event_description" cols="40" rows="5"></textarea>
-  
+  <!-- ***End-Modified -->
           </div>
         </div>
       </div>
@@ -113,6 +116,7 @@
       </div>
     </form>
   
+    <!-- ***Modified*** - from bootstrap documentation -->
     <form #locationForm="ngForm" (ngSubmit)="onLocationSubmit(locationForm)">
       <p class="lead text-left">
         Update your Location Details
@@ -165,6 +169,7 @@
         <button class="btn btn-dark btn-lg" type="submit">Update Location</button>
       </div>
     </form>
+    <!-- ***End-Modified -->
   </div>
 
   <div class="container-fluid">
@@ -192,6 +197,7 @@
       </div>
     </div>
 
+    <!-- ***Modified*** - from bootstrap documentation -->
     <div class="row">
       <nav class="col-md-3 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
@@ -212,6 +218,7 @@
           </div>
         </div>
       </nav>
+      <!-- ***End-Modified -->
   
       <div class="table-responsive col-md-9">
         <table class="table table-striped text-center">
@@ -237,6 +244,7 @@
   </div>
 </section>
 
+<!-- ***Modified*** - from bootstrap documentation -->
 <div class="modal fade" id="removeUserModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -262,3 +270,4 @@
     </div>
   </div>
 </div>
+<!-- ***End-Modified -->

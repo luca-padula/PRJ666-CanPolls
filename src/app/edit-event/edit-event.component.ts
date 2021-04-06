@@ -126,6 +126,7 @@ export class EditEventComponent implements OnInit {
   applyFilters(): void {
     this.filteredRegistrations = this.registrations.filter((reg) => {
       let atLeast1Filter: boolean = false;
+      // ***Modified*** - from stackoverflow filtering question
       for (let filter of this.userFilters) {
         if (filter.filtering) {
           atLeast1Filter = true;
@@ -138,8 +139,10 @@ export class EditEventComponent implements OnInit {
         return true;
       }
       return false;
+      // ***End-Modified***
     }).filter((reg) => {
       let atLeast1Filter: boolean = false;
+      // ***Modified*** - from stackoverflow filtering question
       for (let filter of this.registrationFilters) {
         if (filter.filtering) {
           atLeast1Filter = true;
@@ -153,6 +156,7 @@ export class EditEventComponent implements OnInit {
       }
       return false;
     });
+    // ***End-Modified***
   }
 
   // This function updates the event data

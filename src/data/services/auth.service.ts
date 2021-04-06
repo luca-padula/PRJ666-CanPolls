@@ -13,6 +13,7 @@ import {EventToCreate} from '../Model/EventToCreate';
 })
 export class AuthService {
 
+  // ***Modified*** - from web422 angular jwt guide
   constructor(
     private http: HttpClient,
     private jwtHelper: JwtHelperService
@@ -46,6 +47,7 @@ export class AuthService {
   login(user: User): Observable<any> {
     return this.http.post<any>(environment.apiUrl + '/api/login', user);
   }
+  // ***End-Modified***
 
   // This function takes data from a user registration form and registers the user to the database
   register(user: UserToRegister): Observable<any> {

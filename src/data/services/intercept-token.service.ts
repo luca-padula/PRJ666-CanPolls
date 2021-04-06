@@ -10,6 +10,7 @@ export class InterceptTokenService implements HttpInterceptor {
 
   constructor(private auth: AuthService) { }
 
+  // ***Modified*** - from web422 angular jwt guide
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let newRequest = request.clone({
       setHeaders: {
@@ -18,4 +19,5 @@ export class InterceptTokenService implements HttpInterceptor {
     });
     return next.handle(newRequest);
   }
+  // ***End-Modified***
 }

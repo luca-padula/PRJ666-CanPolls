@@ -29,7 +29,9 @@ const routes: Routes = [
   { path: 'officialEvent', component: OfficialEventComponent },
   { path: 'forgotPassword', component: ForgotPasswordComponent },
   { path: 'resetPassword/:id/:token', component: ResetPasswordComponent },
+  // ***Modified*** - from web422 angular jwt guide
   { path: 'event/:id/edit', component: EditEventComponent, canActivate: [GuardAuthService] },
+  // ***End-Modified***
   { path: "", redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

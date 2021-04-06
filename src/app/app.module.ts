@@ -35,9 +35,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe,NgClass,NgStyle } from '@angular/common';
 
 // retrieves the Json Web Token from local storage
+// ***Modified*** - from web422 angular jwt guide
 export function tokenGetter() {
   return localStorage.getItem('access_token');
 }
+// ***End-Modified***
 
 
 @NgModule({

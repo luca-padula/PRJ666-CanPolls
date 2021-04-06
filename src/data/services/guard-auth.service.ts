@@ -14,6 +14,7 @@ export class GuardAuthService implements CanActivate {
 
   // This function checks if a user can access a route, it returns true if the user is logged in,
   // false otherwise
+  // ***Modified*** - from web422 angular jwt guide
   canActivate(): boolean {
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['/login']);
@@ -21,4 +22,5 @@ export class GuardAuthService implements CanActivate {
     }
     return true;
   }
+  // ***End-Modified***
 }

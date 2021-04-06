@@ -49,10 +49,12 @@ export class LoginComponent implements OnInit {
   // This function logs in a user with the credentials entered in the login form
   onSubmit(f: NgForm): void {
     this.userNotVerified = false;
+    // ***Modified*** - from web422 angular jwt guide
     this.auth.login(this.user).subscribe((success) => {
       localStorage.setItem('access_token', success.token);
       this.router.navigate(['/home']);
       this.token = this.auth.readToken();
+      // ***End-Modified***      
 
       this.eService.getEventsAttendedByUser(this.token.userId).subscribe(data => {
         console.log(data);
