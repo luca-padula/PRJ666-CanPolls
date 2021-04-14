@@ -7,23 +7,49 @@ import { EventService } from 'src/data/services/event.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { SubmittedEventComponent } from './submitted-event.component';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { EditEventComponent } from '../edit-event/edit-event.component';
+import { MatDialog } from '@angular/material';
+import { Location } from 'src/data/Model/Location';
+import { EventRegistration } from 'src/data/Model/EventRegistration';
 
 describe('SubmittedEventComponent', () => {
   let component: SubmittedEventComponent;
   let fixture: ComponentFixture<SubmittedEventComponent>;
   let authServiceSpy = jasmine.createSpyObj('AuthService', ['readToken', 'isAuthenticated']);
-  let eventServiceSpy = jasmine.createSpyObj('EventService', ['getEventById']);
+  let eventServiceSpy = jasmine.createSpyObj('EventService', ['getEventById', 'getLocationByEventId', 'getRegistration', 'getRegistrationCount']);
+  let activatedRouteStub = {
+    params: of( { id: 1 } )
+  };
+  class MatDialogMock {
+    // When the component calls this.dialog.open(...) we'll return an object
+    // with an afterClosed method that allows to subscribe to the dialog result observable.
+    open() {
+      return {
+        afterClosed: () => of([])
+      };
+    }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SubmittedEventComponent ],
+      declarations: [
+        SubmittedEventComponent,
+        EditEventComponent
+      ],
       imports: [
         FormsModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([
+          { path: 'event/:id/edit', component: EditEventComponent },
+        ])
       ],
       providers: [ 
         { provide: AuthService, useValue: authServiceSpy},
-        { provide: EventService, useValue: eventServiceSpy}
+        { provide: EventService, useValue: eventServiceSpy},
+        { provide: ActivatedRoute, useValue: activatedRouteStub},
+        { provide: MatDialog, useClass: MatDialogMock}
       ]
     })
     .compileComponents();
@@ -38,7 +64,8 @@ describe('SubmittedEventComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('event testing', () => {
+  describe('Rendering an event viewing while logged in as the event owner', () => {
+
     let sampleEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
@@ -53,14 +80,33 @@ describe('SubmittedEventComponent', () => {
       createdAt: 'fjewfh',
       updatedAt: 'fhewgf'
     };
-    it('should render an event', () => {
-      
-      let readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
-      let isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
-      let getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(sampleEvent) )
+    let sampleLocation: Location = {
+      location_id: '1',
+      venue_name: 'Metro Convention Center',
+      street_name: '230 Front Street W',
+      city: 'Toronto',
+      province: 'Ontario',
+      postal_code: 'M4X 5LV',
+      createdAt: 'sample',
+      updatedAt: 'sample',
+      EventEventId: '1'
+    };
+    let readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
+    let isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
+    let getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(sampleEvent) );
+    let getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue( of(sampleLocation) );
+    let getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue( of({}) );
+    let getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue( of(5) );
+
+    it('should show the event and location information', () => {
+            
       fixture.detectChanges();
       const eventTitleTag: HTMLElement = fixture.nativeElement.querySelector('.event-title');
       expect(eventTitleTag.textContent).toBe('A night with benny');
-    })
-  })
+      const locationVenueTag: HTMLElement = fixture.nativeElement.querySelector('.location-venue');
+      expect(locationVenueTag.textContent).toBe('Metro Convention Center');      
+    });
+
+    // TODO: more tests, make sure edit button shows, etc
+  });
 });

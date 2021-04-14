@@ -78,10 +78,12 @@ export class SubmittedEventComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private http: HttpClient
-    ) {   this.token = this.auth.readToken(); }
+    ) {    }
 
   ngOnInit() {
-  
+
+    this.token = this.auth.readToken();
+    console.log('token: ', this.token);
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
