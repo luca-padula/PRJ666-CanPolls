@@ -101,10 +101,16 @@ describe('SubmittedEventComponent', () => {
     it('should show the event and location information', () => {
             
       fixture.detectChanges();
+      console.log('registration: ', component.registration);
+      console.log('count: ', component.eventRegistrationCount);
       const eventTitleTag: HTMLElement = fixture.nativeElement.querySelector('.event-title');
       expect(eventTitleTag.textContent).toBe('A night with benny');
       const locationVenueTag: HTMLElement = fixture.nativeElement.querySelector('.location-venue');
-      expect(locationVenueTag.textContent).toBe('Metro Convention Center');      
+      expect(locationVenueTag.textContent).toBe('Metro Convention Center');
+      expect(component.eventRegistrationCount).toBe(5);
+      // checking if registration object is empty since comparing it to empty
+      // object with toBe or toEqual does not behave as expected
+      expect(component.registration.UserUserId).toBeFalsy();  
     });
 
     // TODO: more tests, make sure edit button shows, etc
