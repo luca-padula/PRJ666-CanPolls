@@ -18,7 +18,10 @@ describe('SubmittedEventComponent', () => {
   let component: SubmittedEventComponent;
   let fixture: ComponentFixture<SubmittedEventComponent>;
   let authServiceSpy = jasmine.createSpyObj('AuthService', ['readToken', 'isAuthenticated']);
-  let eventServiceSpy = jasmine.createSpyObj('EventService', ['getEventById', 'getLocationByEventId', 'getRegistration', 'getRegistrationCount']);
+  let eventServiceSpy = jasmine.createSpyObj('EventService', [
+    'getEventById', 'getLocationByEventId', 'getRegistration', 'getRegistrationCount',
+    'getFeedbackByEventId'
+  ]);
   let activatedRouteStub = {
     params: of( { id: 1 } )
   };
@@ -97,6 +100,7 @@ describe('SubmittedEventComponent', () => {
     let getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue( of(sampleLocation) );
     let getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue( of({}) );
     let getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue( of(5) );
+    let getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue( of([]) );
 
     it('should show the event and location information', () => {
             
@@ -104,9 +108,9 @@ describe('SubmittedEventComponent', () => {
       console.log('registration: ', component.registration);
       console.log('count: ', component.eventRegistrationCount);
       const eventTitleTag: HTMLElement = fixture.nativeElement.querySelector('.event-title');
-      expect(eventTitleTag.textContent).toBe('A night with benny');
+      expect(eventTitleTag.textContent).toBe(sampleEvent.event_title);
       const locationVenueTag: HTMLElement = fixture.nativeElement.querySelector('.location-venue');
-      expect(locationVenueTag.textContent).toBe('Metro Convention Center');
+      expect(locationVenueTag.textContent).toBe(sampleLocation.venue_name);
       expect(component.eventRegistrationCount).toBe(5);
       // checking if registration object is empty since comparing it to empty
       // object with toBe or toEqual does not behave as expected
