@@ -13,6 +13,7 @@ import { EditEventComponent } from '../edit-event/edit-event.component';
 import { MatDialog } from '@angular/material';
 import { Location } from 'src/data/Model/Location';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
+import { EventDateBuilder } from 'src/testing/event-date-builder';
 
 describe('SubmittedEventComponent', () => {
   let component: SubmittedEventComponent;
@@ -34,6 +35,7 @@ describe('SubmittedEventComponent', () => {
       };
     }
   };
+  let eventDateBuilder = new EventDateBuilder();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -60,15 +62,16 @@ describe('SubmittedEventComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SubmittedEventComponent);
-    component = fixture.componentInstance;  
+    component = fixture.componentInstance;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Rendering an event viewing while logged in as the event owner', () => {
-
+  describe('Viewing a non-expired event while logged in as the event owner', () => {
+    
+    let dateAndTimes = eventDateBuilder.buildEventDate(24);
     let sampleEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
@@ -77,9 +80,9 @@ describe('SubmittedEventComponent', () => {
       attendee_limit: 10,
       status: 'A',
       UserUserId: '1',
-      date_from: '04/15/2021',
-      time_from: '09:00',
-      time_to: '11:00',
+      date_from: dateAndTimes[0],
+      time_from: dateAndTimes[1],
+      time_to: dateAndTimes[2],
       createdAt: 'fjewfh',
       updatedAt: 'fhewgf'
     };
@@ -115,10 +118,12 @@ describe('SubmittedEventComponent', () => {
       expect(component.registration.UserUserId).toBeFalsy();     
     });
 
-    it('should not let the user register for their own event', () => {
+    it('should set the proper available actions for the user', () => {
 
       fixture.detectChanges();  
-      expect(component.userCanRegister).toBe(false); 
+      expect(component.userCanRegister).toBe(false);
+      expect(component.userCanCancel).toBe(false);
+      expect(component.userCanEdit).toBe(true);      
     })
 
     // TODO: more tests, make sure edit button shows, etc
