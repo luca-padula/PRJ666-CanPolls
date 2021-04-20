@@ -82,7 +82,6 @@ export class SubmittedEventComponent implements OnInit {
   ngOnInit() {
 
     this.token = this.auth.readToken();
-    console.log('token: ', this.token);
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
@@ -90,8 +89,7 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
-      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){
-        console.log("event status: " + this.currentEvent.status);
+      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){        
         if((this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation) || this.token.userId == this.currentEvent.UserUserId){
           this.successStatus = true;
           if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
@@ -99,8 +97,7 @@ export class SubmittedEventComponent implements OnInit {
           } 
           else{
             this.isCreator = true;
-          }
-          //this.uploadImage(this.currentEvent.photo)
+          }          
           if(this.currentEvent.attendee_limit == 0){
             this.att_limit = "Unlimited attendee";
           }
@@ -116,13 +113,11 @@ export class SubmittedEventComponent implements OnInit {
         }
         else{
           this.isAd = false;
-          this.isCreator = false;
-          //this.successStatus = false;
+          this.isCreator = false;          
           this.router.navigate(['/notAvailable']);
         }
       }
-      else if(this.currentEvent.status == "D"){
-        console.log("event status: " + this.currentEvent.status);
+      else if(this.currentEvent.status == "D"){        
         if(this.currentEvent.UserUserId == this.token.userId || (this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation )){
           this.successStatus = true;
         if(this.currentEvent.attendee_limit == 0){
@@ -159,8 +154,7 @@ export class SubmittedEventComponent implements OnInit {
     }
       }
       else{
-        this.successStatus=true;
-        console.log("event status: " + this.currentEvent.status);
+        this.successStatus=true;        
         if(this.currentEvent.attendee_limit == 0){
           this.att_limit = "Unlimited attendee";
         }
@@ -273,8 +267,7 @@ export class SubmittedEventComponent implements OnInit {
     //RETRIEVE FROM API
     retrieveImage()
   {
-    var getExt = this.currentEvent.photo;
-    console.log("Retrieve : "+getExt);
+    var getExt = this.currentEvent.photo;    
     this.http.get(environment.apiUrl + "/api/getimage/"+getExt,{responseType: 'blob'})
     .subscribe( result => {
        this.createImageFromBlob(result);
@@ -287,8 +280,7 @@ export class SubmittedEventComponent implements OnInit {
 createImageFromBlob(image: Blob) {
   let reader = new FileReader();
   reader.addEventListener("load", () => {
-     this.imageToShow = reader.result;
-    // console.log("imagetoshow: "+this.imageToShow);
+     this.imageToShow = reader.result;    
   }, false);
 
   if (image) {

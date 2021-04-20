@@ -13,8 +13,7 @@ export class EventDateBuilder {
         let eventDate = date.toISOString().slice(0, 10);
         let hour = date.getHours();
         let eventStartTime = hour + ':00';
-        let eventEndTime = (hour + 2) + ':00';
-        console.log('date, start, end', eventDate, eventStartTime, eventEndTime);
+        let eventEndTime = (hour + 2) + ':00';        
         return [eventDate, eventStartTime, eventEndTime];
     }
 }
