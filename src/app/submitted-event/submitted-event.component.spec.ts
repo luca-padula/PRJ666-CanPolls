@@ -16,16 +16,27 @@ import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { EventDateBuilder } from 'src/testing/event-date-builder';
 
 describe('SubmittedEventComponent', () => {
+
   let component: SubmittedEventComponent;
   let fixture: ComponentFixture<SubmittedEventComponent>;
+
   let authServiceSpy = jasmine.createSpyObj('AuthService', ['readToken', 'isAuthenticated']);
   let eventServiceSpy = jasmine.createSpyObj('EventService', [
     'getEventById', 'getLocationByEventId', 'getRegistration', 'getRegistrationCount',
     'getFeedbackByEventId'
   ]);
+  let readTokenSpy;
+  let isAuthenticatedSpy;
+  let getEventSpy;
+  let getLocationSpy;
+  let getRegistrationSpy;
+  let getRegistrationCountSpy;
+  let getFeedbackSpy;
+
   let activatedRouteStub = {
     params: of( { id: 1 } )
   };
+
   class MatDialogMock {
     // When the component calls this.dialog.open(...) we'll return an object
     // with an afterClosed method that allows to subscribe to the dialog result observable.
@@ -35,9 +46,11 @@ describe('SubmittedEventComponent', () => {
       };
     }
   };
+
   let eventDateBuilder = new EventDateBuilder();
 
   beforeEach(async(() => {
+
     TestBed.configureTestingModule({
       declarations: [
         SubmittedEventComponent,
@@ -61,6 +74,7 @@ describe('SubmittedEventComponent', () => {
   }));
 
   beforeEach(() => {
+
     fixture = TestBed.createComponent(SubmittedEventComponent);
     component = fixture.componentInstance;
   });
@@ -72,7 +86,7 @@ describe('SubmittedEventComponent', () => {
   describe('Viewing a non-expired event while logged in as the event owner', () => {
     
     let dateAndTimes = eventDateBuilder.buildEventDate(24);
-    let sampleEvent: Event = {
+    let futureEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
       event_description: "Join us for a nice evening with the cat",
@@ -97,19 +111,19 @@ describe('SubmittedEventComponent', () => {
       updatedAt: 'sample',
       EventEventId: '1'
     };
-    let readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
-    let isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
-    let getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(sampleEvent) );
-    let getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue( of(sampleLocation) );
-    let getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue( of({}) );
-    let getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue( of(5) );
-    let getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue( of([]) );
+    readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
+    isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
+    getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(futureEvent) );
+    getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue( of(sampleLocation) );
+    getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue( of({}) );
+    getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue( of(5) );
+    getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue( of([]) );
 
     it('should show the event and location information', () => {
-            
+          
       fixture.detectChanges();      
       const eventTitleTag: HTMLElement = fixture.nativeElement.querySelector('.event-title');
-      expect(eventTitleTag.textContent).toBe(sampleEvent.event_title);
+      expect(eventTitleTag.textContent).toBe(futureEvent.event_title);
       const locationVenueTag: HTMLElement = fixture.nativeElement.querySelector('.location-venue');
       expect(locationVenueTag.textContent).toBe(sampleLocation.venue_name);
       expect(component.eventRegistrationCount).toBe(5);
@@ -124,8 +138,38 @@ describe('SubmittedEventComponent', () => {
       expect(component.userCanRegister).toBe(false);
       expect(component.userCanCancel).toBe(false);
       expect(component.userCanEdit).toBe(true);      
-    })
-
-    // TODO: more tests, make sure edit button shows, etc
+    })    
   });
+
+  describe('viewing an expired event as event creator', () => {
+
+    let dateAndTimes = eventDateBuilder.buildEventDate(-24);
+    let expiredEvent: Event = {
+      event_id: 1,
+      event_title: "A night with benny",
+      event_description: "Join us for a nice evening with the cat",
+      photo: 'fhewfgewfv',
+      attendee_limit: 10,
+      status: 'A',
+      UserUserId: '1',
+      date_from: dateAndTimes[0],
+      time_from: dateAndTimes[1],
+      time_to: dateAndTimes[2],
+      createdAt: 'fjewfh',
+      updatedAt: 'fhewgf'
+    };
+
+    beforeEach(() => {
+      
+      getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(expiredEvent) );
+    });
+
+    it('should not let the user edit the event', () => {
+
+      fixture.detectChanges();      
+      expect(component.userCanEdit).toBe(false);
+    });
+  });
+
+  // TODO: more tests, make sure edit button shows, etc
 });
