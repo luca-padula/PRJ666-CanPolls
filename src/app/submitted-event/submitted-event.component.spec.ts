@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material';
 import { Location } from 'src/data/Model/Location';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
 import { TestDataBuilder } from 'src/testing/test-data-builder';
+import { DebugElement } from '@angular/core';
 
 describe('SubmittedEventComponent', () => {
 
@@ -111,13 +112,17 @@ describe('SubmittedEventComponent', () => {
       updatedAt: 'sample',
       EventEventId: '1'
     };
-    readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
-    isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
-    getEventSpy = eventServiceSpy.getEventById.and.returnValue( of(futureEvent) );
-    getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue( of(sampleLocation) );
-    getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue( of({}) );
-    getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue( of(5) );
-    getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue( of([]) );
+    
+    beforeEach(() => {
+
+      readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 1 });
+      isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
+      getEventSpy = eventServiceSpy.getEventById.and.returnValue(of(futureEvent));
+      getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue(of(sampleLocation));
+      getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue(of({}));
+      getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue(of(5));
+      getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue(of([]));
+    });
 
     it('should show the event and location information', () => {
           
@@ -137,7 +142,16 @@ describe('SubmittedEventComponent', () => {
       fixture.detectChanges();  
       expect(component.userCanRegister).toBe(false);
       expect(component.userCanCancel).toBe(false);
-      expect(component.userCanEdit).toBe(true);      
+      expect(component.userCanEdit).toBe(true);
+
+      // Debug element wraps and gives access to the platform-specific native element, allowing test
+      // to work across all supported platforms. Going for the native html element directly
+      // without debug element would mean the test would only work on browser platforms
+      // that have a DOM, which may be fine most of the time.
+      const compDe: DebugElement = fixture.debugElement;
+      const compEl: HTMLElement = compDe.nativeElement;
+      const editBtnEl = compEl.querySelector('#editBtn');
+      expect(editBtnEl).toBeDefined();     
     })    
   });
 
@@ -166,7 +180,11 @@ describe('SubmittedEventComponent', () => {
 
     it('should not let the user edit the event', () => {
 
-      fixture.detectChanges();      
+      fixture.detectChanges();
+      const compDe: DebugElement = fixture.debugElement;
+      const compEl: HTMLElement = compDe.nativeElement;
+      const editBtnEl = compEl.querySelector('#editBtn');
+      expect(editBtnEl).toBeFalsy();
       expect(component.userCanEdit).toBe(false);
     });
   });

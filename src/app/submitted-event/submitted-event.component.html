@@ -73,7 +73,7 @@
             <div *ngIf="registration && registration.status === 'cancelled'" class="alert alert-danger">
               You cancelled your registration for this event.
             </div>
-            <button *ngIf="userCanEdit" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
+            <button *ngIf="userCanEdit" id="editBtn" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
           </div>
       </div>
     </div>
