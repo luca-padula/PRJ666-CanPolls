@@ -1,4 +1,4 @@
-export class EventDateBuilder {
+export class TestDataBuilder {
 
     constructor() { }
     

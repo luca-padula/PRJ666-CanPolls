@@ -13,7 +13,7 @@ import { EditEventComponent } from '../edit-event/edit-event.component';
 import { MatDialog } from '@angular/material';
 import { Location } from 'src/data/Model/Location';
 import { EventRegistration } from 'src/data/Model/EventRegistration';
-import { EventDateBuilder } from 'src/testing/event-date-builder';
+import { TestDataBuilder } from 'src/testing/test-data-builder';
 
 describe('SubmittedEventComponent', () => {
 
@@ -47,7 +47,7 @@ describe('SubmittedEventComponent', () => {
     }
   };
 
-  let eventDateBuilder = new EventDateBuilder();
+  let testDataBuilder = new TestDataBuilder();
 
   beforeEach(async(() => {
 
@@ -85,7 +85,7 @@ describe('SubmittedEventComponent', () => {
 
   describe('Viewing a non-expired event while logged in as the event owner', () => {
     
-    let dateAndTimes = eventDateBuilder.buildEventDate(24);
+    let dateAndTimes = testDataBuilder.buildEventDate(24);
     let futureEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
@@ -143,7 +143,7 @@ describe('SubmittedEventComponent', () => {
 
   describe('viewing an expired event as event creator', () => {
 
-    let dateAndTimes = eventDateBuilder.buildEventDate(-24);
+    let dateAndTimes = testDataBuilder.buildEventDate(-24);
     let expiredEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
