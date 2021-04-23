@@ -86,7 +86,7 @@ describe('SubmittedEventComponent', () => {
 
   describe('Viewing a non-expired event while logged in as the event owner', () => {
     
-    let dateAndTimes = testDataBuilder.buildEventDate(24);
+    const [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(24);
     let futureEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
@@ -95,9 +95,9 @@ describe('SubmittedEventComponent', () => {
       attendee_limit: 10,
       status: 'A',
       UserUserId: '1',
-      date_from: dateAndTimes[0],
-      time_from: dateAndTimes[1],
-      time_to: dateAndTimes[2],
+      date_from: eventDate,
+      time_from: eventStartTime,
+      time_to: eventEndTime,
       createdAt: 'fjewfh',
       updatedAt: 'fhewgf'
     };
@@ -157,7 +157,7 @@ describe('SubmittedEventComponent', () => {
 
   describe('viewing an expired event as event creator', () => {
 
-    let dateAndTimes = testDataBuilder.buildEventDate(-24);
+    const [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(-24);
     let expiredEvent: Event = {
       event_id: 1,
       event_title: "A night with benny",
@@ -166,9 +166,9 @@ describe('SubmittedEventComponent', () => {
       attendee_limit: 10,
       status: 'A',
       UserUserId: '1',
-      date_from: dateAndTimes[0],
-      time_from: dateAndTimes[1],
-      time_to: dateAndTimes[2],
+      date_from: eventDate,
+      time_from: eventStartTime,
+      time_to: eventEndTime,
       createdAt: 'fjewfh',
       updatedAt: 'fhewgf'
     };
