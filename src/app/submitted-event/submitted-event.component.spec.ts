@@ -18,6 +18,8 @@ import { DebugElement } from '@angular/core';
 
 describe('SubmittedEventComponent', () => {
 
+  // set up global variables used accross multiple tests
+
   let component: SubmittedEventComponent;
   let fixture: ComponentFixture<SubmittedEventComponent>;
 
@@ -49,6 +51,51 @@ describe('SubmittedEventComponent', () => {
   };
 
   let testDataBuilder = new TestDataBuilder();
+
+  let [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(24);
+  const futureEvent: Event = {
+    event_id: 1,
+    event_title: "A night with benny",
+    event_description: "Join us for a nice evening with the cat",
+    photo: 'fhewfgewfv',
+    attendee_limit: 10,
+    status: 'A',
+    UserUserId: '1',
+    date_from: eventDate,
+    time_from: eventStartTime,
+    time_to: eventEndTime,
+    createdAt: 'fjewfh',
+    updatedAt: 'fhewgf'
+  };
+  const sampleLocation: Location = {
+    location_id: '1',
+    venue_name: 'Metro Convention Center',
+    street_name: '230 Front Street W',
+    city: 'Toronto',
+    province: 'Ontario',
+    postal_code: 'M4X 5LV',
+    createdAt: 'sample',
+    updatedAt: 'sample',
+    EventEventId: '1'
+  };
+
+  [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(-24);
+  let expiredEvent: Event = {
+    event_id: 1,
+    event_title: "A night with benny",
+    event_description: "Join us for a nice evening with the cat",
+    photo: 'fhewfgewfv',
+    attendee_limit: 10,
+    status: 'A',
+    UserUserId: '1',
+    date_from: eventDate,
+    time_from: eventStartTime,
+    time_to: eventEndTime,
+    createdAt: 'fjewfh',
+    updatedAt: 'fhewgf'
+  };
+
+  // finish global test variable set up
 
   beforeEach(async(() => {
 
@@ -84,34 +131,7 @@ describe('SubmittedEventComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Viewing a non-expired event while logged in as the event owner', () => {
-    
-    const [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(24);
-    let futureEvent: Event = {
-      event_id: 1,
-      event_title: "A night with benny",
-      event_description: "Join us for a nice evening with the cat",
-      photo: 'fhewfgewfv',
-      attendee_limit: 10,
-      status: 'A',
-      UserUserId: '1',
-      date_from: eventDate,
-      time_from: eventStartTime,
-      time_to: eventEndTime,
-      createdAt: 'fjewfh',
-      updatedAt: 'fhewgf'
-    };
-    let sampleLocation: Location = {
-      location_id: '1',
-      venue_name: 'Metro Convention Center',
-      street_name: '230 Front Street W',
-      city: 'Toronto',
-      province: 'Ontario',
-      postal_code: 'M4X 5LV',
-      createdAt: 'sample',
-      updatedAt: 'sample',
-      EventEventId: '1'
-    };
+  describe('Viewing a non-expired event while logged in as the event owner', () => {    
     
     beforeEach(() => {
 
@@ -155,23 +175,7 @@ describe('SubmittedEventComponent', () => {
     })    
   });
 
-  describe('viewing an expired event as event creator', () => {
-
-    const [eventDate, eventStartTime, eventEndTime] = testDataBuilder.buildEventDate(-24);
-    let expiredEvent: Event = {
-      event_id: 1,
-      event_title: "A night with benny",
-      event_description: "Join us for a nice evening with the cat",
-      photo: 'fhewfgewfv',
-      attendee_limit: 10,
-      status: 'A',
-      UserUserId: '1',
-      date_from: eventDate,
-      time_from: eventStartTime,
-      time_to: eventEndTime,
-      createdAt: 'fjewfh',
-      updatedAt: 'fhewgf'
-    };
+  describe('viewing an expired event as event creator', () => {    
 
     beforeEach(() => {
       
@@ -180,12 +184,37 @@ describe('SubmittedEventComponent', () => {
 
     it('should not let the user edit the event', () => {
 
-      fixture.detectChanges();
+      fixture.detectChanges();      
+      expect(component.userCanEdit).toBe(false);
+      expect(component.userCanRegister).toBe(false);
+      expect(component.userCanCancel).toBe(false);   
+      
       const compDe: DebugElement = fixture.debugElement;
       const compEl: HTMLElement = compDe.nativeElement;
       const editBtnEl = compEl.querySelector('#editBtn');
       expect(editBtnEl).toBeFalsy();
-      expect(component.userCanEdit).toBe(false);
+    });
+  });
+
+  describe('viewing future event as logged in user - not registered', () => {
+
+    beforeEach(() => {
+
+      readTokenSpy = authServiceSpy.readToken.and.returnValue({ userId: 2 });
+      getEventSpy = eventServiceSpy.getEventById.and.returnValue(of(futureEvent));      
+    });    
+
+    it('should let the user register for the event', () => {
+
+      fixture.detectChanges();
+      expect(component.registration).toBeFalsy();      
+      expect(component.userCanRegister).toBe(true, 'user cant register');
+      expect(component.userCanEdit).toBe(false, 'user can edit'); 
+      expect(component.userCanCancel).toBe(false, 'user can cancel');
+
+      const compEl: HTMLElement = fixture.nativeElement;
+      const regBtnEl: HTMLElement = compEl.querySelector('#registerBtn');
+      expect(regBtnEl).toBeDefined();
     });
   });
 

@@ -218,7 +218,7 @@ export class SubmittedEventComponent implements OnInit {
       this.userCanRegister = this.token.userId != this.currentEvent.UserUserId
         && this.currentTime < registrationDeadline
         && !this.registration;
-      if (this.userCanRegister && this.currentEvent.attendee_limit != 0) {
+      if (this.userCanRegister && this.currentEvent.attendee_limit != 0) {        
         this.userCanRegister = this.eventRegistrationCount < this.currentEvent.attendee_limit;
       }
     }, err => console.log(err));
