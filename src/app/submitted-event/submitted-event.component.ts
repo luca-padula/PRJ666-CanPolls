@@ -208,16 +208,21 @@ export class SubmittedEventComponent implements OnInit {
 
       this.registration = registration;
       this.eventRegistrationCount = count;
-      let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from);      
+      let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from); 
+
       this.userCanEdit = this.token.userId == this.currentEvent.UserUserId
         && this.currentTime < registrationDeadline
         && this.currentEvent.status != 'C';
-      this.userCanCancel = this.registration && this.registration.status == 'registered'
+
+      this.userCanCancel = (this.registration != null) && this.registration.status == 'registered'
         && this.currentTime < registrationDeadline;
+
       registrationDeadline.setHours(registrationDeadline.getHours() - 12);
+
       this.userCanRegister = this.token.userId != this.currentEvent.UserUserId
         && this.currentTime < registrationDeadline
-        && !this.registration;
+        && (this.registration == null);
+        
       if (this.userCanRegister && this.currentEvent.attendee_limit != 0) {        
         this.userCanRegister = this.eventRegistrationCount < this.currentEvent.attendee_limit;
       }

@@ -139,7 +139,7 @@ describe('SubmittedEventComponent', () => {
       isAuthenticatedSpy = authServiceSpy.isAuthenticated.and.returnValue(true);
       getEventSpy = eventServiceSpy.getEventById.and.returnValue(of(futureEvent));
       getLocationSpy = eventServiceSpy.getLocationByEventId.and.returnValue(of(sampleLocation));
-      getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue(of({}));
+      getRegistrationSpy = eventServiceSpy.getRegistration.and.returnValue(of(null));
       getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue(of(5));
       getFeedbackSpy = eventServiceSpy.getFeedbackByEventId.and.returnValue(of([]));
     });
@@ -154,7 +154,7 @@ describe('SubmittedEventComponent', () => {
       expect(component.eventRegistrationCount).toBe(5);
       // checking if registration object is empty since comparing it to empty
       // object with toBe or toEqual does not work as expected
-      expect(component.registration.UserUserId).toBeFalsy();     
+      expect(component.registration).toBeFalsy();     
     });
 
     it('should set the proper available actions for the user', () => {
@@ -215,6 +215,9 @@ describe('SubmittedEventComponent', () => {
       const compEl: HTMLElement = fixture.nativeElement;
       const regBtnEl: HTMLElement = compEl.querySelector('#registerBtn');
       expect(regBtnEl).toBeDefined();
+
+      const editBtnEl = compEl.querySelector('#editBtn');
+      expect(editBtnEl).toBeFalsy();  
     });
   });
 
