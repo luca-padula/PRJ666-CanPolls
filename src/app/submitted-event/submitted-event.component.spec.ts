@@ -208,9 +208,9 @@ describe('SubmittedEventComponent', () => {
 
       fixture.detectChanges();
       expect(component.registration).toBeFalsy();      
-      expect(component.userCanRegister).toBe(true, 'user cant register');
-      expect(component.userCanEdit).toBe(false, 'user can edit'); 
-      expect(component.userCanCancel).toBe(false, 'user can cancel');
+      expect(component.userCanRegister).toBe(true);
+      expect(component.userCanEdit).toBe(false); 
+      expect(component.userCanCancel).toBe(false);
 
       const compEl: HTMLElement = fixture.nativeElement;
       const regBtnEl: HTMLElement = compEl.querySelector('#registerBtn');
@@ -218,6 +218,14 @@ describe('SubmittedEventComponent', () => {
 
       const editBtnEl = compEl.querySelector('#editBtn');
       expect(editBtnEl).toBeFalsy();  
+    });
+
+    it('should not let the user register if the event is full', () => {
+      
+      getRegistrationCountSpy = eventServiceSpy.getRegistrationCount.and.returnValue(of(futureEvent.attendee_limit));
+      fixture.detectChanges();      
+
+      expect(component.userCanRegister).toBe(false, 'user can register for full event');
     });
   });
 
