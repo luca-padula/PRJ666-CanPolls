@@ -229,5 +229,4 @@ describe('SubmittedEventComponent', () => {
     });
   });
 
-  // TODO: more tests, make sure edit button shows, etc
 });
