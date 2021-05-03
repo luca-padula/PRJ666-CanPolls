@@ -53,7 +53,7 @@
               <strong> DECLINED </strong>
               <p *ngIf="isAd">{{messageP}}</p>
           </div>
-          <h1 class="l-Section-title ">{{currentEvent.event_title}}</h1>
+          <h1 class="l-Section-title event-title">{{currentEvent.event_title}}</h1>
         <div>Toronto, Ontario</div>
         <div *ngIf="!isExpired" class="text-center">
             <div *ngIf="registrationSuccess" class="alert alert-success">
@@ -62,18 +62,18 @@
             <div *ngIf="registrationFailure" class="alert alert-danger">
               {{registrationFailure}}
             </div>
-            <button *ngIf="userCanRegister" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
+            <button *ngIf="userCanRegister" id="registerBtn" class="btn btn-dark btn-lg" (click)="registerUser()">Register</button>
             <div *ngIf="registration && registration.status === 'registered'" class="alert alert-success">
               You are registered for this event!
             </div>
-            <button *ngIf="userCanCancel" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#cancelRegistrationModal">Cancel Registration</button>
+            <button *ngIf="userCanCancel" id="cancelBtn" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#cancelRegistrationModal">Cancel Registration</button>
             <div *ngIf="registration && registration.status === 'removed'" class="alert alert-danger">
               You have been removed from this event by the owner.
             </div>
             <div *ngIf="registration && registration.status === 'cancelled'" class="alert alert-danger">
               You cancelled your registration for this event.
             </div>
-            <button *ngIf="userCanEdit" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
+            <button *ngIf="userCanEdit" id="editBtn" class="btn btn-dark btn-lg" (click)="routeEventEdit(eventId)">Edit Event</button>
           </div>
       </div>
     </div>
@@ -101,7 +101,7 @@
       <h2 class="l-Section-title ">Location</h2>
       <div class="l-Section-content">
         <h3>Venue Name</h3>
-        <p>{{currentLocation.venue_name}}</p>
+        <p class="location-venue">{{currentLocation.venue_name}}</p>
   
         <h3>Address</h3>
         <p>{{currentLocation.street_name}},&nbsp;{{currentLocation.city}},&nbsp;{{currentLocation.province}},&nbsp;{{currentLocation.postal_code}} </p>

@@ -16,6 +16,8 @@ import {HttpClient} from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import { switchMap, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -26,15 +28,13 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 export class SubmittedEventComponent implements OnInit {
   private paramSubscription: any;
   private eventSubscription: any;
-  private userSubscription: any;
   private locationSubscription: any;
   private feedbackSubscription: any;
   private eventId: number;
 
   currentTime: Date;
   registration: EventRegistration;
-  getRegistrationSubscription: any;
-  getRegistrationCountSubscription: any;
+  getRegistrationAndCountSubscription: any;
   userCanRegister: boolean = false;
   userCanCancel: boolean = false;
   userCanEdit: boolean = false;
@@ -45,7 +45,6 @@ export class SubmittedEventComponent implements OnInit {
   cancellationSuccess: string;
   cancellationFailure: string;
   currentEvent: EventWithUserObj = new EventWithUserObj();
-  currentUser: User = new User();
   currentLocation: Location = new Location();
   eventRegistrationCount: number;
   successStatus: boolean;  
@@ -78,10 +77,11 @@ export class SubmittedEventComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private http: HttpClient
-    ) {   this.token = this.auth.readToken(); }
+    ) {    }
 
   ngOnInit() {
-  
+
+    this.token = this.auth.readToken();
     this.currentTime = new Date();
     this.paramSubscription = this.route.params.subscribe((param)=>{
       this.eventId = param['id'];
@@ -89,8 +89,7 @@ export class SubmittedEventComponent implements OnInit {
     this.eventSubscription = this.eService.getEventById(this.eventId).subscribe((data)=>{
       this.currentEvent=data;
       let endDate: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_to);
-      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){
-        console.log("event status: " + this.currentEvent.status);
+      if(this.currentEvent.status=="P" || this.currentEvent.status=="C"){        
         if((this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation) || this.token.userId == this.currentEvent.UserUserId){
           this.successStatus = true;
           if(this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation ){
@@ -98,8 +97,7 @@ export class SubmittedEventComponent implements OnInit {
           } 
           else{
             this.isCreator = true;
-          }
-          //this.uploadImage(this.currentEvent.photo)
+          }          
           if(this.currentEvent.attendee_limit == 0){
             this.att_limit = "Unlimited attendee";
           }
@@ -115,13 +113,11 @@ export class SubmittedEventComponent implements OnInit {
         }
         else{
           this.isAd = false;
-          this.isCreator = false;
-          //this.successStatus = false;
+          this.isCreator = false;          
           this.router.navigate(['/notAvailable']);
         }
       }
-      else if(this.currentEvent.status == "D"){
-        console.log("event status: " + this.currentEvent.status);
+      else if(this.currentEvent.status == "D"){        
         if(this.currentEvent.UserUserId == this.token.userId || (this.token.isAdmin && this.token.partyAffiliation == this.currentEvent.User.partyAffiliation )){
           this.successStatus = true;
         if(this.currentEvent.attendee_limit == 0){
@@ -158,8 +154,7 @@ export class SubmittedEventComponent implements OnInit {
     }
       }
       else{
-        this.successStatus=true;
-        console.log("event status: " + this.currentEvent.status);
+        this.successStatus=true;        
         if(this.currentEvent.attendee_limit == 0){
           this.att_limit = "Unlimited attendee";
         }
@@ -173,8 +168,7 @@ export class SubmittedEventComponent implements OnInit {
         if(endDate < this.currentTime){
           this.isExpired = true;
           this.feedbackSubscription = this.eService.getFeedbackByEventId(this.currentEvent.event_id).subscribe(data=>{
-            this.feedbacks = data;
-            console.log(this.feedbacks);
+            this.feedbacks = data;            
 
             if(this.feedbacks.length>0){
               for(var i = 0; i<this.feedbacks.length; i++){
@@ -193,37 +187,46 @@ export class SubmittedEventComponent implements OnInit {
     }
     // Determine which actions should be available to the user - edit, register, cancel, etc.
       if (this.auth.isAuthenticated()) {
-        this.userSubscription = this.uService.getUserById(this.token.userId).subscribe((data)=>{
-          this.currentUser=data;
-        });
-        this.getRegistrationSubscription = this.eService.getRegistration(this.eventId, this.token.userId).subscribe((result) => {
-          this.registration = result;
-          this.getRegistrationCountSubscription = this.eService.getRegistrationCount(this.eventId).subscribe((result) => {
-            this.eventRegistrationCount = result;
-            let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from);
-            this.userCanEdit = this.token.userId == this.currentEvent.UserUserId
-              && this.currentTime < registrationDeadline
-              && this.currentEvent.status != 'C';
-            this.userCanCancel = this.registration && this.registration.status == 'registered'
-              && this.currentTime < registrationDeadline;
-            registrationDeadline.setHours(registrationDeadline.getHours() - 12);
-            this.userCanRegister = this.token.userId != this.currentEvent.UserUserId
-              && this.currentTime < registrationDeadline
-              && !this.registration;
-            if (this.userCanRegister && this.currentEvent.attendee_limit != 0) {
-              this.userCanRegister = this.eventRegistrationCount < this.currentEvent.attendee_limit;
-            }
-          }, (err) => {
-            console.log(err);
-          });
-        }, (err) => {
-          console.log(err);
-        });
+        this.determineAvailableUserActions();        
       }
+
     }, (err) => {
       console.log(err);
     });
 
+  }
+
+  determineAvailableUserActions(): void {
+
+    const registrationAndCount$ = forkJoin([
+      this.eService.getRegistration(this.eventId, this.token.userId),
+      this.eService.getRegistrationCount(this.eventId)
+    ]);
+
+    this.getRegistrationAndCountSubscription = registrationAndCount$
+    .subscribe(([registration, count]) => {
+
+      this.registration = registration;
+      this.eventRegistrationCount = count;
+      let registrationDeadline: Date = new Date(this.currentEvent.date_from + ' ' + this.currentEvent.time_from); 
+
+      this.userCanEdit = this.token.userId == this.currentEvent.UserUserId
+        && this.currentTime < registrationDeadline
+        && this.currentEvent.status != 'C';
+
+      this.userCanCancel = (this.registration != null) && this.registration.status == 'registered'
+        && this.currentTime < registrationDeadline;
+
+      registrationDeadline.setHours(registrationDeadline.getHours() - 12);
+
+      this.userCanRegister = this.token.userId != this.currentEvent.UserUserId
+        && this.currentTime < registrationDeadline
+        && (this.registration == null);
+        
+      if (this.userCanRegister && this.currentEvent.attendee_limit != 0) {        
+        this.userCanRegister = this.eventRegistrationCount < this.currentEvent.attendee_limit;
+      }
+    }, err => console.log(err));
   }
  
   // This function registers the logged in user for the current event
@@ -268,8 +271,7 @@ export class SubmittedEventComponent implements OnInit {
     //RETRIEVE FROM API
     retrieveImage()
   {
-    var getExt = this.currentEvent.photo;
-    console.log("Retrieve : "+getExt);
+    var getExt = this.currentEvent.photo;    
     this.http.get(environment.apiUrl + "/api/getimage/"+getExt,{responseType: 'blob'})
     .subscribe( result => {
        this.createImageFromBlob(result);
@@ -282,8 +284,7 @@ export class SubmittedEventComponent implements OnInit {
 createImageFromBlob(image: Blob) {
   let reader = new FileReader();
   reader.addEventListener("load", () => {
-     this.imageToShow = reader.result;
-    // console.log("imagetoshow: "+this.imageToShow);
+     this.imageToShow = reader.result;    
   }, false);
 
   if (image) {
@@ -332,11 +333,9 @@ approve(isApp: boolean){
   
   ngOnDestroy(){
     if(this.paramSubscription){this.paramSubscription.unsubscribe();}
-    if(this.eventSubscription){this.eventSubscription.unsubscribe();}
-    if(this.userSubscription){this.userSubscription.unsubscribe();}
+    if(this.eventSubscription){this.eventSubscription.unsubscribe();}   
     if(this.locationSubscription){this.locationSubscription.unsubscribe();}
-    if(this.getRegistrationSubscription){this.getRegistrationSubscription.unsubscribe();}
-    if(this.getRegistrationCountSubscription){this.getRegistrationCountSubscription.unsubscribe();}
+    if(this.getRegistrationAndCountSubscription){this.getRegistrationAndCountSubscription.unsubscribe();}
     if(this.registerUserSubscription){this.registerUserSubscription.unsubscribe();}
     if(this.cancelRegistrationSubscription){this.cancelRegistrationSubscription.unsubscribe();}
     if(this.feedbackSubscription){this.feedbackSubscription.unsubscribe();}
